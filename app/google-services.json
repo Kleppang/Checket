@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "917017202721",
+    "firebase_url": "https://checket-usn.firebaseio.com",
+    "project_id": "checket-usn",
+    "storage_bucket": "checket-usn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917017202721:android:27499c7d4dcd028f1a9360",
+        "android_client_info": {
+          "package_name": "no.checket.checket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917017202721-5eva4dhpebg2jecip2jni5jldcnt6rsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI4fqXsEfquFrzO8KEflAqf7wfs56StSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917017202721-5eva4dhpebg2jecip2jni5jldcnt6rsl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
