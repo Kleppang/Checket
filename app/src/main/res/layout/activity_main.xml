@@ -15,7 +15,7 @@
         android:layout_gravity="bottom"
         android:contentDescription="@string/main_BottomAppBar_desc"
         app:navigationIcon="@drawable/ic_menu_white_24dp"
-        app:menu="@menu/main_bottomappbar"
+        app:menu="@menu/main_bottomappbar_menu"
         app:hideOnScroll="true"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
