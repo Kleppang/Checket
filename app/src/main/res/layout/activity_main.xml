@@ -13,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:contentDescription="@string/main_BottomAppBar_desc"/>
+        android:contentDescription="@string/main_BottomAppBar_desc"
+        app:navigationIcon="@drawable/ic_menu_white_24dp"
+        app:menu="@menu/main_bottomappbar"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

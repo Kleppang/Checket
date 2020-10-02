@@ -12,4 +12,8 @@
     
     <!-- Bottom app bar -->
     <string name="main_BottomAppBar_desc">Bottom app bar</string>
+    <string name="main_BottomAppBar_tasks_title">Tasks</string>
+    <string name="main_BottomAppBar_ach_title">Achievements</string>
+    <string name="main_BottomAppBar_tasks_desc">A button to open a users tasks</string>
+    <string name="main_BottomAppBar_ach_desc">A button to open a users achievements</string>
 </resources>
