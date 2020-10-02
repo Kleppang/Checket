@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView main_txt_title;
 
     // Declaring an instance of FirebaseAuth
-    private FirebaseAuth mAuth;
+    //private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +28,10 @@ public class MainActivity extends AppCompatActivity {
         main_txt_title = findViewById(R.id.main_txt_title);
 
         // Initializing the FirebaseAuth instance
-        mAuth = FirebaseAuth.getInstance();
+        //mAuth = FirebaseAuth.getInstance();
     }
 
+    /*
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -51,4 +52,5 @@ public class MainActivity extends AppCompatActivity {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
     }
+    */
 }
