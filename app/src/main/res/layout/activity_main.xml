@@ -15,6 +15,17 @@
         android:layout_gravity="bottom"
         android:contentDescription="@string/main_BottomAppBar_desc"
         app:navigationIcon="@drawable/ic_menu_white_24dp"
-        app:menu="@menu/main_bottomappbar"/>
+        app:menu="@menu/main_bottomappbar"
+        app:hideOnScroll="true"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_anchor="@+id/main_BottomAppBar"
+        app:layout_anchorGravity="top|center"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
