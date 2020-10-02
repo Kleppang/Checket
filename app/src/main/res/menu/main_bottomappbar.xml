@@ -8,7 +8,7 @@
         android:icon="@drawable/ic_tasks_white_24dp"
         android:title="@string/main_BottomAppBar_tasks_title"
         android:contentDescription="@string/main_BottomAppBar_tasks_desc"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/main_BottomAppBar_ach"

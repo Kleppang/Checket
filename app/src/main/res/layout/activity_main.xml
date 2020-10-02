@@ -26,6 +26,7 @@
         android:focusable="true"
         app:layout_anchor="@+id/main_BottomAppBar"
         app:layout_anchorGravity="top|center"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
+        app:srcCompat="@drawable/ic_add_black_24dp"
+        android:onClick="newTask"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
