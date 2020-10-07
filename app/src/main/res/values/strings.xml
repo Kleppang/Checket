@@ -10,10 +10,22 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     
-    <!-- Bottom app bar -->
+    <!-- Bottom app bar & Navigation Drawer -->
     <string name="main_BottomAppBar_desc">Bottom app bar</string>
     <string name="main_BottomAppBar_tasks_title">Tasks</string>
     <string name="main_BottomAppBar_ach_title">Achievements</string>
     <string name="main_BottomAppBar_tasks_desc">A button to open a users tasks</string>
     <string name="main_BottomAppBar_ach_desc">A button to open a users achievements</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="my_files">My Files</string>
+    <string name="shared">Shared</string>
+    <string name="openNavDrawer">Navigation Drawer Open</string>
+    <string name="closeNavDrawer">Navigation Drawer Close</string>
+    <string name="login_logout">Login/logout</string>
+    <string name="achievements">Achievements</string>
+    <string name="tasks">Tasks</string>
+    <string name="general">GENERAL</string>
+    <string name="application">APPLICATION</string>
+
 </resources>

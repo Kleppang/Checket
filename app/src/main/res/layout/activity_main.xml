@@ -1,32 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/main_BottomAppBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+    tools:context=".MainActivity"
+    android:id="@+id/drawer_layout"
+    >
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:contentDescription="@string/main_BottomAppBar_desc"
-        app:navigationIcon="@drawable/ic_menu_white_24dp"
-        app:menu="@menu/main_bottomappbar_menu"
-        app:hideOnScroll="true"/>
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/main_BottomAppBar_FAB"
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/main_BottomAppBar"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:contentDescription="@string/main_BottomAppBar_desc"
+            app:hideOnScroll="true"
+            app:menu="@menu/main_bottomappbar_menu"
+            app:navigationIcon="@drawable/ic_menu_white_24dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/main_BottomAppBar_FAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="newTask"
+            app:layout_anchor="@id/main_BottomAppBar"
+            app:layout_anchorGravity="top|center"
+            app:srcCompat="@drawable/ic_add_black_24dp" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_anchor="@+id/main_BottomAppBar"
-        app:layout_anchorGravity="top|center"
-        app:srcCompat="@drawable/ic_add_black_24dp"
-        android:onClick="newTask"/>
+        android:layout_height="match_parent"
+        app:menu="@menu/nav_menu"
+        android:id="@+id/nav_view"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header_layout"
+        />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
+
