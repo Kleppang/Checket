@@ -9,7 +9,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    
+
     <!-- Bottom app bar & Navigation Drawer -->
     <string name="main_BottomAppBar_desc">Bottom app bar</string>
     <string name="main_BottomAppBar_tasks_title">Tasks</string>
@@ -26,6 +26,8 @@
     <string name="achievements">Achievements</string>
     <string name="tasks">Tasks</string>
     <string name="general">GENERAL</string>
-    <string name="application">APPLICATION</string>
+    <string name="system">SYSTEM</string>
+    <string name="label">HeiDetteErEtHint</string>
+    <string name="username">Username</string>
 
 </resources>

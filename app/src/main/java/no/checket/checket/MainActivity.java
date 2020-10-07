@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
+
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
@@ -40,7 +43,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.main_loginRegister:
+                        Intent myintent = new Intent(MainActivity.this,LoginRegisterActivity.class);
+                        startActivity(myintent);
+                        break;
+                }
+                return false;
+            }
+        });
 
         main_BottomAppBar = findViewById(R.id.main_BottomAppBar);
 
@@ -69,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-
+    
     public void newTask(View view) {
         // User has clicked the FAB
         Toast.makeText(this, "Create a new task", Toast.LENGTH_SHORT).show();
