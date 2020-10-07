@@ -8,7 +8,7 @@
             <item android:title="@string/achievements"
                 android:icon="@drawable/ic_achievements_black_24dp" />
             <item android:title="@string/tasks"
-                android:icon="@drawable/ic_profile_black_24dp" />
+                android:icon="@drawable/ic_tasks_black_24dp" />
         </menu>
     </item>
 
