@@ -18,8 +18,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     BottomAppBar main_BottomAppBar;
 
-    private Toolbar toolbar;
-
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -28,16 +26,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.main_BottomAppBar);
-        setSupportActionBar(toolbar);
-
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
-                toolbar,
+                main_BottomAppBar,
                 R.string.openNavDrawer,
                 R.string.closeNavDrawer
         );
