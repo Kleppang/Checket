@@ -34,6 +34,8 @@
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="ForgotPassword">Forgot Password?</string>
+    <string name="rememberMe">Remember me</string>
 
 
 </resources>
