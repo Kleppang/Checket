@@ -8,21 +8,65 @@
     android:id="@+id/drawer_layoutLoginRegister"
     >
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/username"
-            android:orientation="vertical"
-            app:startIconDrawable="@drawable/ic_favorite_24dp"
-            app:startIconContentDescription="@string/content_description_end_icon"
-            >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintLoginRegister"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".LoginRegisterActivity">
 
-            <com.google.android.material.textfield.TextInputEditText
+        <androidx.cardview.widget.CardView
+            android:layout_width="350dp"
+            android:layout_height="290dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <TextView
+                    android:text="@string/login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <!--TextInput 1 -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:hint="@string/username"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_baseline_check_circle_24"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!--TextInput 2 -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:hint="@string/password"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="wrap_content"
+                    app:endIconMode="password_toggle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:drawableEnd="@drawable/ic_outline_remove_red_eye_24"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -39,17 +83,6 @@
             app:hideOnScroll="true"
             app:menu="@menu/main_bottomappbar_menu"
             app:navigationIcon="@drawable/ic_menu_white_24dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/main_BottomAppBar_FAB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="newTask"
-            app:layout_anchor="@id/main_BottomAppBar"
-            app:layout_anchorGravity="top|center"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
