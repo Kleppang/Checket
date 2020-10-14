@@ -3,4 +3,15 @@
     <color name="colorPrimary">#FF8019</color>
     <color name="colorPrimaryDark">#FF4D1C</color>
     <color name="colorAccent">#EDE8E8</color>
+
+
+    <!-- Intro Slider -->
+    <color name="intro_slider_bg1">#F64C73</color>
+    <color name="intro_slider_bg2">#20D2BB</color>
+    <color name="intro_slider_bg3">#3395FF</color>
+    <color name="intro_slider_bg4">#A854D4</color>
+    <!-- Dots, shows progress bottom -->
+    <color name="intro_slider_dot_dark">#202020</color>
+    <color name="intro_slider_dot">#B3B3B3</color>
+
 </resources>
