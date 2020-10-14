@@ -3,6 +3,7 @@ package no.checket.checket;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.Html;
@@ -28,12 +29,16 @@ public class IntroSlideActivity extends AppCompatActivity {
     private int[] layouts;
     private Button btn_skip, btn_next;
     private IntroSlideManager introSlideManager;
+    private Window window;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.intro_slider_layout);
+
+        window = getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.intro_slider_bg1));
 
         viewPager = findViewById(R.id.view_pager);
         dotsLayout = findViewById(R.id.layoutDots);
@@ -78,6 +83,21 @@ public class IntroSlideActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int position) {
             addBottomDots(position);
+
+            switch (position) {
+                case 0:
+                    window.setStatusBarColor(getResources().getColor(R.color.intro_slider_bg1));
+                    break;
+                case 1:
+                    window.setStatusBarColor(getResources().getColor(R.color.intro_slider_bg2));
+                    break;
+                case 2:
+                    window.setStatusBarColor(getResources().getColor(R.color.intro_slider_bg3));
+                    break;
+                case 3:
+                    window.setStatusBarColor(getResources().getColor(R.color.intro_slider_bg4));
+                    break;
+            }
 
             // Checks current page, changes text accordingly
             if (position == layouts.length - 1) {
