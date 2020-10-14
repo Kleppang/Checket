@@ -11,7 +11,7 @@
     <color name="intro_slider_bg3">#3395FF</color>
     <color name="intro_slider_bg4">#A854D4</color>
     <!-- Dots, shows progress bottom -->
-    <color name="intro_slider_dot_dark">#202020</color>
-    <color name="intro_slider_dot">#B3B3B3</color>
+    <color name="intro_slider_dot_dark">#25202020</color>
+    <color name="intro_slider_dot">#E8E8E8</color>
 
 </resources>
