@@ -33,7 +33,9 @@
             android:onClick="newTask"
             app:layout_anchor="@id/main_BottomAppBar"
             app:layout_anchorGravity="top|center"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+            app:srcCompat="@drawable/ic_add_black_24dp"
+            app:borderWidth="0dp"
+            android:backgroundTint="@color/colorAccent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/coming_tasks"
