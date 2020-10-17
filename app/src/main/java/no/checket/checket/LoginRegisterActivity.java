@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,7 +25,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
     EditText eTxt_email;
     EditText eTxt_password;
-
+    MaterialButton btn_login;
 
 
     @Override
@@ -34,14 +35,16 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
         // Firebase, initialize the instance
         mAuth = FirebaseAuth.getInstance();
-
-        Toast.makeText(this, "Du er nå i login/registrer", Toast.LENGTH_LONG).show();
     }
 
     public void loginUser(View view) {
+        btn_login = findViewById(R.id.btn_login);
+        btn_login.setClickable(false);
+        btn_login.setText(R.string.LoginRegisterActivity_wait);
 
         eTxt_email = findViewById(R.id.inp_login_email);
         eTxt_password = findViewById(R.id.inp_login_pw);
+
         String email = eTxt_email.getText().toString();
         String password = eTxt_password.getText().toString();
 
@@ -55,9 +58,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
                     // User authenticated, onStart's mAuth.getCurrentUser() will now return this user
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    setResult(RESULT_OK, intent);
-                    // Finishes activity
-                    finish();
+                    startActivity(intent);
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail: failure", task.getException());
@@ -65,6 +66,9 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
                     // Clear password
                     eTxt_password.setText("");
+
+                    btn_login.setClickable(true);
+                    btn_login.setText(R.string.LoginRegisterActivity_login);
                 }
             }
         });
