@@ -6,7 +6,7 @@
     <!-- Intro slider -->
     <dimen name="intro_slider_dots_height">30dp</dimen>
     <dimen name="intro_slider_dots_margin_bottom">20dp</dimen>
-    <dimen name="intro_slider_img_size">120dp</dimen>
+    <dimen name="intro_slider_img_size">220dp</dimen>
     <dimen name="intro_slider_desc_padding">40dp</dimen>
     <!-- SP is recommended per the Android Documentation for font sizes as it scales the font with a users font size preference -->
     <dimen name="intro_slider_title">30sp</dimen>
