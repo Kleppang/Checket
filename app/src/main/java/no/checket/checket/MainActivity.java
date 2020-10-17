@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private Menu navigationMenu;
+
+    private TextView txtV_email;
+    private MenuItem MI_LoginLogout;
 
     // Recycler view
     private LinkedList<no.checket.checket.Task> mTaskList = new LinkedList<>();
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Firebase, initialize the instance
         mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
         // Start by checking if this is the first launch, decides which view to show
         IntroSlideManager introSlideManager = new IntroSlideManager(this);
@@ -65,7 +72,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             drawerLayout = findViewById(R.id.drawer_layout);
             navigationView = findViewById(R.id.nav_view);
+            navigationMenu = navigationView.getMenu();
 
+            txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
+            MI_LoginLogout = navigationMenu.findItem(R.id.nav_LoginReg);
+
+            if(currentUser != null) {
+                txtV_email.setText(currentUser.getEmail());
+                MI_LoginLogout.setTitle("Logout");
+            } else {
+                MI_LoginLogout.setTitle("Login / Register");
+            }
 
             ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                     this,
@@ -110,11 +127,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     switch (menuItem.getItemId())
                     {
-                        case R.id.main_loginRegister:
-                            // Starts the LoginRegisterActivity, Switch case with putExtra to determine which layout we're showing?
-                            Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
-                            startActivity(intent);
-                            break;
+                        case R.id.nav_LoginReg:
+                            FirebaseUser tempUser = mAuth.getCurrentUser();
+                            if(tempUser != null) {
+                                mAuth.signOut();
+                                // Reload the activity once we've signed out the user
+                                finish();
+                                startActivity(getIntent());
+                                break;
+                            } else {
+                                // Starts the LoginRegisterActivity, Switch case with putExtra to determine which layout we're showing?
+                                Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
+                                startActivity(intent);
+                                break;
+                            }
                     }
                     return false;
                 }
@@ -152,8 +178,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
 
         // Check if a user is currently signed in, update UI
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
         // A function to update the UI accordingly, (Logout / Sign in / Register)
         // updateUI(currentUser);
     }

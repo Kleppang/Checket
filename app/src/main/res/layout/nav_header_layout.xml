@@ -17,13 +17,13 @@
         app:srcCompat="@drawable/ic_profile_black_24dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nav_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
-        android:text="Username"
+        android:text="@string/txt_email_placeholder"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,6 @@
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/nav_email" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

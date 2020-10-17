@@ -58,4 +58,5 @@
     <string name="intro_slider_redo">Redo introduction</string>
 
     <string name="LoginRegisterActivity_wait">Please wait</string>
+    <string name="txt_email_placeholder">User not logged in</string>
 </resources>

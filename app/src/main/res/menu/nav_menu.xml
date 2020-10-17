@@ -20,7 +20,7 @@
             <item android:title="@string/settings"
                 android:icon="@drawable/ic_settings_black_24dp" />
 
-            <item android:id="@+id/main_loginRegister"
+            <item android:id="@+id/nav_LoginReg"
                 android:title="@string/login_logout"
                 android:icon="@drawable/ic_loginlogout_24" />
         </menu>
