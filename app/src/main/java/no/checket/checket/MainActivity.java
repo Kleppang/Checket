@@ -128,19 +128,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     switch (menuItem.getItemId())
                     {
                         case R.id.nav_LoginReg:
-                            FirebaseUser tempUser = mAuth.getCurrentUser();
-                            if(tempUser != null) {
+                            if(mAuth.getCurrentUser() != null) {
                                 mAuth.signOut();
                                 // Reload the activity once we've signed out the user
                                 finish();
                                 startActivity(getIntent());
-                                break;
                             } else {
                                 // Starts the LoginRegisterActivity, Switch case with putExtra to determine which layout we're showing?
                                 Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
                                 startActivity(intent);
-                                break;
                             }
+                            break;
+                        case R.id.nav_settings:
+                            // Starts the SettingsActivity
+                            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                            startActivity(intent);
+                            break;
                     }
                     return false;
                 }
