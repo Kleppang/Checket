@@ -73,7 +73,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                         eTxt_password.setText("");
 
                         btn_login.setClickable(true);
-                        btn_login.setText(R.string.LoginRegisterActivity_login);
+                        btn_login.setText(R.string.action_sign_in);
 
                         btn_login.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                         btn_login.setTextColor(getResources().getColor(R.color.colorAccent));
