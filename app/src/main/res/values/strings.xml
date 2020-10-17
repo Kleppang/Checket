@@ -56,4 +56,6 @@
 
     <string name="intro_slider_redo_desc">To see the introduction at a later time, goto Settings -> Apps -> Checket -> Clear Data</string>
     <string name="intro_slider_redo">Redo introduction</string>
+
+    <string name="LoginRegisterActivity_wait">Please wait</string>
 </resources>
