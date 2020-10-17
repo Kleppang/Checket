@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Firebase, initialize the instance
         mAuth = FirebaseAuth.getInstance();
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
         // Start by checking if this is the first launch, decides which view to show
         IntroSlideManager introSlideManager = new IntroSlideManager(this);
         if(introSlideManager.isFirstTime()) {
@@ -73,16 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout = findViewById(R.id.drawer_layout);
             navigationView = findViewById(R.id.nav_view);
             navigationMenu = navigationView.getMenu();
-
-            txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
-            MI_LoginLogout = navigationMenu.findItem(R.id.nav_LoginReg);
-
-            if(currentUser != null) {
-                txtV_email.setText(currentUser.getEmail());
-                MI_LoginLogout.setTitle("Logout");
-            } else {
-                MI_LoginLogout.setTitle("Login / Register");
-            }
 
             ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                     this,
@@ -182,6 +170,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Check if a user is currently signed in, update UI
         // A function to update the UI accordingly, (Logout / Sign in / Register)
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
+        MI_LoginLogout = navigationMenu.findItem(R.id.nav_LoginReg);
+
+        if(currentUser != null) {
+            txtV_email.setText(currentUser.getEmail());
+            MI_LoginLogout.setTitle("Logout");
+        } else {
+            MI_LoginLogout.setTitle("Login / Register");
+        }
         // updateUI(currentUser);
     }
     

@@ -60,10 +60,8 @@ public class LoginRegisterActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail: success");
                         //FirebaseUser user = mAuth.getCurrentUser();
-
+                        finish();
                         // User authenticated, onStart's mAuth.getCurrentUser() will now return this user
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail: failure", task.getException());
