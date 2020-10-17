@@ -37,5 +37,23 @@
     <string name="ForgotPassword">Forgot Password?</string>
     <string name="rememberMe">Remember me</string>
 
+    <!-- Intro Slider -->
+    <string name="intro_slider_next">NEXT</string>
+    <string name="intro_slider_skip">SKIP</string>
+    <string name="intro_slider_finish">FINISH</string>
 
+    <string name="intro_slider_slide1_title">New task</string>
+    <string name="intro_slider_slide1_desc">You can create a new task by hitting the small round plus button on the bottom of your screen!</string>
+
+    <string name="intro_slider_slide2_title">New task</string>
+    <string name="intro_slider_slide2_desc">After you\'ve filled out all the small neat details about your new task, submit it!</string>
+
+    <string name="intro_slider_slide3_title">Achievements</string>
+    <string name="intro_slider_slide3_desc">By completing certain chores you can earn achievements, some are hidden!</string>
+
+    <string name="intro_slider_slide4_title">Creating a new user</string>
+    <string name="intro_slider_slide4_desc">By creating a new user you can sync your tasks and progress across multiple devices!</string>
+
+    <string name="intro_slider_redo_desc">To see the introduction at a later time, goto Settings -> Apps -> Checket -> Clear Data</string>
+    <string name="intro_slider_redo">Redo introduction</string>
 </resources>

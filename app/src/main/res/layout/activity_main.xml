@@ -35,6 +35,11 @@
             app:layout_anchorGravity="top|center"
             app:srcCompat="@drawable/ic_add_black_24dp" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/coming_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView

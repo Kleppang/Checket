@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -25,65 +32,111 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
+    // Recycler view
+    private LinkedList<no.checket.checket.Task> mTaskList = new LinkedList<>();
+    private RecyclerView mRecyclerView;
+    private TaskListAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+        // Start by checking if this is the first launch, decides which view to show
+        IntroSlideManager introSlideManager = new IntroSlideManager(this);
+        if(introSlideManager.isFirstTime()) {
+            // If first time, launch the intro slider
+
+            // If user exits out of the app while active, assume this was by mistake, don't consider the intro finished
+            //introSlideManager.setFirstTime(false);
+
+            startActivity(new Intent(this, IntroSlideActivity.class));
+            finish();
+        } else {
+            // This is not the first time the app has been launched, continue as normal
+            setContentView(R.layout.activity_main);
+
+            drawerLayout = findViewById(R.id.drawer_layout);
+            navigationView = findViewById(R.id.nav_view);
 
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                main_BottomAppBar,
-                R.string.openNavDrawer,
-                R.string.closeNavDrawer
-        );
+            ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                    this,
+                    drawerLayout,
+                    main_BottomAppBar,
+                    R.string.openNavDrawer,
+                    R.string.closeNavDrawer
+            );
 
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
+            drawerLayout.addDrawerListener(actionBarDrawerToggle);
+            actionBarDrawerToggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId())
-                {
-                    case R.id.main_loginRegister:
-                        Intent myintent = new Intent(MainActivity.this,LoginRegisterActivity.class);
-                        startActivity(myintent);
-                        break;
+            // RecyclerView
+            // Populate list
+            // TODO
+            mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", "11.11.2020", "ic_misc"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", "04.14.2020", "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", "11.11.2020", "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", "11.21.2020", "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick up dad at the airport", "12.12.2020", "ic_misc"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", "11.28.2020", "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Sports", "Football in the park", "11.13.2020", "ic_sports"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", "11.14.2020", "ic_add"));
+            // Sort list
+            Collections.sort(mTaskList, new Comparator<no.checket.checket.Task>() {
+                @Override
+                public int compare(final no.checket.checket.Task object1, final no.checket.checket.Task object2) {
+                    return object1.getDate().compareTo(object2.getDate());
                 }
-                return false;
-            }
-        });
+            });
+            // Get a handle to the RecyclerView.
+            mRecyclerView = findViewById(R.id.coming_tasks);
+            // Create an adapter and supply the data to be displayed.
+            mAdapter = new TaskListAdapter(this, mTaskList);
+            // Connect the adapter with the RecyclerView.
+            mRecyclerView.setAdapter(mAdapter);
+            // Give the RecyclerView a default layout manager.
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        main_BottomAppBar = findViewById(R.id.main_BottomAppBar);
-
-        main_BottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
-        main_BottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch(menuItem.getItemId()) {
-                    case R.id.main_BottomAppBar_tasks:
-                        // Open tasks
-                        Toast.makeText(MainActivity.this, "Open tasks", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.main_BottomAppBar_ach:
-                        // Open achievements
-                        Toast.makeText(MainActivity.this, "Open achievements", Toast.LENGTH_SHORT).show();
-                        break;
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    switch (menuItem.getItemId())
+                    {
+                        case R.id.main_loginRegister:
+                            Intent myintent = new Intent(MainActivity.this,LoginRegisterActivity.class);
+                            startActivity(myintent);
+                            break;
+                    }
+                    return false;
                 }
-                return true;
-            }
-        });
+            });
+
+            main_BottomAppBar = findViewById(R.id.main_BottomAppBar);
+
+            main_BottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+            });
+
+            main_BottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    switch(menuItem.getItemId()) {
+                        case R.id.main_BottomAppBar_tasks:
+                            // Open tasks
+                            Toast.makeText(MainActivity.this, "Open tasks", Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.main_BottomAppBar_ach:
+                            // Open achievements
+                            Toast.makeText(MainActivity.this, "Open achievements", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     
