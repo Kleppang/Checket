@@ -45,13 +45,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:hint="@string/username"
-                    >
+                    android:hint="@string/prompt_email">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inp_login_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/ic_baseline_check_circle_24" />
+                        android:drawableEnd="@drawable/ic_baseline_check_circle_24"
+                        android:inputType="textEmailAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,9 +62,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:hint="@string/password">
+                    android:hint="@string/prompt_password">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inp_login_pw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/ic_outline_remove_red_eye_24"
@@ -111,7 +113,8 @@
                 android:layout_height="50dp"
                 android:layout_marginRight="20dp"
                 android:text="@string/action_sign_in"
-                app:backgroundTint="@color/colorPrimary">
+                app:backgroundTint="@color/colorPrimary"
+                android:onClick="loginUser">
 
             </com.google.android.material.button.MaterialButton>
 

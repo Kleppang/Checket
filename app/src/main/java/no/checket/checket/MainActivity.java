@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,9 +39,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;
     private TaskListAdapter mAdapter;
 
+    // Firebase, declare instance
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Firebase, initialize the instance
+        mAuth = FirebaseAuth.getInstance();
 
         // Start by checking if this is the first launch, decides which view to show
         IntroSlideManager introSlideManager = new IntroSlideManager(this);
@@ -103,8 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     switch (menuItem.getItemId())
                     {
                         case R.id.main_loginRegister:
-                            Intent myintent = new Intent(MainActivity.this,LoginRegisterActivity.class);
-                            startActivity(myintent);
+                            // Starts the LoginRegisterActivity, Switch case with putExtra to determine which layout we're showing?
+                            Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
+                            startActivity(intent);
                             break;
                     }
                     return false;
@@ -139,6 +148,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void onStart() {
+        super.onStart();
+
+        // Check if a user is currently signed in, update UI
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        // A function to update the UI accordingly, (Logout / Sign in / Register)
+        // updateUI(currentUser);
+    }
     
     public void newTask(View view) {
         // User has clicked the FAB
