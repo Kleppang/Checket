@@ -13,6 +13,11 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/coming_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/main_BottomAppBar"
             style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
@@ -36,11 +41,6 @@
             app:srcCompat="@drawable/ic_add_black_24dp"
             app:borderWidth="0dp"
             android:backgroundTint="@color/colorAccent"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/coming_tasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

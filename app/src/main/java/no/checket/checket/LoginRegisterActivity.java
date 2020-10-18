@@ -48,10 +48,8 @@ public class LoginRegisterActivity extends AppCompatActivity {
         if(!email.isEmpty() && !password.isEmpty()) {
             btn_login = findViewById(R.id.btn_login);
 
-            btn_login.setClickable(false);
+            btn_login.setEnabled(false);
             btn_login.setText(R.string.LoginRegisterActivity_wait);
-            btn_login.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-            btn_login.setTextColor(getResources().getColor(R.color.colorDarkGray));
 
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -70,11 +68,8 @@ public class LoginRegisterActivity extends AppCompatActivity {
                         // Clear password
                         eTxt_password.setText("");
 
-                        btn_login.setClickable(true);
+                        btn_login.setEnabled(true);
                         btn_login.setText(R.string.action_sign_in);
-
-                        btn_login.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                        btn_login.setTextColor(getResources().getColor(R.color.colorAccent));
                     }
                 }
             });
