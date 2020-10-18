@@ -69,4 +69,7 @@
     <string name="dialog_intro_neg">No</string>
     <string name="settings_redo_title">Redo intro</string>
     <string name="settings_redo_desc">Click me to redo the introduction</string>
+
+    <!-- Preference keys -->
+    <string name="key_IsFirstTime">IsFirstTime</string>
 </resources>
