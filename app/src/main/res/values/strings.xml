@@ -37,6 +37,7 @@
     <string name="password">Password</string>
     <string name="ForgotPassword">Forgot Password?</string>
     <string name="rememberMe">Remember me</string>
+    <string name="NoAccount">No account yet? Create one</string>
 
     <!-- Intro Slider -->
     <string name="intro_slider_next">NEXT</string>
