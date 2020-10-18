@@ -23,7 +23,7 @@
             style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom"
             android:contentDescription="@string/main_BottomAppBar_desc"
             app:hideOnScroll="true"
             app:menu="@menu/main_bottomappbar_menu"
