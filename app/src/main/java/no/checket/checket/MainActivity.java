@@ -6,20 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
@@ -31,6 +31,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private IntroSlideManager mIntroSlideManager;
 
     BottomAppBar main_BottomAppBar;
 
@@ -57,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAuth = FirebaseAuth.getInstance();
 
         // Start by checking if this is the first launch, decides which view to show
-        IntroSlideManager introSlideManager = new IntroSlideManager(this);
-        if(introSlideManager.isFirstTime()) {
+        mIntroSlideManager = new IntroSlideManager(this);
+        if(mIntroSlideManager.isFirstTime()) {
             // If first time, launch the intro slider
 
             // If user exits out of the app while active, assume this was by mistake, don't consider the intro finished
@@ -118,19 +120,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     switch (menuItem.getItemId())
                     {
                         case R.id.nav_LoginReg:
+                            // User has selected to login / logout
                             if(mAuth.getCurrentUser() != null) {
+                                // User is currently logged in, show logout dialog
                                 new MaterialAlertDialogBuilder(MainActivity.this).setTitle(R.string.dialog_logout_title).setMessage(R.string.dialog_logout_msg)
-                                        .setNegativeButton(R.string.dialog_logout_neg, null)
-                                        .setPositiveButton(R.string.dialog_logout_pos, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                mAuth.signOut();
-                                                // Reload the activity once we've signed out the user
-                                                finish();
-                                                startActivity(getIntent());
-                                            }
-                                        }).show();
+                                    .setNegativeButton(R.string.dialog_logout_neg, null)
+                                    .setPositiveButton(R.string.dialog_logout_pos, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            // User has confirmed that they want to log out
+                                            mAuth.signOut();
+                                            // Reload the activity once we've signed out the user
+                                            finish();
+                                            startActivity(getIntent());
+                                        }
+                                    }).show();
                             } else {
+                                // TODO
                                 // Starts the LoginRegisterActivity, Switch case with putExtra to determine which layout we're showing?
                                 Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
                                 startActivity(intent);
@@ -190,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             MI_LoginReg.setTitle("Login / Register");
         }
-        // updateUI(currentUser);
     }
     
     public void newTask(View view) {
