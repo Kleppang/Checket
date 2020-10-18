@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Menu navigationMenu;
 
     private TextView txtV_email;
-    private MenuItem MI_LoginLogout;
+    private MenuItem MI_LoginReg;
 
     // Recycler view
     private LinkedList<no.checket.checket.Task> mTaskList = new LinkedList<>();
@@ -117,10 +119,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     {
                         case R.id.nav_LoginReg:
                             if(mAuth.getCurrentUser() != null) {
-                                mAuth.signOut();
-                                // Reload the activity once we've signed out the user
-                                finish();
-                                startActivity(getIntent());
+                                new MaterialAlertDialogBuilder(MainActivity.this).setTitle(R.string.dialog_logout_title).setMessage(R.string.dialog_logout_msg)
+                                        .setNegativeButton(R.string.dialog_logout_neg, null)
+                                        .setPositiveButton(R.string.dialog_logout_pos, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                mAuth.signOut();
+                                                // Reload the activity once we've signed out the user
+                                                finish();
+                                                startActivity(getIntent());
+                                            }
+                                        }).show();
                             } else {
                                 // Starts the LoginRegisterActivity, Switch case with putExtra to determine which layout we're showing?
                                 Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
@@ -173,13 +182,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
-        MI_LoginLogout = navigationMenu.findItem(R.id.nav_LoginReg);
+        MI_LoginReg = navigationMenu.findItem(R.id.nav_LoginReg);
 
         if(currentUser != null) {
             txtV_email.setText(currentUser.getEmail());
-            MI_LoginLogout.setTitle("Logout");
+            MI_LoginReg.setTitle("Logout");
         } else {
-            MI_LoginLogout.setTitle("Login / Register");
+            MI_LoginReg.setTitle("Login / Register");
         }
         // updateUI(currentUser);
     }
