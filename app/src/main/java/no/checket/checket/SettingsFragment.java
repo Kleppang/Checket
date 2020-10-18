@@ -21,7 +21,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             mIntroSlideManager = new IntroSlideManager(getContext());
         }
 
-        Preference redoPref = findPreference("IsFirstTime");
+        Preference redoPref = findPreference(getString(R.string.key_IsFirstTime));
 
         if(redoPref != null) {
             redoPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
