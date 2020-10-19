@@ -9,10 +9,11 @@ public class IntroSlideManager {
     SharedPreferences.Editor editor;
     Context context;
 
-    private static final String IS_FIRST_TIME = "IsFirstTime";
+    private static String IS_FIRST_TIME;
 
     public IntroSlideManager(Context context) {
         this.context = context;
+        IS_FIRST_TIME =  context.getResources().getString(R.string.key_IsFirstTime);
         preferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
     }
 
