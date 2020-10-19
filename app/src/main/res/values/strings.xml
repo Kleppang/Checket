@@ -68,6 +68,8 @@
     <string name="dialog_intro_msg">Are you sure you want to redo the introduction?</string>
     <string name="dialog_intro_pos">Yes</string>
     <string name="dialog_intro_neg">No</string>
+
+    <!-- Settings -->
     <string name="settings_redo_title">Redo intro</string>
     <string name="settings_redo_desc">Click me to redo the introduction</string>
 
