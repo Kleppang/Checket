@@ -75,4 +75,5 @@
 
     <!-- Preference keys -->
     <string name="key_IsFirstTime">IsFirstTime</string>
+    <string name="main_header">Upcoming tasks</string>
 </resources>
