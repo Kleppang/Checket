@@ -201,7 +201,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     
     public void newTask(View view) {
         // User has clicked the FAB
-        Toast.makeText(this, "Create a new task", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, NewTaskActivity.class);
+        startActivity(intent);
     }
 
     @Override
