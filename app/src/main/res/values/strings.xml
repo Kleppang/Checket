@@ -73,4 +73,8 @@
 
     <!-- Preference keys -->
     <string name="key_IsFirstTime">IsFirstTime</string>
+    <string name="logo">Checket</string>
+    <string name="signInText">Sign in to continue</string>
+    <string name="SignUpText">Sign up to begin your tasks</string>
+    <string name="SignUp">Sign up</string>
 </resources>

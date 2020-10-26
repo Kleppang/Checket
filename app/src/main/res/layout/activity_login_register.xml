@@ -8,12 +8,6 @@
     android:id="@+id/drawer_layoutLoginRegister"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ConstraintLoginRegister"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".LoginRegisterActivity">
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -22,15 +16,25 @@
             android:paddingTop="56dp"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
+            android:background="@color/colorAccent"
             >
 
             <!-- Logo / Title -->
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="72dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/luckiest_guy"
+                android:text="@string/logo"
+                android:textSize="55sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:src="@drawable/placeholder_logo" />
+                android:text="@string/signInText"
+                android:textColor="@color/colorPrimaryDark"
+                />
 
 
             <!-- Email label -->
@@ -39,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -47,7 +51,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -91,27 +97,5 @@
                 android:gravity="center"
                 android:textSize="16sp"/>
         </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".LoginRegisterActivity">
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/main_BottomAppBar"
-            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:contentDescription="@string/main_BottomAppBar_desc"
-            app:hideOnScroll="true"
-            app:menu="@menu/main_bottomappbar_menu"
-            app:navigationIcon="@drawable/ic_menu_white_24dp" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

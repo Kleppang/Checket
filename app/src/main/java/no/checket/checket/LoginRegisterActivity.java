@@ -1,6 +1,7 @@
 package no.checket.checket;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -35,6 +36,21 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
         // Firebase, initialize the instance
         mAuth = FirebaseAuth.getInstance();
+
+
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.login);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     public void loginUser(View view) {
@@ -78,9 +94,4 @@ public class LoginRegisterActivity extends AppCompatActivity {
         }
     }
 
-
-    public void newTask(View view) {
-        // User has clicked the FAB
-        Toast.makeText(this, "Create a new task", Toast.LENGTH_SHORT).show();
-    }
 }
