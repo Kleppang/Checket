@@ -25,13 +25,17 @@
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/luckiest_guy"
             android:text="@string/logo"
-            android:textSize="55sp" />
+            android:textSize="55sp"
+            android:transitionName="logo_title"
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="@string/SignUpText"
             android:textColor="@color/colorPrimaryDark"
+            android:transitionName="logo_text"
             />
 
 
@@ -42,6 +46,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:transitionName="input_email"
+            app:helperTextEnabled="true"
+            app:helperText="@string/helperTextInp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -61,6 +68,10 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:transitionName="input_pw"
+            app:passwordToggleEnabled="true"
+            app:helperTextEnabled="true"
+            app:helperText="@string/helperTextInp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -78,38 +89,47 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:transitionName="input_pw2"
+            app:passwordToggleEnabled="true"
+            app:helperTextEnabled="true"
+            app:helperText="@string/helperTextInp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inp_signup_pw2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
+                android:hint="@string/prompt_reenter_pw"
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Sign up Button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_SignUp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:text="@string/SignUp"
-            app:backgroundTint="@color/colorPrimaryDark">
+            app:backgroundTint="@color/colorPrimaryDark"
+            android:transitionName="button_action"
+            android:onClick="CreateUser"
+            >
 
         </com.google.android.material.button.MaterialButton>
 
-        <TextView android:id="@+id/link_signup"
+        <TextView android:id="@+id/link_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="@string/NoAccount"
+            android:text="@string/GotAccount"
             android:textColor="@color/colorPrimaryDark"
             android:gravity="center"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:transitionName="btn_text"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
