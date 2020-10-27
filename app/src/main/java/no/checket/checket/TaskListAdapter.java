@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder> {
@@ -30,7 +33,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         Task mCurrent = mTaskList.get(position);
         holder.wordItemView.setText(mCurrent.getHeader());
         holder.detailItemView.setText(mCurrent.getDetails());
-        holder.dateItemView.setText(mCurrent.getDate());
+        // The holder will not accept a Date object for its setText() method
+        // Parse to String
+        // Starting with specifying a date format
+        DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm");
+        // Parse
+        String strDate = df.format(mCurrent.getDate());
+        holder.dateItemView.setText(strDate);
         Resources res = context.getResources();
         String mDrawable = mCurrent.getIcon();
         int resID = res.getIdentifier(mDrawable , "drawable", context.getPackageName());

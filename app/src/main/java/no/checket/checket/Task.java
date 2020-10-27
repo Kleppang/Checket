@@ -1,12 +1,14 @@
 package no.checket.checket;
 
+import java.util.Date;
+
 public class Task {
     private String header;
     private String details;
-    private String date;
+    private Date date;
     private String icon;
 
-    public Task(String header, String details, String date, String icon) {
+    public Task(String header, String details, Date date, String icon) {
         this.header = header;
         this.details = details;
         this.date = date;
@@ -30,11 +32,11 @@ public class Task {
         this.details = details;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
