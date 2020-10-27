@@ -12,6 +12,9 @@
         <activity android:name=".SignUpActivity"
             android:theme="@style/AppThemeTopBar" />
         <activity
+            android:name =".NewTaskActivity"
+            android:theme="@android:style/Theme.Holo.Dialog" />
+        <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppThemeTopBar" />
         <activity android:name=".IntroSlideActivity" />

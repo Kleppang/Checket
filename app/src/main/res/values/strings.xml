@@ -84,4 +84,12 @@
     <string name="key_IsFirstTime">IsFirstTime</string>
     <string name="logo">Checket</string>
 
+    <string name="main_header">Upcoming tasks</string>
+    <string name="new_task">New task</string>
+    <string name="category">Category</string>
+    <string name="details">Details</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="add">ADD</string>
+    <string name="discard">Discard</string>
 </resources>
