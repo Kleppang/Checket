@@ -90,15 +90,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // RecyclerView
             // Populate list
-            // TODO
-            mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date (2020, 11, 11, 21, 30), "ic_misc"));
+            // TODO: Get list from DB
+            mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date(2020, 11, 11, 21, 30), "ic_misc"));
             mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 12, 21, 30), "ic_add"));
             mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", new Date (2020, 11, 14, 21, 30), "ic_add"));
             mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 19, 21, 30), "ic_add"));
             mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", new Date (2020, 12, 21, 20, 30), "ic_misc"));
             mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 5, 21, 30), "ic_add"));
             mTaskList.add(new no.checket.checket.Task("Sports", "Football in the park", new Date (2020, 10, 22, 20, 0), "ic_sports"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 10, 28, 21, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 12, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 13, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 14, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. This is getting psychotic...", new Date (2020, 12, 28, 15, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 16, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 17, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 18, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Apartment's REAAALLY clean now.", new Date (2020, 12, 28, 19, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Here we go again.", new Date (2020, 12, 28, 21, 30), "ic_add"));
+            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 21, 30), "ic_add"));
             // Sort list
             Collections.sort(mTaskList, new Comparator<no.checket.checket.Task>() {
                 @Override
