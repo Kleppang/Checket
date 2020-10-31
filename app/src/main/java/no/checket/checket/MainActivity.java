@@ -108,8 +108,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             // Get a handle to the RecyclerView.
             mRecyclerView = findViewById(R.id.coming_tasks);
+            // Specify the length of the list for this activity
+            // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
+            int length = 6;
             // Create an adapter and supply the data to be displayed.
-            mAdapter = new TaskListAdapter(this, mTaskList);
+            mAdapter = new TaskListAdapter(this, mTaskList, length);
             // Connect the adapter with the RecyclerView.
             mRecyclerView.setAdapter(mAdapter);
             // Give the RecyclerView a default layout manager.
@@ -168,7 +171,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     switch(menuItem.getItemId()) {
                         case R.id.main_BottomAppBar_tasks:
                             // Open tasks
-                            Toast.makeText(MainActivity.this, "Open tasks", Toast.LENGTH_SHORT).show();
+                            Intent intentTasks = new Intent(MainActivity.this, TasksActivity.class);
+                            startActivity(intentTasks);
                             break;
                         case R.id.main_BottomAppBar_ach:
                             // Open achievements

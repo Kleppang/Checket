@@ -92,4 +92,5 @@
     <string name="time">Time</string>
     <string name="add">ADD</string>
     <string name="discard">Discard</string>
+    <string name="tasks_header">Tasks</string>
 </resources>
