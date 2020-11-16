@@ -47,6 +47,12 @@
     <string name="prompt_reenter_pw">Re-Enter Password</string>
     <string name="helperTextInp">Required*</string>
 
+    <!-- Profile -->
+    <string name="Profile">Profile</string>
+
+    <!-- Edit Profile -->
+    <string name="EditProfile">Edit Profile</string>
+
 
     <!-- Intro Slider -->
     <string name="intro_slider_next">NEXT</string>
