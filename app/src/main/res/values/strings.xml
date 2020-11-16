@@ -49,6 +49,7 @@
 
     <!-- Profile -->
     <string name="Profile">Profile</string>
+    <string name="twitterUsername">\@joeytribbiani</string>
 
     <!-- Edit Profile -->
     <string name="EditProfile">Edit Profile</string>
