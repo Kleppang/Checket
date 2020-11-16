@@ -9,11 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".EditProfileActivity" />
         <activity android:name=".TasksActivity" />
-        <activity android:name=".SignUpActivity"
+        <activity
+            android:name=".SignUpActivity"
             android:theme="@style/AppThemeTopBar" />
         <activity
-            android:name =".NewTaskActivity"
+            android:name=".NewTaskActivity"
             android:theme="@android:style/Theme.Holo.Dialog" />
         <activity
             android:name=".SettingsActivity"
