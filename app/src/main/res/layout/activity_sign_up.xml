@@ -120,16 +120,6 @@
 
         </com.google.android.material.button.MaterialButton>
 
-        <TextView android:id="@+id/link_login"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="@string/GotAccount"
-            android:textColor="@color/colorPrimaryDark"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:transitionName="btn_text"
-            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
