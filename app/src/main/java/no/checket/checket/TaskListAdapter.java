@@ -17,11 +17,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     private LinkedList<Task> mTaskList;
     private LayoutInflater mInflater;
     private Context context;
+    private int length;
 
-    public TaskListAdapter (Context context, LinkedList<Task> taskList) {
+    public TaskListAdapter (Context context, LinkedList<Task> taskList, int length) {
         mInflater = LayoutInflater.from(context);
-        this.mTaskList = taskList;
         this.context = context;
+        this.mTaskList = taskList;
+        this.length = length;
     }
 
     public TaskListAdapter.TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -35,7 +37,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         holder.detailItemView.setText(mCurrent.getDetails());
         // The holder will not accept a Date object for its setText() method
         // Parse to String
-        // Starting with specifying a date format
+        // Starting by specifying a date format
         DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm");
         // Parse
         String strDate = df.format(mCurrent.getDate());
@@ -47,7 +49,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
     public int getItemCount() {
-        final int i = 6;
+        int i = length;
         return i;
     }
 
