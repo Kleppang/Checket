@@ -43,7 +43,7 @@
             android:textColor="@color/colorWhite"
             android:fontFamily="@font/roboto"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="20dp"/>
 
     </RelativeLayout>
 
@@ -123,5 +123,50 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/profile_linlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/roboto"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="epost@checket.no"
+                    android:textColor="@color/colorDarkLiver"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/roboto"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/colorUnderlineGrey"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
