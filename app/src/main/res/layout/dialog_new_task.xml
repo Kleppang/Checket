@@ -12,6 +12,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:entries="@array/categories"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,28 +93,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_input" />
 
-    <EditText
+    <Button
         android:id="@+id/date_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:autofillHints="DD/MM/YYYY"
         android:ems="10"
-        android:inputType="date"
+        android:hint="@string/input"
+        android:onClick="showDatePickerFragment"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_label"
-        android:autofillHints="DD/MM/YYYY" />
+        app:layout_constraintTop_toBottomOf="@+id/date_label" />
 
-    <EditText
+    <Button
         android:id="@+id/time_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:autofillHints="HH:MM"
         android:ems="10"
-        android:inputType="time"
+        android:hint="@string/input"
+        android:onClick="showTimePickerFragment"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_label"
-        android:autofillHints="HH:MM" />
+        app:layout_constraintTop_toBottomOf="@+id/time_label" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
