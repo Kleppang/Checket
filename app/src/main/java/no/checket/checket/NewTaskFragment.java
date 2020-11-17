@@ -22,13 +22,13 @@ public class NewTaskFragment extends DialogFragment {
         // Null represents the parent view, which is none for this dialog
         builder.setView(inflater.inflate(R.layout.dialog_new_task, null))
         // Adding buttons for saving or aborting
-            .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // TODO: save as an object, add to data structure
                 }
             })
-            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     NewTaskFragment.this.getDialog().cancel();
