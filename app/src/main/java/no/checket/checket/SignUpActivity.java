@@ -25,7 +25,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private static final String TAG = "SignUpActivity";
 
-    TextView CallLogin;
     EditText eTxt_email;
     EditText eTxt_pw, eTxt_pw2;
     MaterialButton btn_SignUp;
@@ -44,18 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.SignUp);
         }
-
-        CallLogin = findViewById(R.id.link_login);
-
-        CallLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SignUpActivity.this, LoginRegisterActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
+        
     }
 
     public void CreateUser(View view) {
