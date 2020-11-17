@@ -24,10 +24,14 @@ import java.util.List;
 public class AchievementsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private RecyclerView recyclerViewLocked;
 
     // Firebase, declare instance of Firestore and Auth
     private FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
+
+    private List<Achievement> achList;
+    private List<Achievement> achListLocked;
 
     private static final String TAG = "AchievementsActivity";
 
@@ -55,12 +59,24 @@ public class AchievementsActivity extends AppCompatActivity {
                 actionBar.setTitle(R.string.achievements);
             }
 
-            final List<Achievement> achList = new ArrayList<>();
+            achList = new ArrayList<>();
             final AchievementRecAdapter achAdapter = new AchievementRecAdapter(achList);
+
+            achListLocked = new ArrayList<>();
+            final AchievementRecAdapter achAdapterLocked = new AchievementRecAdapter(achListLocked);
 
             recyclerView = findViewById(R.id.achievements_recView);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(achAdapter);
+
+            recyclerViewLocked = findViewById(R.id.achievements_recViewLocked);
+            recyclerViewLocked.setLayoutManager(new LinearLayoutManager(this));
+            recyclerViewLocked.setAdapter(achAdapterLocked);
+
+            achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row"));
+            achListLocked.add(new Achievement("Taskmaster (10+)", "Created 10 tasks"));
+            achListLocked.add(new Achievement("Taskmaster (100+)", "Created 100 tasks"));
+            achListLocked.add(new Achievement("Taskmaster (1000+)", "Created 1000 tasks"));
 
             firestore = FirebaseFirestore.getInstance();
             firestore.collection("achievements").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -74,8 +90,15 @@ public class AchievementsActivity extends AppCompatActivity {
                                 if(thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                                     Achievement newAchievement = new Achievement(thisDoc.getDocument().getString("name"), thisDoc.getDocument().getString("desc"));
 
+                                    Achievement checkAgainst = findAchievement(thisDoc.getDocument().getString("name"));
+
+                                    if(checkAgainst != null) {
+                                        achListLocked.remove(checkAgainst);
+                                    }
+
                                     achList.add(newAchievement);
                                     achAdapter.notifyDataSetChanged();
+                                    achAdapterLocked.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -90,11 +113,18 @@ public class AchievementsActivity extends AppCompatActivity {
 
     }
 
-
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private Achievement findAchievement(String checkName) {
+        for(Achievement ach : achListLocked) {
+            if(ach.getName().equals(checkName)) {
+                return ach;
+            }
+        }
+        return null;
     }
 }

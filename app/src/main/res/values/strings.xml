@@ -104,4 +104,9 @@
     <string name="tasks_header">Tasks</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+
+    <!-- Achievements -->
+    <string name="ach_unlockedAchievements">Unlocked achievements</string>
+    <string name="ach_lockedAchievements">Locked achievements</string>
+
 </resources>
