@@ -256,13 +256,18 @@ public class AchievementsActivity extends AppCompatActivity {
 
             // If the user does not already have the achievement Customizer
             if(!existsAchievement("Customizer")) {
-                DocumentReference usersReference = firestore.collection("users").document(mAuth.getUid());
-
-                usersReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        // Successfully found
-                        addAchievementFB("Customizer", "Set a custom name");
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                                // Check if the UID matches logged in users' UID
+                                if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                    // User has set a custom name, award the achievement
+                                    addAchievementFB("Customizer", "Set a custom name");
+                                }
+                            }
+                        }
                     }
                 });
             }
