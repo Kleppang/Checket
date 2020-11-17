@@ -17,13 +17,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/circle_border"
+            android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true">
 
 
 
             <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_margin="5dp"
                 android:src="@drawable/ic_profile_black_24dp"
                 android:adjustViewBounds="true"
@@ -32,6 +33,18 @@
                 />
 
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageUser"
+            android:layout_centerHorizontal="true"
+            android:text="Brukernavn"
+            android:textSize="20dp"
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/roboto"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="10dp"/>
 
     </RelativeLayout>
 
