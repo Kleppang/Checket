@@ -93,6 +93,7 @@
     <string name="key_IsFirstTime">IsFirstTime</string>
     <string name="logo">Checket</string>
 
+    <!-- Tasks -->
     <string name="main_header">Upcoming tasks</string>
     <string name="new_task">New task</string>
     <string name="category">Category</string>
@@ -104,6 +105,18 @@
     <string name="tasks_header">Tasks</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="input">Input</string>
+
+    <string-array name="categories">
+        <item>Cleaning</item>
+        <item>Exercise</item>
+        <item>Gardening</item>
+        <item>Housekeeping</item>
+        <item>Miscellaneous</item>
+        <item>Shopping</item>
+        <item>Social</item>
+        <item>Sports</item>
+    </string-array>
 
     <!-- Achievements -->
     <string name="ach_unlockedAchievements">Unlocked achievements</string>

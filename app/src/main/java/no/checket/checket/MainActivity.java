@@ -232,7 +232,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void newTask(View view) {
         // User has clicked the FAB
         DialogFragment dialog = new NewTaskFragment();
-        dialog.show(getSupportFragmentManager(), "NewTaskFragment");
+        dialog.show(getSupportFragmentManager(), "newTaskFragment");
+    }
+
+    // Used for accessing a time picker in the new task dialog
+    public void showTimePickerFragment(View view) {
+        DialogFragment time = new NewTaskFragment.TimePickerFragment();
+        time.show(getSupportFragmentManager(), "timePickerFragment");
+    }
+
+    // Same as above, for a date picker
+    public void showDatePickerFragment(View view) {
+        DialogFragment newFragment = new NewTaskFragment.DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     @Override
