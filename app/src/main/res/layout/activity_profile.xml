@@ -45,6 +45,16 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="20dp"/>
 
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_settings_white_24dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="13dp"/>
+
     </RelativeLayout>
 
     <LinearLayout
