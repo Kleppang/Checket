@@ -17,4 +17,11 @@
     <color name="intro_slider_dot_dark">#25202020</color>
     <color name="intro_slider_dot">#E8E8E8</color>
 
+    <!-- Profile -->
+    <color name="profile_circle">#D9D4D1</color>
+    <color name="profile_circle_Border">#FFFFFF</color>
+    <color name="profile_gradientStart">#43444D</color>
+    <color name="profile_gradientEnd">#404040</color>
+    <color name="profile_achievements_bg">#D9D4D1</color>
+    <color name="profile_tasks">#EDE8E8</color>
 </resources>

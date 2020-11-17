@@ -47,6 +47,13 @@
     <string name="prompt_reenter_pw">Re-Enter Password</string>
     <string name="helperTextInp">Required*</string>
 
+    <!-- Profile -->
+    <string name="Profile">Profile</string>
+    <string name="twitterUsername">\@joeytribbiani</string>
+
+    <!-- Edit Profile -->
+    <string name="EditProfile">Edit Profile</string>
+
 
     <!-- Intro Slider -->
     <string name="intro_slider_next">NEXT</string>
@@ -94,4 +101,5 @@
     <string name="time">Time</string>
     <string name="add">ADD</string>
     <string name="discard">Discard</string>
+    <string name="tasks_header">Tasks</string>
 </resources>

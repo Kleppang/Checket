@@ -4,7 +4,9 @@
 
     <item android:title="@string/general">
         <menu>
-            <item android:title="@string/profile"
+            <item
+                android:id="@+id/nav_profile"
+                android:title="@string/profile"
                 android:icon="@drawable/ic_profile_black_24dp" />
 
             <item android:title="@string/achievements"
