@@ -169,6 +169,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Intent intentP = new Intent(MainActivity.this, ProfileActivity.class);
                             startActivity(intentP);
                             break;
+
+                        case R.id.nav_achievements:
+                            // Starts the AchievementsActivity
+                            Intent intentAch = new Intent(MainActivity.this, AchievementsActivity.class);
+                            startActivity(intentAch);
+                            break;
+
                     }
                     return false;
                 }
@@ -194,7 +201,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             break;
                         case R.id.main_BottomAppBar_ach:
                             // Open achievements
-                            Toast.makeText(MainActivity.this, "Open achievements", Toast.LENGTH_SHORT).show();
+                            Intent intentAch = new Intent(MainActivity.this, AchievementsActivity.class);
+                            startActivity(intentAch);
                             break;
                     }
                     return true;
