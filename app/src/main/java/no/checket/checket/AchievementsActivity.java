@@ -15,8 +15,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
@@ -25,6 +27,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
@@ -44,16 +48,11 @@ public class AchievementsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private List<Achievement> achList;
+    private AchievementRecAdapter achAdapter;
     private List<Achievement> achListLocked;
+    private AchievementRecAdapter achAdapterLocked;
 
     private static final String TAG = "AchievementsActivity";
-
-    // Achievements
-    boolean hasGermaphobe = false;
-    boolean hasCustomizer = false;
-    boolean hasTaskmaster10 = false;
-    boolean hasTaskmaster100 = false;
-    boolean hasTaskmaster1000 = false;
 
     /* TODO:
     As a user may still get achievements while not being logged in, connect list of achievements with local database
@@ -82,10 +81,10 @@ public class AchievementsActivity extends AppCompatActivity {
             }
 
             achList = new ArrayList<>();
-            final AchievementRecAdapter achAdapter = new AchievementRecAdapter(achList);
+            achAdapter = new AchievementRecAdapter(achList);
 
             achListLocked = new ArrayList<>();
-            final AchievementRecAdapter achAdapterLocked = new AchievementRecAdapter(achListLocked);
+            achAdapterLocked = new AchievementRecAdapter(achListLocked);
 
             recyclerView = findViewById(R.id.achievements_recView);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -107,55 +106,33 @@ public class AchievementsActivity extends AppCompatActivity {
             achListLocked.add(new Achievement("Taskmaster (1000+)", "Created 1000 tasks"));
 
             firestore = FirebaseFirestore.getInstance();
-            firestore.collection("achievements").addSnapshotListener(new EventListener<QuerySnapshot>() {
 
+            firestore.collection("achievements").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
-                public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException err) {
-                    if(err == null) {
-                        for(DocumentChange thisDoc:documents.getDocumentChanges()) {
-                            if(thisDoc.getType() == DocumentChange.Type.ADDED) {
-                                // Check if the UID matches logged in users' UID
-                                if(thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                    Achievement newAchievement = new Achievement(thisDoc.getDocument().getString("name"), thisDoc.getDocument().getString("desc"));
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()) {
+                        for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                            // Check if the UID matches logged in users' UID
+                            if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                Achievement newAchievement = new Achievement(thisDoc.getString("name"), thisDoc.getString("desc"));
 
-                                    Achievement checkAgainst = findAchievement(thisDoc.getDocument().getString("name"));
+                                Achievement checkAgainst = findAchievementLocked(thisDoc.getString("name"));
 
-                                    if(checkAgainst != null) {
-                                        achListLocked.remove(checkAgainst);
-                                    }
-
-                                    if(newAchievement.getName().equals("Germaphobe")) {
-                                        Log.d(TAG, "User already has Germaphobe");
-                                        hasGermaphobe = true;
-                                    } else if(newAchievement.getName().equals("Customizer")) {
-                                        Log.d(TAG, "User already has Customizer");
-                                        hasCustomizer = true;
-                                    } else if(newAchievement.getName().equals("Taskmaster (10+)")) {
-                                        Log.d(TAG, "User already has Taskmaster (10+)");
-                                        hasTaskmaster10 = true;
-                                    } else if(newAchievement.getName().equals("Taskmaster (100+)")) {
-                                        Log.d(TAG, "User already has Taskmaster (100+)");
-                                        hasTaskmaster100 = true;
-                                    } else if(newAchievement.getName().equals("Taskmaster (1000+)")) {
-                                        Log.d(TAG, "User already has Taskmaster (1000+)");
-                                        hasTaskmaster1000 = true;
-                                    }
-
-                                    achList.add(newAchievement);
-                                    achAdapter.notifyDataSetChanged();
-                                    achAdapterLocked.notifyDataSetChanged();
+                                if(checkAgainst != null) {
+                                    achListLocked.remove(checkAgainst);
                                 }
+
+                                achList.add(newAchievement);
                             }
                         }
-                    } else {
-                        // If an error occurred
-                        Log.e(TAG, "Error occurred: " + err.getMessage());
+
+                        checkAchievements();
+
+                        achAdapter.notifyDataSetChanged();
+                        achAdapterLocked.notifyDataSetChanged();
                     }
                 }
-
             });
-
-            checkAchievements();
         }
 
     }
@@ -166,7 +143,16 @@ public class AchievementsActivity extends AppCompatActivity {
         return true;
     }
 
-    private Achievement findAchievement(String checkName) {
+    private boolean existsAchievement(String checkName) {
+        for(Achievement ach : achList) {
+            if(ach.getName().equals(checkName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Achievement findAchievementLocked(String checkName) {
         for(Achievement ach : achListLocked) {
             if(ach.getName().equals(checkName)) {
                 return ach;
@@ -181,6 +167,12 @@ public class AchievementsActivity extends AppCompatActivity {
         achMap.put("name", achName);
         achMap.put("desc", achDesc);
         achMap.put("uid", mAuth.getUid());
+
+        achList.add(new Achievement(achName, achDesc));
+        achListLocked.remove(findAchievementLocked("achName"));
+
+        achAdapter.notifyDataSetChanged();
+        achAdapterLocked.notifyDataSetChanged();
 
         firestore.collection("achievements").add(achMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -220,7 +212,7 @@ public class AchievementsActivity extends AppCompatActivity {
                         for(DocumentChange thisDoc:documents.getDocumentChanges()) {
                             if(thisDoc.getType() == DocumentChange.Type.ADDED) {
                                 // Firstly, ensure user does not already have the achievement, then check if the UID matches logged in users' UID, check if the Category is Cleaning and only include results from the past 7 days
-                                if(!hasGermaphobe && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid()) && thisDoc.getDocument().getString("category").equals("Cleaning") && Long.parseLong(thisDoc.getDocument().getString("enddate")) >= (System.currentTimeMillis() - 604800000)) {
+                                if(!existsAchievement("Germaphobe") && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid()) && thisDoc.getDocument().getString("category").equals("Cleaning") && Long.parseLong(thisDoc.getDocument().getString("enddate")) >= (System.currentTimeMillis() - 604800000)) {
 
                                     Calendar taskdate = Calendar.getInstance();
                                     taskdate.setTimeInMillis(Long.parseLong(thisDoc.getDocument().getString("enddate")));
@@ -249,23 +241,8 @@ public class AchievementsActivity extends AppCompatActivity {
                                     if(d7 && d6 && d5 && d4 && d3 && d2 && d1) {
                                         // If all dates are a-okay
                                         addAchievementFB("Germaphobe", "Cleaned 7 days in a row");
-                                        hasGermaphobe = true;
                                     }
 
-                                }
-                                // If the user does not already have the achievement Customizer, the UID equals logged in UID, and the task is in the past
-                                else if(!hasCustomizer && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid()) && Long.parseLong(thisDoc.getDocument().getString("enddate")) <= (System.currentTimeMillis())) {
-
-                                    DocumentReference usersReference = firestore.collection("users").document(mAuth.getUid());
-
-                                    usersReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            // Successfully found
-                                            addAchievementFB("Customizer", "Set a custom name");
-                                            hasCustomizer = true;
-                                        }
-                                    });
                                 }
                             }
                         }
@@ -276,6 +253,19 @@ public class AchievementsActivity extends AppCompatActivity {
                 }
 
             });
+
+            // If the user does not already have the achievement Customizer, the UID equals logged in UID, and the task is in the past
+            if(!existsAchievement("Customizer")) {
+                DocumentReference usersReference = firestore.collection("users").document(mAuth.getUid());
+
+                usersReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        // Successfully found
+                        addAchievementFB("Customizer", "Set a custom name");
+                    }
+                });
+            }
         }
     }
 }
