@@ -231,25 +231,18 @@ public class AchievementsActivity extends AppCompatActivity {
                                     long now = System.currentTimeMillis();
 
                                     if(tasktime <= (now - 518400000)) {
-                                        Log.d(TAG, "This date was between 7 and 6 days ago");
                                         d7 = true;
                                     } else if(tasktime <= (now - 432000000)) {
-                                        Log.d(TAG, "This date was between 6 and 5 days ago");
                                         d6 = true;
                                     } else if(tasktime <= (now - 345600000)) {
-                                        Log.d(TAG, "This date was between 5 and 4 days ago");
                                         d5 = true;
                                     } else if(tasktime <= (now - 259200000)) {
-                                        Log.d(TAG, "This date was between 4 and 3 days ago");
                                         d4 = true;
                                     } else if(tasktime <= (now - 172800000)) {
-                                        Log.d(TAG, "This date was between 3 and 2 days ago");
                                         d3 = true;
                                     } else if(tasktime <= (now - 86400000)) {
-                                        Log.d(TAG, "This date was between 2 and 1 days ago");
                                         d2 = true;
                                     } else if(tasktime <= now) {
-                                        Log.d(TAG, "This date was between 1 and 0 days ago");
                                         d1 = true;
                                     }
 
@@ -259,6 +252,20 @@ public class AchievementsActivity extends AppCompatActivity {
                                         hasGermaphobe = true;
                                     }
 
+                                }
+                                // If the user does not already have the achievement Customizer, the UID equals logged in UID, and the task is in the past
+                                else if(!hasCustomizer && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid()) && Long.parseLong(thisDoc.getDocument().getString("enddate")) <= (System.currentTimeMillis())) {
+
+                                    DocumentReference usersReference = firestore.collection("users").document(mAuth.getUid());
+
+                                    usersReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            // Successfully found
+                                            addAchievementFB("Customizer", "Set a custom name");
+                                            hasCustomizer = true;
+                                        }
+                                    });
                                 }
                             }
                         }
