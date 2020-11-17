@@ -48,45 +48,46 @@ public class AchievementsActivity extends AppCompatActivity {
             // User is not logged in, will show local achievements only, for now, kick back to where the user came from
             onBackPressed();
             Toast.makeText(this, "Not logged in", Toast.LENGTH_LONG).show();
-        }
-
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.achievements);
-        }
-
-        final List<Achievement> achList = new ArrayList<>();
-        final AchievementRecAdapter achAdapter = new AchievementRecAdapter(achList);
-
-        recyclerView = findViewById(R.id.achievements_recView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(achAdapter);
-
-        firestore = FirebaseFirestore.getInstance();
-        firestore.collection("achievements").addSnapshotListener(new EventListener<QuerySnapshot>() {
-
-            @Override
-            public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException err) {
-                if(err == null) {
-                    for(DocumentChange thisDoc:documents.getDocumentChanges()) {
-                        if(thisDoc.getType() == DocumentChange.Type.ADDED) {
-                            // Check if the UID matches logged in users' UID
-                            if(thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                Achievement newAchievement = new Achievement(thisDoc.getDocument().getString("name"), thisDoc.getDocument().getString("desc"));
-
-                                achList.add(newAchievement);
-                                achAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                } else {
-                    // If an error occurred
-                    Log.e(TAG, "Error occurred: " + err.getMessage());
-                }
+        } else {
+            ActionBar actionBar = getSupportActionBar();
+            if(actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setTitle(R.string.achievements);
             }
 
-        });
+            final List<Achievement> achList = new ArrayList<>();
+            final AchievementRecAdapter achAdapter = new AchievementRecAdapter(achList);
+
+            recyclerView = findViewById(R.id.achievements_recView);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(achAdapter);
+
+            firestore = FirebaseFirestore.getInstance();
+            firestore.collection("achievements").addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+                @Override
+                public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException err) {
+                    if(err == null) {
+                        for(DocumentChange thisDoc:documents.getDocumentChanges()) {
+                            if(thisDoc.getType() == DocumentChange.Type.ADDED) {
+                                // Check if the UID matches logged in users' UID
+                                if(thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                    Achievement newAchievement = new Achievement(thisDoc.getDocument().getString("name"), thisDoc.getDocument().getString("desc"));
+
+                                    achList.add(newAchievement);
+                                    achAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    } else {
+                        // If an error occurred
+                        Log.e(TAG, "Error occurred: " + err.getMessage());
+                    }
+                }
+
+            });
+        }
+
     }
 
 
