@@ -126,10 +126,10 @@ public class AchievementsActivity extends AppCompatActivity {
                             }
                         }
 
-                        checkAchievements();
-
                         achAdapter.notifyDataSetChanged();
                         achAdapterLocked.notifyDataSetChanged();
+
+                        checkAchievements();
                     }
                 }
             });
@@ -169,7 +169,7 @@ public class AchievementsActivity extends AppCompatActivity {
         achMap.put("uid", mAuth.getUid());
 
         achList.add(new Achievement(achName, achDesc));
-        achListLocked.remove(findAchievementLocked("achName"));
+        achListLocked.remove(findAchievementLocked(achName));
 
         achAdapter.notifyDataSetChanged();
         achAdapterLocked.notifyDataSetChanged();
