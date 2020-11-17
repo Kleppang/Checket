@@ -286,11 +286,11 @@ public class AchievementsActivity extends AppCompatActivity {
                                     ant++;
                                 }
                             }
-                            if(ant >= 10) {
+                            if(ant >= 10 && !existsAchievement("Taskmaster (10+)")) {
                                 addAchievementFB("Taskmaster (10+)", "Created 10 tasks");
-                            } else if(ant >= 100) {
+                            } else if(ant >= 100 && !existsAchievement("Taskmaster (100+)")) {
                                 addAchievementFB("Taskmaster (100+)", "Created 100 tasks");
-                            } else if(ant >= 1000) {
+                            } else if(ant >= 1000 && !existsAchievement("Taskmaster (1000+)")) {
                                 addAchievementFB("Taskmaster (1000+)", "Created 1000 tasks");
                             }
                         }
