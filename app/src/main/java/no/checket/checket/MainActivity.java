@@ -7,21 +7,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -34,7 +31,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        NewTaskFragment.NewTaskDialogListener {
 
     private IntroSlideManager mIntroSlideManager;
 
@@ -235,6 +234,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.show(getSupportFragmentManager(), "newTaskFragment");
     }
 
+    // Listener for clicking of the save button
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+    }
+
+    // ... or the cancel button
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
+
     // Used for accessing a time picker in the new task dialog
     public void showTimePickerFragment(View view) {
         DialogFragment time = new NewTaskFragment.TimePickerFragment();
@@ -247,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
@@ -256,4 +268,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
+
+
 }
