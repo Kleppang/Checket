@@ -10,12 +10,8 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +24,7 @@ public class NewTaskFragment extends DialogFragment {
     // Interface for fragment communication
     // Includes callbacks to MainActivity
     public interface NewTaskDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogPositiveClick(DialogFragment dialog, String header, String s, Date date, String details);
         void onDialogNegativeClick(DialogFragment dialog);
     }
     NewTaskDialogListener listener;
@@ -50,14 +46,20 @@ public class NewTaskFragment extends DialogFragment {
             .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
+                    // TODO: Access and initialize strings and date
                     Log.i("Petter", "NewTaskFragment.onClick() positive button");
-                    listener.onDialogPositiveClick(NewTaskFragment.this);
+                    String header = "Header";
+                    String details = "Details";
+                    Date date = new Date (2019, 11, 12, 21, 30);
+                    String icon = "Icon";
+                    listener.onDialogPositiveClick(NewTaskFragment.this, header, details, date, icon);
                 }
             })
             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
                     Log.i("Petter", "NewTaskFragment.onClick() negative button");
+                    listener.onDialogNegativeClick(NewTaskFragment.this);
                     NewTaskFragment.this.getDialog().cancel();
                 }
             });
@@ -94,9 +96,6 @@ public class NewTaskFragment extends DialogFragment {
 
         public void onTimeSet(TimePicker View, int hour, int minute) {
             // TODO: something useful. What with the returning and such
-            String mHour = Integer.toString(hour);
-            String mMinute = Integer.toString(minute);
-
         }
     }
 

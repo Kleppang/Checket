@@ -1,6 +1,5 @@
 package no.checket.checket;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -215,7 +214,7 @@ public class TasksActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
+    public void onDialogPositiveClick(DialogFragment dialog, String header, String s, Date date, String details) {
 
     }
 
