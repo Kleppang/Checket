@@ -253,6 +253,7 @@ public class MainActivity extends AppCompatActivity
         // Add the new task to the list
         int index = 0;
         mTaskList.add(index, task);
+        // TODO: Upload new Task
         // Calling the function to refresh the RecyclerView
         recyclerView();
     }
