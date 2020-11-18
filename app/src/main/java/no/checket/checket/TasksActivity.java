@@ -31,7 +31,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 
-public class TasksActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class TasksActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        NewTaskFragment.NewTaskDialogListener {
 
     BottomAppBar main_BottomAppBar;
 
@@ -210,5 +212,15 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 }

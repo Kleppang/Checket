@@ -13,11 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -33,6 +36,7 @@ import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
+        // Interface for communication with NewTaskFragment
         NewTaskFragment.NewTaskDialogListener {
 
     private IntroSlideManager mIntroSlideManager;
@@ -235,15 +239,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     // Listener for clicking of the save button
+    // Had to create these from an error dialog when implementing the interface,
+    // just to get the overrides right.
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-
+        Log.i("Petter", "MainActivity.onDialogPositiveClick()");
+        // TODO: Testing for retrieval of text from the dialog
+        // Currently meeting a null pointer here. Presumably finding the wrong spinner
+        //Spinner mCategory = findViewById(R.id.category_spinner);
+        //String category = mCategory.getSelectedItem().toString();
+        //Log.i("Petter. Output: ", category);
     }
 
     // ... or the cancel button
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-
+        Log.i("Petter", "MainActivity.onNegativeDialogClick()");
     }
 
     // Used for accessing a time picker in the new task dialog

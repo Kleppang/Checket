@@ -28,28 +28,15 @@ public class NewTaskFragment extends DialogFragment {
     // Interface for fragment communication
     // Includes callbacks to MainActivity
     public interface NewTaskDialogListener {
-        abstract void onDialogPositiveClick(DialogFragment dialog);
-        abstract void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogNegativeClick(DialogFragment dialog);
     }
-
     NewTaskDialogListener listener;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // Verify that the host activity implements the callback interface
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            listener = (NewTaskDialogListener) context;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException("Must implement NoticeDialogListener");
-        }
-    }
 
     @NonNull
     @Override
     public android.app.Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Log.i("Petter", "NewTaskFragment.onCreateDialog()");
         // Begin building a dialog, in the activity that called it.
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
@@ -63,18 +50,33 @@ public class NewTaskFragment extends DialogFragment {
             .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
-                    // TODO: save as an object, add to data structure
+                    Log.i("Petter", "NewTaskFragment.onClick() positive button");
+                    listener.onDialogPositiveClick(NewTaskFragment.this);
                 }
             })
             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
+                    Log.i("Petter", "NewTaskFragment.onClick() negative button");
                     NewTaskFragment.this.getDialog().cancel();
                 }
             });
         return builder.create();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        Log.i("Petter", "NewTaskFragment.onAttach()");
+        super.onAttach(context);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            listener = (NewTaskDialogListener) context;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException("Must implement NoticeDialogListener");
+        }
+    }
 
     // Inner class to handle the time picker
     public static class TimePickerFragment extends DialogFragment
