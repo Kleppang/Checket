@@ -89,6 +89,10 @@ public class AchievementsActivity extends AppCompatActivity {
             /* TODO
             Ensure final list of achievements have the correct checks
 
+            Achievement ideas:
+            Over 9000 - 9000+ tasks
+            "Naruto run" - 10 tasks in a single day
+
              */
 
             achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row"));
