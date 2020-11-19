@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +43,6 @@ public class AchievementsActivity extends AppCompatActivity {
     private AchievementRecAdapter achAdapter;
     private List<Achievement> achListLocked;
     private AchievementRecAdapter achAdapterLocked;
-
-    private TabLayout ach_tabLayout;
 
     private static final String TAG = "AchievementsActivity";
 
@@ -122,9 +121,14 @@ public class AchievementsActivity extends AppCompatActivity {
                                     achListLocked.remove(checkAgainst);
                                 }
 
+
                                 achList.add(newAchievement);
                             }
                         }
+
+                        // Sort the lists before displaying
+                        Collections.sort(achList);
+                        Collections.sort(achListLocked);
 
                         achAdapter.notifyDataSetChanged();
                         achAdapterLocked.notifyDataSetChanged();
@@ -134,7 +138,7 @@ public class AchievementsActivity extends AppCompatActivity {
                 }
             });
 
-            ach_tabLayout = findViewById(R.id.achievements_tabLayout);
+            TabLayout ach_tabLayout = findViewById(R.id.ach_tabLayout);
 
             ach_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
@@ -201,6 +205,10 @@ public class AchievementsActivity extends AppCompatActivity {
 
         achList.add(new Achievement(achName, achDesc, achCat));
         achListLocked.remove(findAchievementLocked(achName));
+
+        // Sort the lists before displaying
+        Collections.sort(achList);
+        Collections.sort(achListLocked);
 
         achAdapter.notifyDataSetChanged();
         achAdapterLocked.notifyDataSetChanged();

@@ -1,6 +1,6 @@
 package no.checket.checket;
 
-public class Achievement {
+public class Achievement implements Comparable<Achievement> {
     private String name;
     private String desc;
     private String category;
@@ -21,5 +21,10 @@ public class Achievement {
 
     public String getCategory() {
         return category;
+    }
+
+    @Override
+    public int compareTo(Achievement achievement) {
+        return this.getName().compareTo(achievement.getName());
     }
 }
