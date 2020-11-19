@@ -176,7 +176,7 @@ public class AchievementsActivity extends AppCompatActivity {
                         achAdapter.notifyDataSetChanged();
                         achAdapterLocked.notifyDataSetChanged();
 
-                        checkAchievements();
+                        checkAchievementsFB();
                     }
                 }
             });
@@ -276,7 +276,7 @@ public class AchievementsActivity extends AppCompatActivity {
         });
     }
 
-    private void checkAchievements() {
+    private void checkAchievementsFB() {
         // This function serves as the primary tool to check if a user has unlocked an achievement
         if(mAuth.getCurrentUser() == null) {
             // User not logged in
