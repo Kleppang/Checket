@@ -71,6 +71,7 @@ public class AchievementsActivity extends AppCompatActivity {
             if(actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setTitle(R.string.achievements);
+                actionBar.setElevation(0);
             }
 
             achList = new ArrayList<>();

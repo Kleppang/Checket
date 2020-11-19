@@ -30,4 +30,5 @@
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorUnderlineGrey">#E0E0E0</color>
+    <color name="colorWhiteSecondary">#BEE0E0E0</color>
 </resources>

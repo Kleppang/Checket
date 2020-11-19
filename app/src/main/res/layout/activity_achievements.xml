@@ -10,7 +10,12 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/achievements_tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:tabIndicatorColor="@color/colorWhite"
+        app:tabSelectedTextColor="@color/colorWhite"
+        app:tabTextColor="@color/colorWhiteSecondary"
+        android:elevation="5dp">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/ach_tabLayoutUnlocked"
