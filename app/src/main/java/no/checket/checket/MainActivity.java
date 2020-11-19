@@ -68,9 +68,6 @@ public class MainActivity extends AppCompatActivity
         if(mIntroSlideManager.isFirstTime()) {
             // If first time, launch the intro slider
 
-            // If user exits out of the app while active, assume this was by mistake, don't consider the intro finished
-            //introSlideManager.setFirstTime(false);
-
             startActivity(new Intent(this, IntroSlideActivity.class));
             finish();
         } else {
@@ -170,12 +167,12 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 }
             });
-        }
 
-        // Fill mTaskList
-        fillTaskList();
-        // Call the method to initialize and inflate the recycler
-        recyclerView();
+            // Fill mTaskList
+            fillTaskList();
+            // Call the method to initialize and inflate the recycler
+            recyclerView();
+        }
     }
 
     public void onStart() {
