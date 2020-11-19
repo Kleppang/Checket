@@ -49,7 +49,6 @@
 
     <!-- Profile -->
     <string name="Profile">Profile</string>
-    <string name="twitterUsername">\@joeytribbiani</string>
 
     <!-- Edit Profile -->
     <string name="EditProfile">Edit Profile</string>
@@ -122,5 +121,7 @@
     <!-- Achievements -->
     <string name="ach_unlockedAchievements">Unlocked achievements</string>
     <string name="ach_lockedAchievements">Locked achievements</string>
+    <string name="ach_unlockedAchievements_desc">A tab that will show all the unlocked achievements</string>
+    <string name="ach_lockedAchievements_desc">A tab that will show all the locked achievements</string>
 
 </resources>
