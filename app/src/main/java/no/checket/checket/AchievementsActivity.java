@@ -88,20 +88,19 @@ public class AchievementsActivity extends AppCompatActivity {
             recyclerViewLocked.setLayoutManager(new LinearLayoutManager(this));
             recyclerViewLocked.setAdapter(achAdapterLocked);
 
-            /* TODO
-            Ensure final list of achievements have the correct checks
+            /*
 
-            Achievement ideas:
-            Over 9000 - 9000+ tasks
-            "Naruto run" - 10 tasks in a single day
-
-            Hidden achievement:
-            Klimate - Custom name = Klimate
+            Hidden achievements:
+            Name            | Description               | Requirements
+            -----------------------------------------------------------
+            Klimate         | A true environmentalist   | Custom name = Klimate
+            It's over 9000! | Created 9001 tasks        | 9000+ tasks
 
              */
 
-            achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row", "Cleaning"));
             achListLocked.add(new Achievement("Customizer", "Set a custom name", "User profile"));
+            achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row", "Cleaning"));
+            achListLocked.add(new Achievement("Gotta go fast", "10 tasks in a single day", "Miscellaneous"));
             achListLocked.add(new Achievement("Taskmaster (10+)", "Created 10 tasks", "Miscellaneous"));
             achListLocked.add(new Achievement("Taskmaster (100+)", "Created 100 tasks", "Miscellaneous"));
             achListLocked.add(new Achievement("Taskmaster (1000+)", "Created 1000 tasks", "Miscellaneous"));
@@ -233,6 +232,7 @@ public class AchievementsActivity extends AppCompatActivity {
 
                 @Override
                 public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException err) {
+                    // Booleans used by the achievement "Germaphobe"
                     boolean d1 = false;
                     boolean d2 = false;
                     boolean d3 = false;
@@ -240,6 +240,10 @@ public class AchievementsActivity extends AppCompatActivity {
                     boolean d5 = false;
                     boolean d6 = false;
                     boolean d7 = false;
+
+                    // Counter used by the achievement "Gotta go fast"
+                    int GGF_count = 0;
+
                     if(err == null) {
                         for(DocumentChange thisDoc:documents.getDocumentChanges()) {
                             if(thisDoc.getType() == DocumentChange.Type.ADDED) {
@@ -275,6 +279,13 @@ public class AchievementsActivity extends AppCompatActivity {
                                         addAchievementFB("Germaphobe", "Cleaned 7 days in a row", "Cleaning");
                                     }
 
+                                } else if(!existsAchievement("Gotta go fast") && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid())  && Long.parseLong(thisDoc.getDocument().getString("enddate")) >= (System.currentTimeMillis() - 86400000)) {
+                                    // Gets all of the tasks for a logged in user in the past 24 hours
+                                    GGF_count++;
+
+                                    if(GGF_count >= 10) {
+                                        addAchievementFB("Gotta go fast", "10 tasks in a single day", "Miscellaneous");
+                                    }
                                 }
                             }
                         }
@@ -332,6 +343,9 @@ public class AchievementsActivity extends AppCompatActivity {
                                 addAchievementFB("Taskmaster (100+)", "Created 100 tasks", "Miscellaneous");
                             } else if(ant >= 1000 && !existsAchievement("Taskmaster (1000+)")) {
                                 addAchievementFB("Taskmaster (1000+)", "Created 1000 tasks", "Miscellaneous");
+                            } else if(ant >= 9001 && !existsAchievement("It's over 9000!")) {
+                                // The hidden achievement "It's over 9000!"
+                                addAchievementFB("It's over 9000!", "Created 9001 tasks", "Hidden");
                             }
                         }
                     }
