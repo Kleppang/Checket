@@ -149,14 +149,17 @@ public class AchievementsActivity extends AppCompatActivity {
                             if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                                 final Achievement newAchievement = new Achievement(thisDoc.getString("name"), thisDoc.getString("desc"), thisDoc.getString("category"));
 
+                                // In order to avoid confusion we remove an unlocked achievement from the locked list
                                 Achievement checkAgainst = findAchievementLocked(thisDoc.getString("name"));
-
                                 if(checkAgainst != null) {
+                                    // The unlocked achievement was found in the list of locked achievements and is removed
                                     achListLocked.remove(checkAgainst);
                                 }
 
+                                // Add this achievement to the list of unlocked achievement
                                 achList.add(newAchievement);
 
+                                // Add this achievement to the local database, if it already exists it will be replaced.
                                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                                     @Override
                                     public void run() {
@@ -179,11 +182,6 @@ public class AchievementsActivity extends AppCompatActivity {
             });
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     public void loadAllLocalAch() {
