@@ -79,6 +79,9 @@ public class AchievementRecAdapter extends RecyclerView.Adapter<AchievementRecAd
             case "User profile":
                 holder.imgAch.setImageResource(R.drawable.ic_profile_black_24dp);
                 break;
+            case "Hidden":
+                holder.imgAch.setImageResource(R.drawable.ic_baseline_lock_open_black_24dp);
+                break;
             default:
                 break;
         }

@@ -95,6 +95,9 @@ public class AchievementsActivity extends AppCompatActivity {
             Over 9000 - 9000+ tasks
             "Naruto run" - 10 tasks in a single day
 
+            Hidden achievement:
+            Klimate - Custom name = Klimate
+
              */
 
             achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row", "Cleaning"));
@@ -283,8 +286,8 @@ public class AchievementsActivity extends AppCompatActivity {
 
             });
 
-            // If the user does not already have the achievement Customizer
-            if(!existsAchievement("Customizer")) {
+            // Achievements related to the users collection
+            if(!existsAchievement("Customizer") || !existsAchievement("Klimate")) {
                 firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -292,8 +295,16 @@ public class AchievementsActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                                 // Check if the UID matches logged in users' UID
                                 if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                    // User has set a custom name, award the achievement
-                                    addAchievementFB("Customizer", "Set a custom name", "User profile");
+                                    if(!existsAchievement("Customizer")) {
+                                        // User has set a custom name, award the achievement
+                                        addAchievementFB("Customizer", "Set a custom name", "User profile");
+                                    }
+                                    if(!existsAchievement("Klimate")) {
+                                        // Checking for the additional hidden achievement "Klimate"
+                                        if(thisDoc.getString("name").equals("Klimate")) {
+                                            addAchievementFB("Klimate", "A true environmentalist", "Hidden");
+                                        }
+                                    }
                                 }
                             }
                         }
