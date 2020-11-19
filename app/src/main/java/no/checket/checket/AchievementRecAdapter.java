@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,12 +26,16 @@ public class AchievementRecAdapter extends RecyclerView.Adapter<AchievementRecAd
         // Your holder should contain a member variable for any view that will be set as you render a row
         TextView tvName;
         TextView tvDesc;
+        TextView tvCat;
+        ImageView imgAch;
 
         public AchievementViewHolder(View itemView) {
             super(itemView);
             // Viewholder gets the handles for each view items in a row
-            tvName = (TextView)itemView.findViewById(R.id.txtName);
-            tvDesc = (TextView)itemView.findViewById(R.id.txtDesc);
+            tvName = (TextView)itemView.findViewById(R.id.ach_txtName);
+            tvDesc = (TextView)itemView.findViewById(R.id.ach_txtDesc);
+            tvCat = (TextView)itemView.findViewById(R.id.ach_txtCat);
+            imgAch = (ImageView)itemView.findViewById(R.id.ach_img);
         }
     }
 
@@ -62,6 +67,21 @@ public class AchievementRecAdapter extends RecyclerView.Adapter<AchievementRecAd
         //  show the data in the views
         holder.tvName.setText(currentAchievement.getName());
         holder.tvDesc.setText(currentAchievement.getDesc());
+        holder.tvCat.setText(currentAchievement.getCategory());
+
+        switch(currentAchievement.getCategory()) {
+            case "Cleaning":
+                holder.imgAch.setImageResource(R.drawable.ic_baseline_cleaning_services_black_24dp);
+                break;
+            case "Miscellaneous":
+                holder.imgAch.setImageResource(R.drawable.ic_baseline_miscellaneous_services_black_24dp);
+                break;
+            case "User profile":
+                holder.imgAch.setImageResource(R.drawable.ic_profile_black_24dp);
+                break;
+            default:
+                break;
+        }
     }
 
     /**Returns the total number of items in the data set held by the adapter. */

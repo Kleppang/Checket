@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -32,9 +34,6 @@ import java.util.Map;
 
 public class AchievementsActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private RecyclerView recyclerViewLocked;
-
     // Firebase, declare instance of Firestore and Auth
     private FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
@@ -43,6 +42,8 @@ public class AchievementsActivity extends AppCompatActivity {
     private AchievementRecAdapter achAdapter;
     private List<Achievement> achListLocked;
     private AchievementRecAdapter achAdapterLocked;
+
+    private TabLayout ach_tabLayout;
 
     private static final String TAG = "AchievementsActivity";
 
@@ -78,11 +79,11 @@ public class AchievementsActivity extends AppCompatActivity {
             achListLocked = new ArrayList<>();
             achAdapterLocked = new AchievementRecAdapter(achListLocked);
 
-            recyclerView = findViewById(R.id.achievements_recView);
+            final RecyclerView recyclerView = findViewById(R.id.ach_recView);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(achAdapter);
 
-            recyclerViewLocked = findViewById(R.id.achievements_recViewLocked);
+            final RecyclerView recyclerViewLocked = findViewById(R.id.ach_recViewLocked);
             recyclerViewLocked.setLayoutManager(new LinearLayoutManager(this));
             recyclerViewLocked.setAdapter(achAdapterLocked);
 
@@ -95,11 +96,11 @@ public class AchievementsActivity extends AppCompatActivity {
 
              */
 
-            achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row"));
-            achListLocked.add(new Achievement("Customizer", "Set a custom name"));
-            achListLocked.add(new Achievement("Taskmaster (10+)", "Created 10 tasks"));
-            achListLocked.add(new Achievement("Taskmaster (100+)", "Created 100 tasks"));
-            achListLocked.add(new Achievement("Taskmaster (1000+)", "Created 1000 tasks"));
+            achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row", "Cleaning"));
+            achListLocked.add(new Achievement("Customizer", "Set a custom name", "User profile"));
+            achListLocked.add(new Achievement("Taskmaster (10+)", "Created 10 tasks", "Miscellaneous"));
+            achListLocked.add(new Achievement("Taskmaster (100+)", "Created 100 tasks", "Miscellaneous"));
+            achListLocked.add(new Achievement("Taskmaster (1000+)", "Created 1000 tasks", "Miscellaneous"));
 
             firestore = FirebaseFirestore.getInstance();
 
@@ -110,7 +111,7 @@ public class AchievementsActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                             // Check if the UID matches logged in users' UID
                             if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                Achievement newAchievement = new Achievement(thisDoc.getString("name"), thisDoc.getString("desc"));
+                                Achievement newAchievement = new Achievement(thisDoc.getString("name"), thisDoc.getString("desc"), thisDoc.getString("category"));
 
                                 Achievement checkAgainst = findAchievementLocked(thisDoc.getString("name"));
 
@@ -127,6 +128,36 @@ public class AchievementsActivity extends AppCompatActivity {
 
                         checkAchievements();
                     }
+                }
+            });
+
+            ach_tabLayout = findViewById(R.id.achievements_tabLayout);
+
+            ach_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    switch(tab.getPosition()) {
+                        case 0:
+                            recyclerView.setVisibility(View.VISIBLE);
+                            recyclerViewLocked.setVisibility(View.GONE);
+                            break;
+                        case 1:
+                            recyclerView.setVisibility(View.GONE);
+                            recyclerViewLocked.setVisibility(View.VISIBLE);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
                 }
             });
         }
@@ -157,14 +188,15 @@ public class AchievementsActivity extends AppCompatActivity {
         return null;
     }
 
-    private void addAchievementFB(final String achName, String achDesc) {
+    private void addAchievementFB(final String achName, String achDesc, String achCat) {
 
         Map<String, Object> achMap = new HashMap<>();
         achMap.put("name", achName);
         achMap.put("desc", achDesc);
+        achMap.put("category", achCat);
         achMap.put("uid", mAuth.getUid());
 
-        achList.add(new Achievement(achName, achDesc));
+        achList.add(new Achievement(achName, achDesc, achCat));
         achListLocked.remove(findAchievementLocked(achName));
 
         achAdapter.notifyDataSetChanged();
@@ -236,7 +268,7 @@ public class AchievementsActivity extends AppCompatActivity {
 
                                     if(d7 && d6 && d5 && d4 && d3 && d2 && d1) {
                                         // If all dates are a-okay
-                                        addAchievementFB("Germaphobe", "Cleaned 7 days in a row");
+                                        addAchievementFB("Germaphobe", "Cleaned 7 days in a row", "Cleaning");
                                     }
 
                                 }
@@ -260,7 +292,7 @@ public class AchievementsActivity extends AppCompatActivity {
                                 // Check if the UID matches logged in users' UID
                                 if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                                     // User has set a custom name, award the achievement
-                                    addAchievementFB("Customizer", "Set a custom name");
+                                    addAchievementFB("Customizer", "Set a custom name", "User profile");
                                 }
                             }
                         }
@@ -283,11 +315,11 @@ public class AchievementsActivity extends AppCompatActivity {
                                 }
                             }
                             if(ant >= 10 && !existsAchievement("Taskmaster (10+)")) {
-                                addAchievementFB("Taskmaster (10+)", "Created 10 tasks");
+                                addAchievementFB("Taskmaster (10+)", "Created 10 tasks", "Miscellaneous");
                             } else if(ant >= 100 && !existsAchievement("Taskmaster (100+)")) {
-                                addAchievementFB("Taskmaster (100+)", "Created 100 tasks");
+                                addAchievementFB("Taskmaster (100+)", "Created 100 tasks", "Miscellaneous");
                             } else if(ant >= 1000 && !existsAchievement("Taskmaster (1000+)")) {
-                                addAchievementFB("Taskmaster (1000+)", "Created 1000 tasks");
+                                addAchievementFB("Taskmaster (1000+)", "Created 1000 tasks", "Miscellaneous");
                             }
                         }
                     }
