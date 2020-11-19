@@ -39,8 +39,6 @@ public class NewTaskFragment extends DialogFragment {
         // Begin building a dialog, in the activity that called it.
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
-        //LayoutInflater inflater = requireActivity().getLayoutInflater();
-
         LayoutInflater inflater = LayoutInflater.from(getContext());
         final View view = inflater.inflate(R.layout.dialog_new_task, null);
         final Spinner mHeader = (Spinner) view.findViewById(R.id.category_spinner);
@@ -103,7 +101,7 @@ public class NewTaskFragment extends DialogFragment {
         }
 
         public void onTimeSet(TimePicker View, int hour, int minute) {
-            // TODO: something useful. What with the returning and such
+            //
         }
     }
 

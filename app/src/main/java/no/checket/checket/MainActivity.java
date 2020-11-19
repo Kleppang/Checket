@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -255,11 +256,18 @@ public class MainActivity extends AppCompatActivity
         Task task = new Task(header, details, date, icon);
         // Add the new task to the list
         int index = 0;
-        mTaskList.add(index, task);
-        // TODO: Upload new Task to DB
-        Log.i("Petter", header + ", " + details + ", " + icon);
-        // Calling the function to refresh the RecyclerView
-        recyclerView();
+        if (!header.equals("")) {
+            mTaskList.add(index, task);
+            // TODO: Upload new Task to DB
+            Log.i("Petter", header + ", " + details + ", " + icon);
+            // Calling the function to refresh the RecyclerView
+            recyclerView();
+        } else {
+            Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
+            // TODO: Unsure whether this is the right view to give
+            newTask(drawerLayout);
+        }
+
     }
 
     // ... or the cancel button
