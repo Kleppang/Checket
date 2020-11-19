@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -198,8 +200,9 @@ public class MainActivity extends AppCompatActivity
         // RecyclerView
         // Populate list
         // TODO: Get list from DB
-        mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date(2020, 11, 11, 21, 30), "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 12, 21, 30), "ic_add"));
+        // NB! The year, month, etc. constructor is deprecated
+        mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date(61565866200000L), "ic_misc"));
+        mTaskList.add(new no.checket.checket.Task("TEST", "Vacuuming", new Date(61565866200000L), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", new Date (2020, 11, 14, 21, 30), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 19, 21, 30), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", new Date (2020, 12, 21, 20, 30), "ic_misc"));
@@ -215,6 +218,10 @@ public class MainActivity extends AppCompatActivity
         mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Apartment's REAAALLY clean now.", new Date (2020, 12, 28, 19, 30), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Here we go again.", new Date (2020, 12, 28, 21, 30), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 21, 30), "ic_add"));
+
+    }
+
+    public void recyclerView() {
         // Sort list
         Collections.sort(mTaskList, new Comparator<no.checket.checket.Task>() {
             @Override
@@ -222,9 +229,6 @@ public class MainActivity extends AppCompatActivity
                 return object1.getDate().compareTo(object2.getDate());
             }
         });
-    }
-
-    public void recyclerView() {
         // Get a handle to the RecyclerView.
         mRecyclerView = findViewById(R.id.coming_tasks);
         // Specify the length of the list for this activity
@@ -252,10 +256,18 @@ public class MainActivity extends AppCompatActivity
         Task task = new Task(header, details, date, icon);
         // Add the new task to the list
         int index = 0;
-        mTaskList.add(index, task);
-        // TODO: Upload new Task
-        // Calling the function to refresh the RecyclerView
-        recyclerView();
+        if (!header.equals("")) {
+            mTaskList.add(index, task);
+            // TODO: Upload new Task to DB
+            Log.i("Petter", header + ", " + details + ", " + icon);
+            // Calling the function to refresh the RecyclerView
+            recyclerView();
+        } else {
+            Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
+            // TODO: Unsure whether this is the right view to give
+            newTask(drawerLayout);
+        }
+
     }
 
     // ... or the cancel button

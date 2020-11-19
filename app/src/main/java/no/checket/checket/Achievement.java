@@ -1,12 +1,25 @@
 package no.checket.checket;
 
-public class Achievement {
-    private String name;
-    private String desc;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    public Achievement(String name, String desc) {
+@Entity(tableName = "AchievementsTable")
+public class Achievement implements Comparable<Achievement> {
+    @ColumnInfo
+    @PrimaryKey()
+    @NonNull
+    private String name;
+    @ColumnInfo
+    private String desc;
+    @ColumnInfo
+    private String category;
+
+    public Achievement(String name, String desc, String category) {
         this.name = name;
         this.desc = desc;
+        this.category = category;
     }
 
     public String getName() {
@@ -15,5 +28,14 @@ public class Achievement {
 
     public String getDesc() {
         return desc;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    @Override
+    public int compareTo(Achievement achievement) {
+        return this.getName().compareTo(achievement.getName());
     }
 }
