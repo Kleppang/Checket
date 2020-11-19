@@ -4,11 +4,12 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -17,35 +18,67 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class NewTaskFragment extends DialogFragment {
+    // Interface for fragment communication
+    // Includes callbacks to MainActivity
+    public interface NewTaskDialogListener {
+        void onDialogPositiveClick(DialogFragment dialog, String header, String s, Date date, String details);
+        void onDialogNegativeClick(DialogFragment dialog);
+    }
+    NewTaskDialogListener listener;
+
     @NonNull
     @Override
     public android.app.Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Log.i("Petter", "NewTaskFragment.onCreateDialog()");
+        // Begin building a dialog, in the activity that called it.
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         // Inflate and set buttons for dialog
         // Null represents the parent view, which is none for this dialog
+        // The layout file referenced is that of a customized dialog
         builder.setView(inflater.inflate(R.layout.dialog_new_task, null))
         // Adding buttons for saving or aborting
             .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
-                    // TODO: save as an object, add to data structure
+                    // TODO: Access and initialize strings and date
+                    Log.i("Petter", "NewTaskFragment.onClick() positive button");
+                    String header = "Header";
+                    String details = "Details";
+                    Date date = new Date (2019, 11, 12, 21, 30);
+                    String icon = "Icon";
+                    listener.onDialogPositiveClick(NewTaskFragment.this, header, details, date, icon);
                 }
             })
             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
+                    Log.i("Petter", "NewTaskFragment.onClick() negative button");
+                    listener.onDialogNegativeClick(NewTaskFragment.this);
                     NewTaskFragment.this.getDialog().cancel();
                 }
             });
-
         return builder.create();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        Log.i("Petter", "NewTaskFragment.onAttach()");
+        super.onAttach(context);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            listener = (NewTaskDialogListener) context;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException("Must implement NoticeDialogListener");
+        }
+    }
 
     // Inner class to handle the time picker
     public static class TimePickerFragment extends DialogFragment
@@ -56,14 +89,13 @@ public class NewTaskFragment extends DialogFragment {
             final Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
+            // Create a new instance of TimePickerDialog and return it to the custom AlertDialog
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
 
         public void onTimeSet(TimePicker View, int hour, int minute) {
-            // TODO: Do something useful. What with the returning and such
+            // TODO: something useful. What with the returning and such
         }
     }
 
@@ -83,7 +115,7 @@ public class NewTaskFragment extends DialogFragment {
         }
 
         @Override
-        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        public void onDateSet(DatePicker view, int year, int month, int day) {
             // TODO: Do something useful. What with the returning and such
         }
     }

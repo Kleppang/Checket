@@ -7,21 +7,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -34,7 +30,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        // Interface for communication with NewTaskFragment
+        NewTaskFragment.NewTaskDialogListener {
 
     private IntroSlideManager mIntroSlideManager;
 
@@ -90,45 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             drawerLayout.addDrawerListener(actionBarDrawerToggle);
             actionBarDrawerToggle.syncState();
-
-            // RecyclerView
-            // Populate list
-            // TODO: Get list from DB
-            mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date(2020, 11, 11, 21, 30), "ic_misc"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 12, 21, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", new Date (2020, 11, 14, 21, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 19, 21, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", new Date (2020, 12, 21, 20, 30), "ic_misc"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 5, 21, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Sports", "Football in the park", new Date (2020, 10, 22, 20, 0), "ic_sports"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 12, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 13, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 14, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. This is getting psychotic...", new Date (2020, 12, 28, 15, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 16, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 17, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 18, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Apartment's REAAALLY clean now.", new Date (2020, 12, 28, 19, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Here we go again.", new Date (2020, 12, 28, 21, 30), "ic_add"));
-            mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 21, 30), "ic_add"));
-            // Sort list
-            Collections.sort(mTaskList, new Comparator<no.checket.checket.Task>() {
-                @Override
-                public int compare(final no.checket.checket.Task object1, final no.checket.checket.Task object2) {
-                    return object1.getDate().compareTo(object2.getDate());
-                }
-            });
-            // Get a handle to the RecyclerView.
-            mRecyclerView = findViewById(R.id.coming_tasks);
-            // Specify the length of the list for this activity
-            // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
-            int length = 6;
-            // Create an adapter and supply the data to be displayed.
-            mAdapter = new TaskListAdapter(this, mTaskList, length);
-            // Connect the adapter with the RecyclerView.
-            mRecyclerView.setAdapter(mAdapter);
-            // Give the RecyclerView a default layout manager.
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -209,6 +169,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
+
+        // Fill mTaskList
+        fillTaskList();
+        // Call the method to initialize and inflate the recycler
+        recyclerView();
     }
 
     public void onStart() {
@@ -228,11 +193,75 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             MI_LoginReg.setTitle("Login / Register");
         }
     }
+
+    public void fillTaskList () {
+        // RecyclerView
+        // Populate list
+        // TODO: Get list from DB
+        mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date(2020, 11, 11, 21, 30), "ic_misc"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 12, 21, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", new Date (2020, 11, 14, 21, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 19, 21, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", new Date (2020, 12, 21, 20, 30), "ic_misc"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 5, 21, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Sports", "Football in the park", new Date (2020, 10, 22, 20, 0), "ic_sports"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 12, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 13, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 14, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. This is getting psychotic...", new Date (2020, 12, 28, 15, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 16, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 17, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 18, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Apartment's REAAALLY clean now.", new Date (2020, 12, 28, 19, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Here we go again.", new Date (2020, 12, 28, 21, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 21, 30), "ic_add"));
+        // Sort list
+        Collections.sort(mTaskList, new Comparator<no.checket.checket.Task>() {
+            @Override
+            public int compare(final no.checket.checket.Task object1, final no.checket.checket.Task object2) {
+                return object1.getDate().compareTo(object2.getDate());
+            }
+        });
+    }
+
+    public void recyclerView() {
+        // Get a handle to the RecyclerView.
+        mRecyclerView = findViewById(R.id.coming_tasks);
+        // Specify the length of the list for this activity
+        // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
+        int length = 6;
+        // Create an adapter and supply the data to be displayed.
+        mAdapter = new TaskListAdapter(this, mTaskList, length);
+        // Connect the adapter with the RecyclerView.
+        mRecyclerView.setAdapter(mAdapter);
+        // Give the RecyclerView a default layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
     
     public void newTask(View view) {
         // User has clicked the FAB
         DialogFragment dialog = new NewTaskFragment();
         dialog.show(getSupportFragmentManager(), "newTaskFragment");
+    }
+
+    // Listener for clicking of the save button
+    // Had to create these from an error dialog when implementing the interface,
+    // just to get the overrides right.
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, String header, String details, Date date, String icon) {
+        Task task = new Task(header, details, date, icon);
+        // Add the new task to the list
+        int index = 0;
+        mTaskList.add(index, task);
+        // TODO: Upload new Task
+        // Calling the function to refresh the RecyclerView
+        recyclerView();
+    }
+
+    // ... or the cancel button
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.i("Petter", "MainActivity.onNegativeDialogClick()");
     }
 
     // Used for accessing a time picker in the new task dialog
@@ -247,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
@@ -256,4 +286,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
+
+
 }
