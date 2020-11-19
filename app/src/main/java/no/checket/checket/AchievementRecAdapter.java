@@ -74,7 +74,7 @@ public class AchievementRecAdapter extends RecyclerView.Adapter<AchievementRecAd
                 holder.imgAch.setImageResource(R.drawable.ic_baseline_cleaning_services_black_24dp);
                 break;
             case "Miscellaneous":
-                holder.imgAch.setImageResource(R.drawable.ic_baseline_miscellaneous_services_black_24dp);
+                holder.imgAch.setImageResource(R.drawable.ic_achievements_black_24dp);
                 break;
             case "User profile":
                 holder.imgAch.setImageResource(R.drawable.ic_profile_black_24dp);
