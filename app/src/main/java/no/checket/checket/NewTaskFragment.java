@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -36,22 +39,27 @@ public class NewTaskFragment extends DialogFragment {
         // Begin building a dialog, in the activity that called it.
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        //LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        final View view = inflater.inflate(R.layout.dialog_new_task, null);
+        final Spinner mHeader = (Spinner) view.findViewById(R.id.category_spinner);
+        final EditText mDetails = (EditText) view.findViewById(R.id.details_text);
 
         // Inflate and set buttons for dialog
         // Null represents the parent view, which is none for this dialog
         // The layout file referenced is that of a customized dialog
-        builder.setView(inflater.inflate(R.layout.dialog_new_task, null))
+        builder.setView(view)
         // Adding buttons for saving or aborting
             .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
                     // TODO: Access and initialize strings and date
                     Log.i("Petter", "NewTaskFragment.onClick() positive button");
-                    String header = "Header";
-                    String details = "Details";
-                    Date date = new Date (2019, 11, 12, 21, 30);
-                    String icon = "Icon";
+                    String header = mHeader.getSelectedItem().toString();
+                    String details = mDetails.getText().toString();
+                    Date date = new Date (61565866200000L);
+                    String icon = "ic_" + header;
                     listener.onDialogPositiveClick(NewTaskFragment.this, header, details, date, icon);
                 }
             })
