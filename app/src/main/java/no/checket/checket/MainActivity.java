@@ -111,8 +111,7 @@ public class MainActivity extends AppCompatActivity
                                         }
                                     }).show();
                             } else {
-                                // TODO
-                                // Starts the LoginRegisterActivity, Switch case with putExtra to determine which layout we're showing?
+                                // Starts the LoginRegisterActivity
                                 Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
                                 startActivity(intent);
                             }
