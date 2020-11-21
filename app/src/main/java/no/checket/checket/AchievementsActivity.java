@@ -124,7 +124,31 @@ public class AchievementsActivity extends AppCompatActivity {
         // Check if the user is logged in
         if(mAuth.getCurrentUser() == null) {
             // User is not logged in
-            loadAllLocalAch();
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    achList = mDB.checketDao().loadAllAchievements();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            achAdapter.setData(achList);
+
+                            // Remove any achievements that are already unlocked from the locked list
+                            for(Achievement ach : achList) {
+                                Achievement checkAgainst = findAchievementLocked(ach.getName());
+
+                                if(checkAgainst != null) {
+                                    achListLocked.remove(checkAgainst);
+                                }
+                            }
+
+                            achAdapterLocked.notifyDataSetChanged();
+
+                            checkAchievements();
+                        }
+                    });
+                }
+            });
         } else {
             // User logged in
 
@@ -176,38 +200,12 @@ public class AchievementsActivity extends AppCompatActivity {
                         achAdapter.notifyDataSetChanged();
                         achAdapterLocked.notifyDataSetChanged();
 
-                        checkAchievementsFB();
+                        checkAchievements();
                     }
                 }
             });
         }
 
-    }
-
-    public void loadAllLocalAch() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                achList = mDB.checketDao().loadAllAchievements();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        achAdapter.setData(achList);
-
-                        // Remove any achievements that are already unlocked from the locked list
-                        for(Achievement ach : achList) {
-                            Achievement checkAgainst = findAchievementLocked(ach.getName());
-
-                            if(checkAgainst != null) {
-                                achListLocked.remove(checkAgainst);
-                            }
-                        }
-
-                        achAdapterLocked.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
     }
 
     @Override
@@ -234,6 +232,29 @@ public class AchievementsActivity extends AppCompatActivity {
         return null;
     }
 
+    // Add an achievement locally
+    private void addAchievementLocal(final String achName, String achDesc, String achCat) {
+        final Achievement newAchievement = new Achievement(achName, achDesc, achCat);
+
+        achList.add(newAchievement);
+        achListLocked.remove(findAchievementLocked(achName));
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDB.checketDao().insertAchievement(newAchievement);
+            }
+        });
+
+        // Sort the lists before displaying
+        Collections.sort(achList);
+        Collections.sort(achListLocked);
+
+        achAdapter.notifyDataSetChanged();
+        achAdapterLocked.notifyDataSetChanged();
+    }
+
+    // Add an achievement to Firestore
     private void addAchievementFB(final String achName, String achDesc, String achCat) {
 
         Map<String, Object> achMap = new HashMap<>();
@@ -276,10 +297,96 @@ public class AchievementsActivity extends AppCompatActivity {
         });
     }
 
-    private void checkAchievementsFB() {
+    private void checkAchievements() {
         // This function serves as the primary tool to check if a user has unlocked an achievement
         if(mAuth.getCurrentUser() == null) {
             // User not logged in
+
+            // Fetch all tasks we'll test on
+            /*
+            List<Task> taskList = new ArrayList<>();
+
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    taskList = mDB.checketDao().loadAllTasks();
+                }
+            });
+
+            // Germaphobe & Gotta go fast
+            if(!existsAchievement("Germaphobe") || !existsAchievement("Gotta go fast")) {
+
+                // Booleans used by the achievement "Germaphobe"
+                boolean d1 = false;
+                boolean d2 = false;
+                boolean d3 = false;
+                boolean d4 = false;
+                boolean d5 = false;
+                boolean d6 = false;
+                boolean d7 = false;
+
+                // Counter used by the achievement "Gotta go fast"
+                int GGF_count = 0;
+
+                for(Task thisTask : taskList) {
+                    // Germaphobe
+                    if(!existsAchievement("Germaphobe") && thisTask.getCategory().equals("Cleaning") && thisTask.getDate() >= (System.currentTimeMillis() - 604800000)) {
+                        Calendar taskdate = Calendar.getInstance();
+                        taskdate.setTimeInMillis(thisTask.getDate());
+
+                        // Comparing todays date and the task's date, setting booleans to indicate whether all 7 days had a Cleaning task
+
+                        long tasktime = taskdate.getTimeInMillis();
+                        long now = System.currentTimeMillis();
+
+                        if(tasktime <= (now - 518400000)) {
+                            d7 = true;
+                        } else if(tasktime <= (now - 432000000)) {
+                            d6 = true;
+                        } else if(tasktime <= (now - 345600000)) {
+                            d5 = true;
+                        } else if(tasktime <= (now - 259200000)) {
+                            d4 = true;
+                        } else if(tasktime <= (now - 172800000)) {
+                            d3 = true;
+                        } else if(tasktime <= (now - 86400000)) {
+                            d2 = true;
+                        } else if(tasktime <= now) {
+                            d1 = true;
+                        }
+
+                        if(d7 && d6 && d5 && d4 && d3 && d2 && d1) {
+                            // If all dates are a-okay
+                            addAchievementLocal("Germaphobe", "Cleaned 7 days in a row", "Cleaning");
+                        }
+
+                    } else if(!existsAchievement("Gotta go fast") && thisTask.getDate() >= (System.currentTimeMillis() - 86400000)) {
+                        // Gets all of the tasks for a logged in user in the past 24 hours
+                        GGF_count++;
+
+                        if(GGF_count >= 10) {
+                            addAchievementLocal("Gotta go fast", "10 tasks in a single day", "Miscellaneous");
+                        }
+                    } else if(!existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
+                        int taskAmount = taskList.size();
+
+                        if(taskAmount >= 10 && !existsAchievement("Taskmaster (10+)")) {
+                            addAchievementLocal("Taskmaster (10+)", "Finished 10 tasks", "Miscellaneous");
+                        } else if(taskAmount >= 100 && !existsAchievement("Taskmaster (100+)")) {
+                            addAchievementLocal("Taskmaster (100+)", "Finished 100 tasks", "Miscellaneous");
+                        } else if(taskAmount >= 1000 && !existsAchievement("Taskmaster (1000+)")) {
+                            addAchievementLocal("Taskmaster (1000+)", "Finished 1000 tasks", "Miscellaneous");
+                        } else if(taskAmount >= 9001 && !existsAchievement("It's over 9000!")) {
+                            // The hidden achievement "It's over 9000!"
+                            addAchievementLocal("It's over 9000!", "Finished 9001 tasks", "Hidden");
+                        }
+                    }
+                }
+            }
+
+
+            */
+
         } else {
             // User logged in
 
