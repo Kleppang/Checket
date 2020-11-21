@@ -326,7 +326,7 @@ public class AchievementsActivity extends AppCompatActivity {
             });
 
             // Germaphobe & Gotta go fast
-            if(!existsAchievement("Germaphobe") || !existsAchievement("Gotta go fast")) {
+            if(!existsAchievement("Germaphobe") || !existsAchievement("Gotta go fast") || !existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
 
                 // Booleans used by the achievement "Germaphobe"
                 boolean d1 = false;
