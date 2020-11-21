@@ -53,6 +53,28 @@ public class AchievementsActivity extends AppCompatActivity {
 
      */
 
+    /*
+
+    Hidden achievements:
+    Name            | Description               | Requirements
+    -----------------------------------------------------------
+    Klimate         | A true environmentalist   | Custom name = Klimate
+    It's over 9000! | Created 9001 tasks        | 9000+ tasks
+
+
+    Shown achievements:
+    Name                | Description               | Requirements
+    -----------------------------------------------------------
+    Customizer          | Set a custom name         | Custom name
+    Germaphobe          | Cleaned 7 days in a row   | At least 1 daily Cleaning task in the past 7 days
+    Gotta go fast       | 10 tasks in a single day  | At least 10 tasks in the past 24 hours
+    Taskmaster (10+)    | Finished 10 tasks         | At least 10 tasks with a end date in the
+    Taskmaster (100+)   | Finished 100 tasks        | At least 100 tasks with a end date in the past
+    Taskmaster (1000+)  | Finished 1000 tasks       | At least 1000 tasks with a end date in the past
+
+
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,16 +173,6 @@ public class AchievementsActivity extends AppCompatActivity {
             });
         } else {
             // User logged in
-
-            /*
-
-            Hidden achievements:
-            Name            | Description               | Requirements
-            -----------------------------------------------------------
-            Klimate         | A true environmentalist   | Custom name = Klimate
-            It's over 9000! | Created 9001 tasks        | 9000+ tasks
-
-             */
 
             firestore = FirebaseFirestore.getInstance();
 
