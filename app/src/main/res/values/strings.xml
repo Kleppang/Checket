@@ -28,8 +28,8 @@
     <string name="general">GENERAL</string>
     <string name="system">SYSTEM</string>
     <string name="label">HeiDetteErEtHint</string>
-    <string name="txt_email_placeholder">User not logged in</string>
-    <string name="txt_navname_placeholder"></string>
+    <string name="txt_email_placeholder">Please login</string>
+    <string name="txt_navname_placeholder">User not logged in</string>
 
 
     <!-- Login/Register -->
