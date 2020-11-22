@@ -33,12 +33,12 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/profile_username"
+            android:id="@+id/profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_userimage"
             android:layout_centerHorizontal="true"
-            android:text="@string/txt_username_placeholder"
+            android:text="@string/txt_name_placeholder"
             android:textSize="20dp"
             android:textColor="@color/colorWhite"
             android:fontFamily="@font/roboto"
@@ -161,9 +161,10 @@
                     android:fontFamily="@font/roboto"/>
 
                 <TextView
+                    android:id="@+id/profile_profileemail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="epost@checket.no"
+                    android:text="@string/txt_profileemail_placeholder"
                     android:textColor="@color/colorDarkLiver"
                     android:textSize="16sp"
                     android:fontFamily="@font/roboto"/>

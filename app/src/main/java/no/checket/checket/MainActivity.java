@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private Menu navigationMenu;
 
     private TextView txtV_email;
+    private TextView txtV_name;
     private MenuItem MI_LoginReg;
 
     // Recycler view

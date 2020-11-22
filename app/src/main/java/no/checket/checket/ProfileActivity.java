@@ -21,7 +21,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class ProfileActivity extends AppCompatActivity {
     ImageView callEditprofile;
 
-    private TextView txtV_username;
+    private TextView txtV_name;
+    private TextView txtV_useremail;
 
     // Firebase, declare instance of Firestore and Auth
     private FirebaseFirestore firestore;
@@ -49,7 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
+        //Displaying information for logged in users Profile
         firestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
@@ -60,14 +61,19 @@ public class ProfileActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                         // Check if the UID matches logged in users' UID
                         if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                            txtV_username = findViewById(R.id.profile_username);
-                            txtV_username.setText(thisDoc.getString("name"));
+                            //Name
+                            txtV_name = findViewById(R.id.profile_name);
+                            txtV_name.setText(thisDoc.getString("name"));
+
+                            //Email
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            txtV_useremail = findViewById(R.id.profile_profileemail);
+                            txtV_useremail.setText(currentUser.getEmail());
                         }
                     }
                 }
             }
         });
-
     }
 
     @Override
