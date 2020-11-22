@@ -24,7 +24,7 @@
             android:theme="@style/AppThemeTopBar" />
         <activity
             android:name=".SettingsActivity"
-            android:theme="@style/AppThemeTopBar" />
+            android:theme="@style/SettingsTheme" />
         <activity android:name=".IntroSlideActivity" />
         <activity
             android:name=".LoginRegisterActivity"

@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,12 +44,34 @@ public class AchievementsActivity extends AppCompatActivity {
     private List<Achievement> achListLocked;
     private AchievementRecAdapter achAdapterLocked;
 
-    private TabLayout ach_tabLayout;
+    private ChecketDatabase mDB;
 
     private static final String TAG = "AchievementsActivity";
 
     /* TODO:
     As a user may still get achievements while not being logged in, connect list of achievements with local database
+
+     */
+
+    /*
+
+    Hidden achievements:
+    Name            | Description               | Requirements
+    -----------------------------------------------------------
+    Klimate         | A true environmentalist   | Custom name = Klimate
+    It's over 9000! | Created 9001 tasks        | 9000+ tasks
+
+
+    Shown achievements:
+    Name                | Description               | Requirements
+    -----------------------------------------------------------
+    Customizer          | Set a custom name         | Custom name
+    Germaphobe          | Cleaned 7 days in a row   | At least 1 daily Cleaning task in the past 7 days
+    Gotta go fast       | 10 tasks in a single day  | At least 10 tasks in the past 24 hours
+    Taskmaster (10+)    | Finished 10 tasks         | At least 10 tasks with a end date in the
+    Taskmaster (100+)   | Finished 100 tasks        | At least 100 tasks with a end date in the past
+    Taskmaster (1000+)  | Finished 1000 tasks       | At least 1000 tasks with a end date in the past
+
 
      */
 
@@ -60,50 +83,96 @@ public class AchievementsActivity extends AppCompatActivity {
         // Firebase, initialize the instance
         mAuth = FirebaseAuth.getInstance();
 
-        if(mAuth.getCurrentUser() == null) {
-            // User is not logged in, will show local achievements only, for now, kick back to where the user came from
-            onBackPressed();
-            Toast.makeText(this, "Not logged in", Toast.LENGTH_LONG).show();
+        mDB = ChecketDatabase.getDatabase(this);
 
-            // checkAchievements();
-        } else {
-            ActionBar actionBar = getSupportActionBar();
-            if(actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setTitle(R.string.achievements);
-                actionBar.setElevation(0);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.achievements);
+            actionBar.setElevation(0);
+        }
+
+        achList = new ArrayList<>();
+        achAdapter = new AchievementRecAdapter(achList);
+
+        achListLocked = new ArrayList<>();
+        achAdapterLocked = new AchievementRecAdapter(achListLocked);
+
+        final RecyclerView recyclerView = findViewById(R.id.ach_recView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(achAdapter);
+
+        final RecyclerView recyclerViewLocked = findViewById(R.id.ach_recViewLocked);
+        recyclerViewLocked.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewLocked.setAdapter(achAdapterLocked);
+
+        achListLocked.add(new Achievement("Customizer", "Set a custom name", "User profile"));
+        achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row", "Cleaning"));
+        achListLocked.add(new Achievement("Gotta go fast", "10 tasks in a single day", "Miscellaneous"));
+        achListLocked.add(new Achievement("Taskmaster (10+)", "Finished 10 tasks", "Miscellaneous"));
+        achListLocked.add(new Achievement("Taskmaster (100+)", "Finished 100 tasks", "Miscellaneous"));
+        achListLocked.add(new Achievement("Taskmaster (1000+)", "Finished 1000 tasks", "Miscellaneous"));
+
+        TabLayout ach_tabLayout = findViewById(R.id.ach_tabLayout);
+
+        ach_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch(tab.getPosition()) {
+                    case 0:
+                        recyclerView.setVisibility(View.VISIBLE);
+                        recyclerViewLocked.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        recyclerView.setVisibility(View.GONE);
+                        recyclerViewLocked.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        break;
+                }
             }
 
-            achList = new ArrayList<>();
-            achAdapter = new AchievementRecAdapter(achList);
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-            achListLocked = new ArrayList<>();
-            achAdapterLocked = new AchievementRecAdapter(achListLocked);
+            }
 
-            final RecyclerView recyclerView = findViewById(R.id.ach_recView);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(achAdapter);
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
-            final RecyclerView recyclerViewLocked = findViewById(R.id.ach_recViewLocked);
-            recyclerViewLocked.setLayoutManager(new LinearLayoutManager(this));
-            recyclerViewLocked.setAdapter(achAdapterLocked);
+            }
+        });
 
-            /*
+        // Check if the user is logged in
+        if(mAuth.getCurrentUser() == null) {
+            // User is not logged in
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    achList = mDB.checketDao().loadAllAchievements();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            achAdapter.setData(achList);
 
-            Hidden achievements:
-            Name            | Description               | Requirements
-            -----------------------------------------------------------
-            Klimate         | A true environmentalist   | Custom name = Klimate
-            It's over 9000! | Created 9001 tasks        | 9000+ tasks
+                            // Remove any achievements that are already unlocked from the locked list
+                            for(Achievement ach : achList) {
+                                Achievement checkAgainst = findAchievementLocked(ach.getName());
 
-             */
+                                if(checkAgainst != null) {
+                                    achListLocked.remove(checkAgainst);
+                                }
+                            }
 
-            achListLocked.add(new Achievement("Customizer", "Set a custom name", "User profile"));
-            achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row", "Cleaning"));
-            achListLocked.add(new Achievement("Gotta go fast", "10 tasks in a single day", "Miscellaneous"));
-            achListLocked.add(new Achievement("Taskmaster (10+)", "Created 10 tasks", "Miscellaneous"));
-            achListLocked.add(new Achievement("Taskmaster (100+)", "Created 100 tasks", "Miscellaneous"));
-            achListLocked.add(new Achievement("Taskmaster (1000+)", "Created 1000 tasks", "Miscellaneous"));
+                            achAdapterLocked.notifyDataSetChanged();
+
+                            checkAchievements();
+                        }
+                    });
+                }
+            });
+        } else {
+            // User logged in
 
             firestore = FirebaseFirestore.getInstance();
 
@@ -114,53 +183,37 @@ public class AchievementsActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                             // Check if the UID matches logged in users' UID
                             if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                Achievement newAchievement = new Achievement(thisDoc.getString("name"), thisDoc.getString("desc"), thisDoc.getString("category"));
+                                final Achievement newAchievement = new Achievement(thisDoc.getString("name"), thisDoc.getString("desc"), thisDoc.getString("category"));
 
+                                // In order to avoid confusion we remove an unlocked achievement from the locked list
                                 Achievement checkAgainst = findAchievementLocked(thisDoc.getString("name"));
-
                                 if(checkAgainst != null) {
+                                    // The unlocked achievement was found in the list of locked achievements and is removed
                                     achListLocked.remove(checkAgainst);
                                 }
 
+                                // Add this achievement to the list of unlocked achievement
                                 achList.add(newAchievement);
+
+                                // Add this achievement to the local database, if it already exists it will be replaced.
+                                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mDB.checketDao().insertAchievement(newAchievement);
+                                    }
+                                });
                             }
                         }
+
+                        // Sort the lists before displaying
+                        Collections.sort(achList);
+                        Collections.sort(achListLocked);
 
                         achAdapter.notifyDataSetChanged();
                         achAdapterLocked.notifyDataSetChanged();
 
                         checkAchievements();
                     }
-                }
-            });
-
-            ach_tabLayout = findViewById(R.id.achievements_tabLayout);
-
-            ach_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    switch(tab.getPosition()) {
-                        case 0:
-                            recyclerView.setVisibility(View.VISIBLE);
-                            recyclerViewLocked.setVisibility(View.GONE);
-                            break;
-                        case 1:
-                            recyclerView.setVisibility(View.GONE);
-                            recyclerViewLocked.setVisibility(View.VISIBLE);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
                 }
             });
         }
@@ -191,6 +244,29 @@ public class AchievementsActivity extends AppCompatActivity {
         return null;
     }
 
+    // Add an achievement locally
+    private void addAchievementLocal(final String achName, String achDesc, String achCat) {
+        final Achievement newAchievement = new Achievement(achName, achDesc, achCat);
+
+        achList.add(newAchievement);
+        achListLocked.remove(findAchievementLocked(achName));
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDB.checketDao().insertAchievement(newAchievement);
+            }
+        });
+
+        // Sort the lists before displaying
+        Collections.sort(achList);
+        Collections.sort(achListLocked);
+
+        achAdapter.notifyDataSetChanged();
+        achAdapterLocked.notifyDataSetChanged();
+    }
+
+    // Add an achievement to Firestore
     private void addAchievementFB(final String achName, String achDesc, String achCat) {
 
         Map<String, Object> achMap = new HashMap<>();
@@ -199,8 +275,21 @@ public class AchievementsActivity extends AppCompatActivity {
         achMap.put("category", achCat);
         achMap.put("uid", mAuth.getUid());
 
-        achList.add(new Achievement(achName, achDesc, achCat));
+        final Achievement newAchievement = new Achievement(achName, achDesc, achCat);
+
+        achList.add(newAchievement);
         achListLocked.remove(findAchievementLocked(achName));
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDB.checketDao().insertAchievement(newAchievement);
+            }
+        });
+
+        // Sort the lists before displaying
+        Collections.sort(achList);
+        Collections.sort(achListLocked);
 
         achAdapter.notifyDataSetChanged();
         achAdapterLocked.notifyDataSetChanged();
@@ -224,6 +313,92 @@ public class AchievementsActivity extends AppCompatActivity {
         // This function serves as the primary tool to check if a user has unlocked an achievement
         if(mAuth.getCurrentUser() == null) {
             // User not logged in
+
+            // Fetch all tasks we'll test on
+            /*
+            List<Task> taskList = new ArrayList<>();
+
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    taskList = mDB.checketDao().loadAllTasks();
+                }
+            });
+
+            // Germaphobe & Gotta go fast
+            if(!existsAchievement("Germaphobe") || !existsAchievement("Gotta go fast") || !existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
+
+                // Booleans used by the achievement "Germaphobe"
+                boolean d1 = false;
+                boolean d2 = false;
+                boolean d3 = false;
+                boolean d4 = false;
+                boolean d5 = false;
+                boolean d6 = false;
+                boolean d7 = false;
+
+                // Counter used by the achievement "Gotta go fast"
+                int GGF_count = 0;
+
+                for(Task thisTask : taskList) {
+                    // Germaphobe
+                    if(!existsAchievement("Germaphobe") && thisTask.getCategory().equals("Cleaning") && thisTask.getDate() >= (System.currentTimeMillis() - 604800000)) {
+                        Calendar taskdate = Calendar.getInstance();
+                        taskdate.setTimeInMillis(thisTask.getDate());
+
+                        // Comparing todays date and the task's date, setting booleans to indicate whether all 7 days had a Cleaning task
+
+                        long tasktime = taskdate.getTimeInMillis();
+                        long now = System.currentTimeMillis();
+
+                        if(tasktime <= (now - 518400000)) {
+                            d7 = true;
+                        } else if(tasktime <= (now - 432000000)) {
+                            d6 = true;
+                        } else if(tasktime <= (now - 345600000)) {
+                            d5 = true;
+                        } else if(tasktime <= (now - 259200000)) {
+                            d4 = true;
+                        } else if(tasktime <= (now - 172800000)) {
+                            d3 = true;
+                        } else if(tasktime <= (now - 86400000)) {
+                            d2 = true;
+                        } else if(tasktime <= now) {
+                            d1 = true;
+                        }
+
+                        if(d7 && d6 && d5 && d4 && d3 && d2 && d1) {
+                            // If all dates are a-okay
+                            addAchievementLocal("Germaphobe", "Cleaned 7 days in a row", "Cleaning");
+                        }
+
+                    } else if(!existsAchievement("Gotta go fast") && thisTask.getDate() >= (System.currentTimeMillis() - 86400000)) {
+                        // Gets all of the tasks for a logged in user in the past 24 hours
+                        GGF_count++;
+
+                        if(GGF_count >= 10) {
+                            addAchievementLocal("Gotta go fast", "10 tasks in a single day", "Miscellaneous");
+                        }
+                    } else if(!existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
+                        int taskAmount = taskList.size();
+
+                        if(taskAmount >= 10 && !existsAchievement("Taskmaster (10+)")) {
+                            addAchievementLocal("Taskmaster (10+)", "Finished 10 tasks", "Miscellaneous");
+                        } else if(taskAmount >= 100 && !existsAchievement("Taskmaster (100+)")) {
+                            addAchievementLocal("Taskmaster (100+)", "Finished 100 tasks", "Miscellaneous");
+                        } else if(taskAmount >= 1000 && !existsAchievement("Taskmaster (1000+)")) {
+                            addAchievementLocal("Taskmaster (1000+)", "Finished 1000 tasks", "Miscellaneous");
+                        } else if(taskAmount >= 9001 && !existsAchievement("It's over 9000!")) {
+                            // The hidden achievement "It's over 9000!"
+                            addAchievementLocal("It's over 9000!", "Finished 9001 tasks", "Hidden");
+                        }
+                    }
+                }
+            }
+
+
+            */
+
         } else {
             // User logged in
 
@@ -338,14 +513,14 @@ public class AchievementsActivity extends AppCompatActivity {
                                 }
                             }
                             if(ant >= 10 && !existsAchievement("Taskmaster (10+)")) {
-                                addAchievementFB("Taskmaster (10+)", "Created 10 tasks", "Miscellaneous");
+                                addAchievementFB("Taskmaster (10+)", "Finished 10 tasks", "Miscellaneous");
                             } else if(ant >= 100 && !existsAchievement("Taskmaster (100+)")) {
-                                addAchievementFB("Taskmaster (100+)", "Created 100 tasks", "Miscellaneous");
+                                addAchievementFB("Taskmaster (100+)", "Finished 100 tasks", "Miscellaneous");
                             } else if(ant >= 1000 && !existsAchievement("Taskmaster (1000+)")) {
-                                addAchievementFB("Taskmaster (1000+)", "Created 1000 tasks", "Miscellaneous");
+                                addAchievementFB("Taskmaster (1000+)", "Finished 1000 tasks", "Miscellaneous");
                             } else if(ant >= 9001 && !existsAchievement("It's over 9000!")) {
                                 // The hidden achievement "It's over 9000!"
-                                addAchievementFB("It's over 9000!", "Created 9001 tasks", "Hidden");
+                                addAchievementFB("It's over 9000!", "Finished 9001 tasks", "Hidden");
                             }
                         }
                     }

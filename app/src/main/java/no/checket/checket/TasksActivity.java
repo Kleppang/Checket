@@ -96,8 +96,7 @@ public class TasksActivity extends AppCompatActivity
                                         }
                                     }).show();
                         } else {
-                            // TODO
-                            // Starts the LoginRegisterActivity, Switch case with putExtra to determine which layout we're showing?
+                            // Starts the LoginRegisterActivity
                             Intent intent = new Intent(TasksActivity.this, LoginRegisterActivity.class);
                             startActivity(intent);
                         }
@@ -106,6 +105,18 @@ public class TasksActivity extends AppCompatActivity
                         // Starts the SettingsActivity
                         Intent intent = new Intent(TasksActivity.this, SettingsActivity.class);
                         startActivity(intent);
+                        break;
+
+                    case R.id.nav_profile:
+                        //Starts the ProfileActivity
+                        Intent intentP = new Intent(TasksActivity.this, ProfileActivity.class);
+                        startActivity(intentP);
+                        break;
+
+                    case R.id.nav_achievements:
+                        // Starts the AchievementsActivity
+                        Intent intentAch = new Intent(TasksActivity.this, AchievementsActivity.class);
+                        startActivity(intentAch);
                         break;
                 }
                 return false;
@@ -127,11 +138,13 @@ public class TasksActivity extends AppCompatActivity
                 switch(menuItem.getItemId()) {
                     case R.id.main_BottomAppBar_tasks:
                         // Open tasks
-                        Toast.makeText(TasksActivity.this, "Open tasks", Toast.LENGTH_SHORT).show();
+                        Intent intentTasks = new Intent(TasksActivity.this, TasksActivity.class);
+                        startActivity(intentTasks);
                         break;
                     case R.id.main_BottomAppBar_ach:
                         // Open achievements
-                        Toast.makeText(TasksActivity.this, "Open achievements", Toast.LENGTH_SHORT).show();
+                        Intent intentAch = new Intent(TasksActivity.this, AchievementsActivity.class);
+                        startActivity(intentAch);
                         break;
                 }
                 return true;

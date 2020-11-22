@@ -92,4 +92,10 @@ public class AchievementRecAdapter extends RecyclerView.Adapter<AchievementRecAd
     public int getItemCount() {
         return mAchievements.size();
     }
+
+
+    public void setData(List<Achievement> achList) {
+        mAchievements = achList;
+        notifyDataSetChanged();
+    }
 }
