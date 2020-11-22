@@ -29,6 +29,8 @@
     <string name="system">SYSTEM</string>
     <string name="label">HeiDetteErEtHint</string>
     <string name="txt_email_placeholder">User not logged in</string>
+    <string name="txt_navname_placeholder">Login</string>
+
 
     <!-- Login/Register -->
     <string name="loginRegister_username">Username Icon</string>
@@ -50,7 +52,7 @@
     <!-- Profile -->
     <string name="Profile">Profile</string>
     <string name="txt_name_placeholder">Name</string>
-    <string name="txt_useremail_placeholder">Email</string>
+    <string name="txt_profileemail_placeholder">Email</string>
 
     <!-- Edit Profile -->
     <string name="EditProfile">Edit Profile</string>

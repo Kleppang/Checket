@@ -62,12 +62,12 @@ public class ProfileActivity extends AppCompatActivity {
                         // Check if the UID matches logged in users' UID
                         if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                             //Name
-                            txtV_name = findViewById(R.id.profile_username);
+                            txtV_name = findViewById(R.id.profile_name);
                             txtV_name.setText(thisDoc.getString("name"));
 
                             //Email
                             FirebaseUser currentUser = mAuth.getCurrentUser();
-                            txtV_useremail = findViewById(R.id.profile_useremail);
+                            txtV_useremail = findViewById(R.id.profile_profileemail);
                             txtV_useremail.setText(currentUser.getEmail());
                         }
                     }
