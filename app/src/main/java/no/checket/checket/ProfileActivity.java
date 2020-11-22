@@ -49,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
+        //Visning av navn for innlogget bruker
         firestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
