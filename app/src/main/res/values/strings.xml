@@ -56,6 +56,7 @@
 
     <!-- Edit Profile -->
     <string name="EditProfile">Edit Profile</string>
+    <string name="change_profile_picture">Change profile picture</string>
 
 
     <!-- Intro Slider -->
