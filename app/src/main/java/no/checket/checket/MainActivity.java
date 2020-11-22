@@ -10,22 +10,29 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,8 +41,9 @@ import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        // Interface for communication with NewTaskFragment
-        NewTaskFragment.NewTaskDialogListener {
+        // Interface for communication with NewTaskFragment...
+        NewTaskFragment.NewTaskDialogListener,
+        NewTaskFragment.DatePickerFragment.DateListener {
 
     private IntroSlideManager mIntroSlideManager;
 
@@ -46,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     private Menu navigationMenu;
 
     private TextView txtV_email;
+    private TextView txtV_name;
     private MenuItem MI_LoginReg;
 
     // Recycler view
@@ -53,7 +62,8 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private TaskListAdapter mAdapter;
 
-    // Firebase, declare instance
+    // Firebase & Auth, declare instance
+    private FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
 
     @Override
@@ -186,7 +196,27 @@ public class MainActivity extends AppCompatActivity
 
         if(currentUser != null) {
             txtV_email.setText(currentUser.getEmail());
+
+            firestore = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
+
+            firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()) {
+                        for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                            // Check if the UID matches logged in users' UID
+                            if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                txtV_name = findViewById(R.id.nav_name);
+                                txtV_name.setText(thisDoc.getString("name"));
+                            }
+                        }
+                    }
+                }
+            });
+
             MI_LoginReg.setTitle("Logout");
+
         } else {
             MI_LoginReg.setTitle("Login / Register");
         }
@@ -198,7 +228,7 @@ public class MainActivity extends AppCompatActivity
         // TODO: Get list from DB
         // NB! The year, month, etc. constructor is deprecated
         mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date(61565866200000L), "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("TEST", "Vacuuming", new Date(61565866200000L), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date(61565866200000L), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", new Date (2020, 11, 14, 21, 30), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 19, 21, 30), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", new Date (2020, 12, 21, 20, 30), "ic_misc"));
@@ -260,6 +290,7 @@ public class MainActivity extends AppCompatActivity
             recyclerView();
         } else {
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
+            // TODO: Reload dialog with any input
             // TODO: Unsure whether this is the right view to give
             newTask(drawerLayout);
         }
@@ -272,6 +303,8 @@ public class MainActivity extends AppCompatActivity
         Log.i("Petter", "MainActivity.onNegativeDialogClick()");
     }
 
+
+
     // Used for accessing a time picker in the new task dialog
     public void showTimePickerFragment(View view) {
         DialogFragment time = new NewTaskFragment.TimePickerFragment();
@@ -282,8 +315,15 @@ public class MainActivity extends AppCompatActivity
     public void showDatePickerFragment(View view) {
         DialogFragment newFragment = new NewTaskFragment.DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
+        Log.i("Petter", "TEST");
     }
 
+    @Override
+    public void onDateSet(DialogFragment dialog, String newDate) {
+        // TODO: Get the view of the dialog
+        Button mDate = (Button) findViewById(R.id.date_input);
+        mDate.setText(newDate);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -294,7 +334,6 @@ public class MainActivity extends AppCompatActivity
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-
 
 
 
