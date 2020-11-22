@@ -24,11 +24,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,7 +62,8 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private TaskListAdapter mAdapter;
 
-    // Firebase, declare instance
+    // Firebase & Auth, declare instance
+    private FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
 
     @Override
@@ -191,7 +196,27 @@ public class MainActivity extends AppCompatActivity
 
         if(currentUser != null) {
             txtV_email.setText(currentUser.getEmail());
+
+            firestore = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
+
+            firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()) {
+                        for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                            // Check if the UID matches logged in users' UID
+                            if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                txtV_name = findViewById(R.id.nav_name);
+                                txtV_name.setText(thisDoc.getString("name"));
+                            }
+                        }
+                    }
+                }
+            });
+
             MI_LoginReg.setTitle("Logout");
+
         } else {
             MI_LoginReg.setTitle("Login / Register");
         }

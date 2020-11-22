@@ -22,7 +22,7 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView callEditprofile;
 
     private TextView txtV_name;
-    private TextView txtV_useremail;
+    private TextView txtV_email;
 
     // Firebase, declare instance of Firestore and Auth
     private FirebaseFirestore firestore;
@@ -67,8 +67,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                             //Email
                             FirebaseUser currentUser = mAuth.getCurrentUser();
-                            txtV_useremail = findViewById(R.id.profile_profileemail);
-                            txtV_useremail.setText(currentUser.getEmail());
+                            txtV_email = findViewById(R.id.profile_profileemail);
+                            txtV_email.setText(currentUser.getEmail());
                         }
                     }
                 }

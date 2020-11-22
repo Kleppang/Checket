@@ -29,7 +29,7 @@
     <string name="system">SYSTEM</string>
     <string name="label">HeiDetteErEtHint</string>
     <string name="txt_email_placeholder">User not logged in</string>
-    <string name="txt_navname_placeholder">Login</string>
+    <string name="txt_navname_placeholder"></string>
 
 
     <!-- Login/Register -->
