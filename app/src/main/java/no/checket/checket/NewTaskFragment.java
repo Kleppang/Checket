@@ -67,16 +67,18 @@ public class NewTaskFragment extends DialogFragment {
                     String sDate = mDate.getText().toString();
                     // Separate string
                     // Into year...
-                    String sYear = Character.toString(sDate.charAt(0));
-                    sYear += Character.toString(sDate.charAt(1));
+                    String sYear = Character.toString(sDate.charAt(6));
+                    sYear += Character.toString(sDate.charAt(7));
+                    sYear += Character.toString(sDate.charAt(8));
+                    sYear += Character.toString(sDate.charAt(9));
                     int year = Integer.parseInt(sYear);
                     // Month...
                     String sMonth = Character.toString(sDate.charAt(3));
                     sMonth += Character.toString(sDate.charAt(4));
                     int month = Integer.parseInt(sMonth);
                     // Day...
-                    String sDay = Character.toString(sDate.charAt(6));
-                    sDay += Character.toString(sDate.charAt(7));
+                    String sDay = Character.toString(sDate.charAt(0));
+                    sDay += Character.toString(sDate.charAt(1));
                     int day = Integer.parseInt(sDay);
                     // Hour...
                     String sTime = mTime.getText().toString();
@@ -116,10 +118,6 @@ public class NewTaskFragment extends DialogFragment {
         String hour = Integer.toString(cal.get(Calendar.HOUR_OF_DAY));
         String minute = Integer.toString(cal.get(Calendar.MINUTE));
         String dateButton = day + "/" + month + "/" + year;
-        // concatenate a 0 to the beginning of single digit numbers
-        if (minute.length() == 1) {
-            minute = "0" + minute;
-        }
         String timeButton = hour + ":" + minute;
         mDate.setText(dateButton);
         mTime.setText(timeButton);
@@ -154,8 +152,18 @@ public class NewTaskFragment extends DialogFragment {
         }
 
         public void onTimeSet(TimePicker View, int hour, int minute) {
-            // TODO: Set the buttons text to this string
-            String newTime = hour + ":" + minute;
+            String sHour;
+            String sMinute;
+            if (hour < 10) {
+                sHour = "0" + hour;
+            } else {
+                sHour = Integer.toString(hour);
+            }if (minute < 10) {
+                sMinute = "0" + minute;
+            } else {
+                sMinute = Integer.toString(minute);
+            }
+            String newTime = sHour + ":" + sMinute;
         }
     }
 
@@ -194,8 +202,20 @@ public class NewTaskFragment extends DialogFragment {
 
         @Override
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // TODO: Set the buttons text to this string
-            String newDate = year + "/" + month + "/" + day;
+            String sDay;
+            String sMonth;
+            String sYear = Integer.toString(year);
+            if (day < 10) {
+                sDay = "0" + day;
+            } else {
+                sDay = Integer.toString(day);
+            }
+            if (day < 10) {
+                sMonth = "0" + month;
+            } else {
+                sMonth = Integer.toString(month);
+            }
+            String newDate = sDay + "/" + sMonth + "/" + sYear;
             listener.onDateSet(NewTaskFragment.DatePickerFragment.this, newDate);
         }
     }
