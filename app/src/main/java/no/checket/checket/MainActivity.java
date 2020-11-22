@@ -10,13 +10,16 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,8 +37,9 @@ import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        // Interface for communication with NewTaskFragment
-        NewTaskFragment.NewTaskDialogListener {
+        // Interface for communication with NewTaskFragment...
+        NewTaskFragment.NewTaskDialogListener,
+        NewTaskFragment.DatePickerFragment.DateListener {
 
     private IntroSlideManager mIntroSlideManager;
 
@@ -198,7 +202,7 @@ public class MainActivity extends AppCompatActivity
         // TODO: Get list from DB
         // NB! The year, month, etc. constructor is deprecated
         mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date(61565866200000L), "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("TEST", "Vacuuming", new Date(61565866200000L), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date(61565866200000L), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", new Date (2020, 11, 14, 21, 30), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 19, 21, 30), "ic_add"));
         mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", new Date (2020, 12, 21, 20, 30), "ic_misc"));
@@ -260,6 +264,7 @@ public class MainActivity extends AppCompatActivity
             recyclerView();
         } else {
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
+            // TODO: Reload dialog with any input
             // TODO: Unsure whether this is the right view to give
             newTask(drawerLayout);
         }
@@ -272,6 +277,8 @@ public class MainActivity extends AppCompatActivity
         Log.i("Petter", "MainActivity.onNegativeDialogClick()");
     }
 
+
+
     // Used for accessing a time picker in the new task dialog
     public void showTimePickerFragment(View view) {
         DialogFragment time = new NewTaskFragment.TimePickerFragment();
@@ -282,8 +289,15 @@ public class MainActivity extends AppCompatActivity
     public void showDatePickerFragment(View view) {
         DialogFragment newFragment = new NewTaskFragment.DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
+        Log.i("Petter", "TEST");
     }
 
+    @Override
+    public void onDateSet(DialogFragment dialog, String newDate) {
+        // TODO: Get the view of the dialog
+        Button mDate = (Button) findViewById(R.id.date_input);
+        mDate.setText(newDate);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -294,7 +308,6 @@ public class MainActivity extends AppCompatActivity
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-
 
 
 
