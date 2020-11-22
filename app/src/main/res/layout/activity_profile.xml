@@ -21,12 +21,11 @@
             android:layout_centerHorizontal="true">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/pb_pic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_margin="5dp"
                 android:src="@drawable/ic_profile_black_24dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/circle"
                 app:civ_border_color="@color/colorDarkGray"
                 app:civ_border_width="2dp"
                 />

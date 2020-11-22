@@ -13,7 +13,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:src="@drawable/ic_profile_black_24dp"
-        android:background="@drawable/circle"
         app:civ_border_color="@color/colorDarkGray"
         app:civ_border_width="2dp"
         />

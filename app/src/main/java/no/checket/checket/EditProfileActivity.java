@@ -58,12 +58,14 @@ public class EditProfileActivity extends AppCompatActivity {
             actionBar.setTitle(R.string.EditProfile);
         }
 
+        //Init
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("User");
         storageProfilePicsRef = FirebaseStorage.getInstance().getReference().child("Profile Pic");
 
         profileImageView = findViewById(R.id.editProfile_image);
         saveButton = findViewById(R.id.btnSave);
+        profileChangeBtn = findViewById(R.id.change_profile_btn);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
