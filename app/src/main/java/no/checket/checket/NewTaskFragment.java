@@ -118,10 +118,6 @@ public class NewTaskFragment extends DialogFragment {
         String hour = Integer.toString(cal.get(Calendar.HOUR_OF_DAY));
         String minute = Integer.toString(cal.get(Calendar.MINUTE));
         String dateButton = day + "/" + month + "/" + year;
-        // concatenate a 0 to the beginning of single digit numbers
-        if (minute.length() == 1) {
-            minute = "0" + minute;
-        }
         String timeButton = hour + ":" + minute;
         mDate.setText(dateButton);
         mTime.setText(timeButton);
