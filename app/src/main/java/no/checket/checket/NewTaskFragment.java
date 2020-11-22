@@ -155,11 +155,11 @@ public class NewTaskFragment extends DialogFragment {
             String sHour;
             String sMinute;
             if (hour < 10) {
-                sHour = hour + "0";
+                sHour = "0" + hour;
             } else {
                 sHour = Integer.toString(hour);
             }if (minute < 10) {
-                sMinute = minute + "0";
+                sMinute = "0" + minute;
             } else {
                 sMinute = Integer.toString(minute);
             }
@@ -206,12 +206,12 @@ public class NewTaskFragment extends DialogFragment {
             String sMonth;
             String sYear = Integer.toString(year);
             if (day < 10) {
-                sDay = day + "0";
+                sDay = "0" + day;
             } else {
                 sDay = Integer.toString(day);
             }
             if (day < 10) {
-                sMonth = month + "0";
+                sMonth = "0" + month;
             } else {
                 sMonth = Integer.toString(month);
             }
