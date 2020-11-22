@@ -49,6 +49,7 @@
 
     <!-- Profile -->
     <string name="Profile">Profile</string>
+    <string name="txt_username_placeholder">Username</string>
 
     <!-- Edit Profile -->
     <string name="EditProfile">Edit Profile</string>
