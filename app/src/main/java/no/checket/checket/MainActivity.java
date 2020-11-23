@@ -222,7 +222,6 @@ public class MainActivity extends AppCompatActivity
 
         } else {
             MI_LoginReg.setTitle("Login / Register");
-
             MI_Profile.setVisible(false);
         }
     }
