@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,8 +43,7 @@ import java.util.LinkedList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         // Interface for communication with NewTaskFragment...
-        NewTaskFragment.NewTaskDialogListener,
-        NewTaskFragment.DatePickerFragment.DateListener {
+        NewTaskFragment.NewTaskDialogListener{
 
     private IntroSlideManager mIntroSlideManager;
 
@@ -321,13 +321,6 @@ public class MainActivity extends AppCompatActivity
         DialogFragment newFragment = new NewTaskFragment.DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
         Log.i("Petter", "TEST");
-    }
-
-    @Override
-    public void onDateSet(DialogFragment dialog, String newDate) {
-        // TODO: Get the view of the dialog
-        Button mDate = (Button) findViewById(R.id.date_input);
-        mDate.setText(newDate);
     }
 
     @Override

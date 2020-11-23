@@ -97,30 +97,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_input" />
 
-    <Button
+    <DatePicker
         android:id="@+id/date_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="DD/MM/YYYY"
         android:ems="10"
-        android:hint="@string/input"
         android:onClick="showDatePickerFragment"
-        android:textAlignment="center"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_label" />
 
-    <Button
+    <TimePicker
         android:id="@+id/time_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints="HH:MM"
         android:ems="10"
-        android:hint="@string/input"
         android:onClick="showTimePickerFragment"
-        android:textAlignment="center"
+        android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/time_label" />

@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.text.BreakIterator;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,6 +36,8 @@ public class NewTaskFragment extends DialogFragment {
     }
     NewTaskDialogListener listener;
 
+
+
     @NonNull
     @Override
     public android.app.Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -47,10 +50,9 @@ public class NewTaskFragment extends DialogFragment {
         final View view = inflater.inflate(R.layout.dialog_new_task, null);
         final Spinner mHeader = (Spinner) view.findViewById(R.id.category_spinner);
         final EditText mDetails = (EditText) view.findViewById(R.id.details_text);
-        final Button mDate = (Button) view.findViewById(R.id.date_input);
-        final Button mTime = (Button) view.findViewById(R.id.time_input);
-
-        setCurrentDateTime(mDate, mTime);
+        final DatePicker mDate = (DatePicker) view.findViewById(R.id.date_input);
+        final TimePicker mTime = (TimePicker) view.findViewById(R.id.time_input);
+        mTime.setIs24HourView(true);
 
         // Inflate and set buttons for dialog
         // Null represents the parent view, which is none for this dialog
@@ -63,36 +65,13 @@ public class NewTaskFragment extends DialogFragment {
                     Log.i("Petter", "NewTaskFragment.onClick() positive button");
                     String header = mHeader.getSelectedItem().toString();
                     String details = mDetails.getText().toString();
-                    // TODO: convert date and time to a single Date
-                    String sDate = mDate.getText().toString();
-                    // Separate string
-                    // Into year...
-                    String sYear = Character.toString(sDate.charAt(6));
-                    sYear += Character.toString(sDate.charAt(7));
-                    sYear += Character.toString(sDate.charAt(8));
-                    sYear += Character.toString(sDate.charAt(9));
-                    int year = Integer.parseInt(sYear);
-                    // Month...
-                    String sMonth = Character.toString(sDate.charAt(3));
-                    sMonth += Character.toString(sDate.charAt(4));
-                    int month = Integer.parseInt(sMonth);
-                    // Day...
-                    String sDay = Character.toString(sDate.charAt(0));
-                    sDay += Character.toString(sDate.charAt(1));
-                    int day = Integer.parseInt(sDay);
-                    // Hour...
-                    String sTime = mTime.getText().toString();
-                    String sHour = Character.toString(sTime.charAt(0));
-                    sHour += Character.toString(sTime.charAt(1));
-                    int hour = Integer.parseInt(sHour);
-                    // And minute
-                    String sMinute = Character.toString(sTime.charAt(3));
-                    sMinute += Character.toString(sTime.charAt(4));
-                    int minute = Integer.parseInt(sMinute);
-                    // Assemble to a date
+                    int month = mDate.getMonth();
+                    int day = mDate.getDayOfMonth();
+                    int year = mDate.getYear();
+                    int hour = mTime.getCurrentHour()-1;
+                    int minute = mTime.getCurrentMinute()-1;
                     Date date = new Date(year, month, day, hour, minute);
-
-                    Log.i("Petter", sDate + ", " + sTime);
+                    Log.i("Petter", day + ", " + month + ", " + year + hour + minute);
                     // The naming convention of the icons is ic_CATEGORY
                     String icon = "ic_" + header;
                     listener.onDialogPositiveClick(NewTaskFragment.this, header, details, date, icon);
@@ -107,20 +86,6 @@ public class NewTaskFragment extends DialogFragment {
                 }
             });
         return builder.create();
-    }
-
-    public void setCurrentDateTime(Button mDate, Button mTime) {
-        // Strings to show current date and time on buttons
-        Calendar cal = Calendar.getInstance();
-        String day = Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
-        String month = Integer.toString(cal.get(Calendar.MONTH));
-        String year = Integer.toString(cal.get(Calendar.YEAR));
-        String hour = Integer.toString(cal.get(Calendar.HOUR_OF_DAY));
-        String minute = Integer.toString(cal.get(Calendar.MINUTE));
-        String dateButton = day + "/" + month + "/" + year;
-        String timeButton = hour + ":" + minute;
-        mDate.setText(dateButton);
-        mTime.setText(timeButton);
     }
 
     @Override
@@ -152,29 +117,12 @@ public class NewTaskFragment extends DialogFragment {
         }
 
         public void onTimeSet(TimePicker View, int hour, int minute) {
-            String sHour;
-            String sMinute;
-            if (hour < 10) {
-                sHour = "0" + hour;
-            } else {
-                sHour = Integer.toString(hour);
-            }if (minute < 10) {
-                sMinute = "0" + minute;
-            } else {
-                sMinute = Integer.toString(minute);
-            }
-            String newTime = sHour + ":" + sMinute;
         }
     }
 
     // Inner class to similarly handle the date picker
     public static class DatePickerFragment extends DialogFragment
             implements android.app.DatePickerDialog.OnDateSetListener {
-
-        public interface DateListener {
-            void onDateSet(DialogFragment dialog, String newDate);
-        }
-        DateListener listener;
 
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use current date as default
@@ -187,36 +135,7 @@ public class NewTaskFragment extends DialogFragment {
         }
 
         @Override
-        public void onAttach(Context context) {
-            Log.i("Petter", "NewTaskFragment.onAttach()");
-            super.onAttach(context);
-            // Verify that the host activity implements the callback interface
-            try {
-                // Instantiate the NoticeDialogListener so we can send events to the host
-                listener = (DateListener) context;
-            } catch (ClassCastException e) {
-                // The activity doesn't implement the interface, throw exception
-                throw new ClassCastException("Must implement NoticeDialogListener");
-            }
-        }
-
-        @Override
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            String sDay;
-            String sMonth;
-            String sYear = Integer.toString(year);
-            if (day < 10) {
-                sDay = "0" + day;
-            } else {
-                sDay = Integer.toString(day);
-            }
-            if (day < 10) {
-                sMonth = "0" + month;
-            } else {
-                sMonth = Integer.toString(month);
-            }
-            String newDate = sDay + "/" + sMonth + "/" + sYear;
-            listener.onDateSet(NewTaskFragment.DatePickerFragment.this, newDate);
         }
     }
 }

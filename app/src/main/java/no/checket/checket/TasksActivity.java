@@ -137,8 +137,8 @@ public class TasksActivity extends AppCompatActivity
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch(menuItem.getItemId()) {
                     case R.id.main_BottomAppBar_tasks:
-                        // Open tasks
-                        Intent intentTasks = new Intent(TasksActivity.this, TasksActivity.class);
+                        // Open Main
+                        Intent intentTasks = new Intent(TasksActivity.this, MainActivity.class);
                         startActivity(intentTasks);
                         break;
                     case R.id.main_BottomAppBar_ach:
