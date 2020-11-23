@@ -43,4 +43,13 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     annotationProcessor 'androidx.room:room-compiler:2.2.5'
+    //IMPLENTERINGER TIL EDITPROFILE
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.+'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.google.firebase:firebase-storage:19.2.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.google.firebase:firebase-database:19.5.1'
+
+
+
 }

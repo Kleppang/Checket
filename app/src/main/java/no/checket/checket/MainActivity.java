@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     private TextView txtV_email;
     private TextView txtV_name;
     private MenuItem MI_LoginReg;
+    private MenuItem MI_Profile;
 
     // Recycler view
     private LinkedList<no.checket.checket.Task> mTaskList = new LinkedList<>();
@@ -193,6 +194,7 @@ public class MainActivity extends AppCompatActivity
 
         txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
         MI_LoginReg = navigationMenu.findItem(R.id.nav_LoginReg);
+        MI_Profile = navigationMenu.findItem(R.id.nav_profile);
 
         if(currentUser != null) {
             txtV_email.setText(currentUser.getEmail());
@@ -216,9 +218,12 @@ public class MainActivity extends AppCompatActivity
             });
 
             MI_LoginReg.setTitle("Logout");
+            MI_Profile.setVisible(true);
 
         } else {
             MI_LoginReg.setTitle("Login / Register");
+
+            MI_Profile.setVisible(false);
         }
     }
 
