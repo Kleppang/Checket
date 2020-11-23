@@ -64,12 +64,18 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Displaying information for logged in users Profile
+
         firestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("User");
 
         profileImageView = findViewById(R.id.pb_pic);
+
+        //Displaying information for logged in users Profile
+        //Email
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        txtV_email = findViewById(R.id.profile_profileemail);
+        txtV_email.setText(currentUser.getEmail());
 
 
         firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -83,10 +89,6 @@ public class ProfileActivity extends AppCompatActivity {
                             txtV_name = findViewById(R.id.profile_name);
                             txtV_name.setText(thisDoc.getString("name"));
 
-                            //Email
-                            FirebaseUser currentUser = mAuth.getCurrentUser();
-                            txtV_email = findViewById(R.id.profile_profileemail);
-                            txtV_email.setText(currentUser.getEmail());
                         }
                     }
                 }
