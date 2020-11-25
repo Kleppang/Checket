@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,11 +21,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
@@ -33,17 +37,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         // Interface for communication with NewTaskFragment...
-        NewTaskFragment.NewTaskDialogListener,
-        NewTaskFragment.DatePickerFragment.DateListener {
+        NewTaskFragment.NewTaskDialogListener{
 
     private IntroSlideManager mIntroSlideManager;
 
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private Menu navigationMenu;
+    CircleImageView profileImage;
 
     private TextView txtV_email;
     private TextView txtV_name;
@@ -66,6 +75,8 @@ public class MainActivity extends AppCompatActivity
     // Firebase & Auth, declare instance
     private FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
+    private StorageReference storageReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +205,7 @@ public class MainActivity extends AppCompatActivity
 
         txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
         MI_LoginReg = navigationMenu.findItem(R.id.nav_LoginReg);
+        profileImage = navigationView.getHeaderView(0).findViewById(R.id.imageView);;
         MI_Profile = navigationMenu.findItem(R.id.nav_profile);
 
         if(currentUser != null) {
@@ -214,6 +226,18 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                     }
+                }
+            });
+
+            //Declares storage reference
+            storageReference = FirebaseStorage.getInstance().getReference();
+
+            //Finds Uri and loads profile picture to nav_header
+            StorageReference profileRef = storageReference.child("users/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
+            profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(profileImage);
                 }
             });
 
@@ -320,13 +344,6 @@ public class MainActivity extends AppCompatActivity
         DialogFragment newFragment = new NewTaskFragment.DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
         Log.i("Petter", "TEST");
-    }
-
-    @Override
-    public void onDateSet(DialogFragment dialog, String newDate) {
-        // TODO: Get the view of the dialog
-        Button mDate = (Button) findViewById(R.id.date_input);
-        mDate.setText(newDate);
     }
 
     @Override
