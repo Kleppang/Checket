@@ -89,6 +89,11 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+        firestore = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("User");
+
+        //Displaying information for logged in users Profile
         //Email
         FirebaseUser currentUser = mAuth.getCurrentUser();
         txtV_email = findViewById(R.id.profile_profileemail);
@@ -104,6 +109,7 @@ public class ProfileActivity extends AppCompatActivity {
                         if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                             txtV_name = findViewById(R.id.profile_name);
                             txtV_name.setText(thisDoc.getString("name"));
+
                         }
                     }
                 }

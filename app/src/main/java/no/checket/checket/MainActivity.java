@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,8 +51,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         // Interface for communication with NewTaskFragment...
-        NewTaskFragment.NewTaskDialogListener,
-        NewTaskFragment.DatePickerFragment.DateListener {
+        NewTaskFragment.NewTaskDialogListener{
 
     private IntroSlideManager mIntroSlideManager;
 
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     private TextView txtV_email;
     private TextView txtV_name;
     private MenuItem MI_LoginReg;
+    private MenuItem MI_Profile;
 
     // Recycler view
     private LinkedList<no.checket.checket.Task> mTaskList = new LinkedList<>();
@@ -205,6 +206,7 @@ public class MainActivity extends AppCompatActivity
         txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
         MI_LoginReg = navigationMenu.findItem(R.id.nav_LoginReg);
         profileImage = navigationView.getHeaderView(0).findViewById(R.id.imageView);;
+        MI_Profile = navigationMenu.findItem(R.id.nav_profile);
 
         if(currentUser != null) {
             txtV_email.setText(currentUser.getEmail());
@@ -240,9 +242,11 @@ public class MainActivity extends AppCompatActivity
             });
 
             MI_LoginReg.setTitle("Logout");
+            MI_Profile.setVisible(true);
 
         } else {
             MI_LoginReg.setTitle("Login / Register");
+            MI_Profile.setVisible(false);
         }
     }
 
@@ -340,13 +344,6 @@ public class MainActivity extends AppCompatActivity
         DialogFragment newFragment = new NewTaskFragment.DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
         Log.i("Petter", "TEST");
-    }
-
-    @Override
-    public void onDateSet(DialogFragment dialog, String newDate) {
-        // TODO: Get the view of the dialog
-        Button mDate = (Button) findViewById(R.id.date_input);
-        mDate.setText(newDate);
     }
 
     @Override
