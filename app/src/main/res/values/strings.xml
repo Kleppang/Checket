@@ -57,6 +57,10 @@
     <!-- Edit Profile -->
     <string name="EditProfile">Edit Profile</string>
     <string name="change_profile_picture">Change profile picture</string>
+    <string name="custom_name_texthint">Enter to assign a custom name</string>
+    <string name="custom_name_placeholder">Custom name</string>
+    <string name="save_information">Save information</string>
+
 
 
     <!-- Intro Slider -->

@@ -5,47 +5,64 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageActivity;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileActivity extends AppCompatActivity {
-    private CircleImageView profileImageView;
-    private MaterialButton saveButton;
-    private TextView profileChangeBtn;
+    private CircleImageView profileImage;
+    private MaterialButton saveButton, profileChangeBtn;
+    private EditText inp_name;
 
-    private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore firestore;
+    private String userID;
+
 
     private Uri imageUri;
-    private String myUri = "";
     private StorageTask uploadTask;
-    private StorageReference storageProfilePicsRef;
+    private StorageReference storageReference;
+
+    private static final String TAG = "EDIT_PROFILE";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,109 +75,102 @@ public class EditProfileActivity extends AppCompatActivity {
             actionBar.setTitle(R.string.EditProfile);
         }
 
+        profileImage = findViewById(R.id.editProfile_image);
+        saveButton = findViewById(R.id.btnSave);
+        profileChangeBtn = findViewById(R.id.btnChangePic);
+        inp_name = findViewById(R.id.inp_customName);
+
+
         //Init
         mAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("User");
-        storageProfilePicsRef = FirebaseStorage.getInstance().getReference().child("Profile Pic");
+        firestore = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
 
-        profileImageView = findViewById(R.id.editProfile_image);
-        saveButton = findViewById(R.id.btnSave);
-        profileChangeBtn = findViewById(R.id.change_profile_btn);
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        StorageReference profileRef = storageReference.child("users/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onClick(View view) {
-                uploadProfileImage();
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(profileImage);
             }
         });
 
         profileChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CropImage.activity().setAspectRatio(1,1).start(EditProfileActivity.this);
+                //Opens gallery
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGalleryIntent, 1000);
             }
         });
 
-        getUserinfo();
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCustomName();
+            }
+        });
+
     }
 
-    private void getUserinfo() {
-        databaseReference.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists() && snapshot.getChildrenCount() > 0) {
-                    if (snapshot.hasChild("image")) {
-                        String image = snapshot.child("image").getValue().toString();
-                        Picasso.get().load(image).into(profileImageView);
-                    }
+    private void addCustomName() {
+        //adds custom name to current user
+        String customName = inp_name.getText().toString();
+
+        if(!customName.isEmpty()) {
+
+            userID = mAuth.getCurrentUser().getUid();
+            //
+            DocumentReference documentReference = firestore.collection("users").document(userID);
+
+            Map<String, Object> user = new HashMap<>();
+            user.put("name", customName);
+            user.put("uid", userID);
+            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "onSuccess: user profile is created for" + userID);
+                    Toast.makeText(EditProfileActivity.this, "Customname added", Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+            });
+        } else {
+            Toast.makeText(EditProfileActivity.this, "No new information has been filled", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //Gets image uri and displays image in imageview
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1000) {
+            if(resultCode == Activity.RESULT_OK) {
+                imageUri = data.getData();
+                //profileImage.setImageURI(imageUri);
+                uploadImageToFirebase(imageUri);
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            imageUri = result.getUri();
-
-            profileImageView.setImageURI(imageUri);
-        } else {
-            Toast.makeText(this, "Error, Try again", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    private void uploadProfileImage() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Set your profile");
-        progressDialog.setMessage("Please wait, while we are setting your data ");
-        progressDialog.show();
+    private void uploadImageToFirebase(Uri imageUri) {
 
-        if (imageUri != null) {
-            final StorageReference fileRef = storageProfilePicsRef
-                    .child(mAuth.getCurrentUser().getUid() + ".jpg");
-
-            uploadTask = fileRef.putFile(imageUri);
-
-            uploadTask.continueWithTask(new Continuation() {
-                @Override
-                public Object then(@NonNull Task task) throws Exception {
-
-                    if(!task.isSuccessful()) {
-                        throw task.getException();
+        //upload image to firebase storage
+        final StorageReference fileRef = storageReference.child("users/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
+        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(profileImage);
                     }
-
-                    return fileRef.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-
-                    if(task.isSuccessful()) {
-                        Uri downloadUrl = task.getResult();
-                        myUri = downloadUrl.toString();
-
-                        HashMap<String, Object> userMap = new HashMap<>();
-                        userMap.put("image", myUri);
-
-                        databaseReference.child(mAuth.getCurrentUser().getUid()).updateChildren(userMap);
-
-                        progressDialog.dismiss();
-                    }
-
-                }
-            });
-        } else {
-            progressDialog.dismiss();
-            Toast.makeText(this, "Image not selected", Toast.LENGTH_SHORT).show();
-        }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditProfileActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
