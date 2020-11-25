@@ -48,7 +48,7 @@
             android:id="@+id/link_Editprofile"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_settings_white_24dp"
+            android:src="@drawable/ic_edit_24"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
             android:layout_alignParentRight="true"
