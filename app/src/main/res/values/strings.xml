@@ -53,6 +53,8 @@
     <string name="Profile">Profile</string>
     <string name="txt_name_placeholder">Name</string>
     <string name="txt_profileemail_placeholder">Email</string>
+    <string name="task_count">Tasks</string>
+    <string name="achievements_count">Achievements</string>
 
     <!-- Edit Profile -->
     <string name="EditProfile">Edit Profile</string>
@@ -60,7 +62,6 @@
     <string name="custom_name_texthint">Enter to assign a custom name</string>
     <string name="custom_name_placeholder">Custom name</string>
     <string name="save_information">Save information</string>
-
 
 
     <!-- Intro Slider -->
@@ -132,5 +133,6 @@
     <string name="ach_lockedAchievements">Locked achievements</string>
     <string name="ach_unlockedAchievements_desc">A tab that will show all the unlocked achievements</string>
     <string name="ach_lockedAchievements_desc">A tab that will show all the locked achievements</string>
+
 
 </resources>

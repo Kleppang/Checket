@@ -10,6 +10,9 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="56dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
         >
         <RelativeLayout
             android:id="@+id/profile_userimage2"
@@ -17,12 +20,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle_border"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
             >
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/editProfile_image"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/ic_profile_black_24dp"
                 app:civ_border_color="@color/colorDarkGray"
@@ -31,28 +33,25 @@
                 />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/change_profile_btn"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnChangePic"
             android:layout_below="@+id/profile_userimage2"
-            android:text="@string/custom_name_texthint"
-            android:textColor="@color/colorPrimary"
-            android:fontFamily="@font/luckiest_guy"
-            android:layout_centerHorizontal="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginTop="30dp"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="@string/change_profile_picture"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+
             />
 
         <!-- inputfield for custom name-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_customName"
-            android:layout_below="@id/change_profile_btn"
-            android:layout_width="300dp"
+            android:layout_below="@id/btnChangePic"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
 
@@ -60,9 +59,9 @@
                 android:id="@+id/inp_customName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_userimage2"
                 android:hint="@string/custom_name_placeholder"
-                android:inputType="textPersonName"
-                />
+                android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
 
@@ -74,16 +73,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="56dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
         >
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnChangePic"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/change_profile_picture"
-            android:padding="12dp"
-            app:backgroundTint="@color/colorPrimaryDark"
-
-            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
