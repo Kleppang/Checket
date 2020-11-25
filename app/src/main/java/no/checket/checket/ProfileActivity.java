@@ -40,8 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
 
 
-    private TextView txtV_name;
-    private TextView txtV_email;
+    private TextView txtV_name, txtV_email, taskNr, achNr;
 
     // Firebase, declare instance of Firestore and Auth
     private FirebaseFirestore firestore;
@@ -64,6 +63,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         callEditprofile = findViewById(R.id.link_Editprofile);
         profileImageView = findViewById(R.id.pb_pic);
+        taskNr = findViewById(R.id.taskCount);
+        achNr = findViewById(R.id.achCount);
 
         //Init
         firestore = FirebaseFirestore.getInstance();
@@ -99,14 +100,52 @@ public class ProfileActivity extends AppCompatActivity {
         txtV_email = findViewById(R.id.profile_profileemail);
         txtV_email.setText(currentUser.getEmail());
 
+        firestore.collection("tasks").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+              @Override
+              public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
+                  if (task.isSuccessful()) {
+                      int Tcount = 0;
+
+                      for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                          // Check if the UID matches logged in users' UID
+                          if (thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                              Tcount++;
+
+                          }
+                      }
+                      String finalTcount = String.valueOf(Tcount);
+                      taskNr.setText(finalTcount);
+                  }
+              }
+          });
+
+        firestore.collection("achievements").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    int Acount = 0;
+
+                    for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                        // Check if the UID matches logged in users' UID
+                        if (thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                            Acount++;
+
+                        }
+                    }
+                    String finalAcount = String.valueOf(Acount);
+                    achNr.setText(finalAcount);
+                }
+            }
+        });
+
 
         firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                         // Check if the UID matches logged in users' UID
-                        if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                        if (thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                             txtV_name = findViewById(R.id.profile_name);
                             txtV_name.setText(thisDoc.getString("name"));
 

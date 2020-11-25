@@ -81,16 +81,17 @@
                 android:gravity="center_horizontal">
 
                 <TextView
+                    android:id="@+id/taskCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123"
+                    android:text="0"
                     android:textSize="20sp"
                     android:textColor="@color/colorDarkLiver"
                     android:fontFamily="@font/roboto"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tasks"
+                    android:text="@string/task_count"
                     android:textSize="15sp"
                     android:textColor="@color/colorDarkLiver"
                     android:fontFamily="@font/roboto"/>
@@ -115,16 +116,17 @@
                 android:gravity="center_horizontal">
 
                 <TextView
+                    android:id="@+id/achCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="321"
+                    android:text="0"
                     android:textSize="20sp"
                     android:textColor="@color/colorDarkLiver"
                     android:fontFamily="@font/roboto"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Achievements"
+                    android:text="@string/achievements_count"
                     android:textSize="15sp"
                     android:textColor="@color/colorDarkLiver"
                     android:fontFamily="@font/roboto"/>
