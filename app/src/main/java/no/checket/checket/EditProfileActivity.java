@@ -113,8 +113,8 @@ public class EditProfileActivity extends AppCompatActivity {
             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "onSuccess: user profile is created for" + userID);
-                    Toast.makeText(EditProfileActivity.this, "Customname added", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onSuccess: user profile is created for " + userID);
+                    Toast.makeText(EditProfileActivity.this, "Successfully changed", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
