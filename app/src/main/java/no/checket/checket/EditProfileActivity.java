@@ -1,13 +1,17 @@
 package no.checket.checket;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,6 +32,8 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +48,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private String userID;
 
+    protected static final int CAMERA_PICTURE= 10;
+    protected static final int GALLERY_PICTURE = 11;
+    protected static final int CAMERA_PERMS = 20;
 
     private Uri imageUri;
     private StorageTask uploadTask;
@@ -82,9 +92,45 @@ public class EditProfileActivity extends AppCompatActivity {
         profileChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Opens gallery
-                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGalleryIntent, 1000);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMS);
+                    }
+                }
+
+                MaterialAlertDialogBuilder profilePicDialog = new MaterialAlertDialogBuilder(view.getContext());
+                profilePicDialog.setTitle("Custom profile picture");
+                profilePicDialog.setMessage("How do you want to select a picture?");
+                profilePicDialog.setPositiveButton("Gallery",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Intent pictureActionIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(pictureActionIntent, GALLERY_PICTURE);
+                            }
+                        });
+                profilePicDialog.setNegativeButton("Camera",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
+
+                                Calendar time = Calendar.getInstance();
+                                String filename = "profile_" + time.getTimeInMillis() + ".jpg";
+
+                                File pic = new File(getBaseContext().getFilesDir(), filename);
+
+                                Uri uri = FileProvider.getUriForFile(getBaseContext(), "no.checket.checket.provider", pic);
+
+                                imageUri = uri;
+
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+                                startActivityForResult(intent, CAMERA_PICTURE);
+
+                            }
+                        });
+                profilePicDialog.show();
             }
         });
 
@@ -123,15 +169,18 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Gets image uri and displays image in imageview
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1000) {
+
+        if(requestCode == CAMERA_PICTURE) {
+            if(resultCode == Activity.RESULT_OK) {
+                uploadImageToFirebase(imageUri);
+            }
+        } else if(requestCode == GALLERY_PICTURE) {
             if(resultCode == Activity.RESULT_OK) {
                 imageUri = data.getData();
-                //profileImage.setImageURI(imageUri);
                 uploadImageToFirebase(imageUri);
-
             }
         }
     }
