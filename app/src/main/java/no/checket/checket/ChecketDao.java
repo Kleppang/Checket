@@ -16,10 +16,13 @@ public interface ChecketDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAchievement(Achievement achievement);
 
+    @Query("Select * from AchievementsTable where name = :thisName")
+    Achievement getAchievement(String thisName);
+
     // Tasks
     @Query("Select * from TasksTable")
     List<no.checket.checket.Task> loadAllTasks();
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTask(Task task);
 }

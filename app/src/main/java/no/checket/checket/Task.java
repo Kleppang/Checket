@@ -10,13 +10,13 @@ import java.util.Calendar;
 @Entity(tableName = "TasksTable")
 public class Task {
     @ColumnInfo
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
     private int id;
     @ColumnInfo
     private String header;
     @ColumnInfo
     private String details;
+    @PrimaryKey()
+    @NonNull
     @ColumnInfo
     private long date;
     @ColumnInfo

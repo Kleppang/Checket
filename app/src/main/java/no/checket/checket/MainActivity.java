@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -71,13 +72,18 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private StorageReference storageReference;
 
+    private ChecketDatabase mDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Firebase, initialize the instance
+        firestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+        mDB = ChecketDatabase.getDatabase(this);
 
         // Start by checking if this is the first launch, decides which view to show
         mIntroSlideManager = new IntroSlideManager(this);
@@ -182,11 +188,6 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 }
             });
-
-            // Fill mTaskList
-            fillTaskList();
-            // Call the method to initialize and inflate the recycler
-            recyclerView();
         }
     }
 
@@ -204,9 +205,6 @@ public class MainActivity extends AppCompatActivity
 
         if(currentUser != null) {
             txtV_email.setText(currentUser.getEmail());
-
-            firestore = FirebaseFirestore.getInstance();
-            mAuth = FirebaseAuth.getInstance();
 
             firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -238,35 +236,38 @@ public class MainActivity extends AppCompatActivity
             MI_LoginReg.setTitle("Logout");
             MI_Profile.setVisible(true);
 
+            // TODO: Bare legg til nye tasks, bruker Clear() for å unnvike dobbel tasks
+            mTaskList.clear();
+
+            // Fetch a users tasks, then add them to the local database
+            firestore.collection("tasks").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()) {
+                        for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                            // Check if the UID matches logged in users' UID
+                            if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add");
+                                mTaskList.add(newTask);
+                                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mDB.checketDao().insertTask(newTask);
+                                    }
+                                });
+                            }
+                        }
+
+                        // Call the method to initialize and inflate the recycler
+                        recyclerView();
+                    }
+                }
+            });
+
         } else {
             MI_LoginReg.setTitle("Login / Register");
             MI_Profile.setVisible(false);
         }
-    }
-
-    public void fillTaskList () {
-        // RecyclerView
-        // Populate list
-        // TODO: Get list from DB
-        // NB! The year, month, etc. constructor is deprecated
-        mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", 61565866200000L, "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", 61565866200000L, "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Sports", "Football in the park", 61565866200000L, "ic_sports"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. This is getting psychotic...", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Apartment's REAAALLY clean now.", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Here we go again.", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-
     }
 
     public void recyclerView() {
@@ -287,7 +288,12 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView = findViewById(R.id.coming_tasks);
         // Specify the length of the list for this activity
         // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
-        int length = 6;
+        int length;
+        if(mTaskList.size() >= 6) {
+            length = 6;
+        } else {
+            length = mTaskList.size();
+        }
         // Create an adapter and supply the data to be displayed.
         mAdapter = new TaskListAdapter(this, mTaskList, length);
         // Connect the adapter with the RecyclerView.

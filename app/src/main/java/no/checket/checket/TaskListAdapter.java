@@ -12,14 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.List;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder> {
-    private LinkedList<Task> mTaskList;
+    private List<Task> mTaskList;
     private LayoutInflater mInflater;
     private Context context;
     private int length;
 
-    public TaskListAdapter (Context context, LinkedList<Task> taskList, int length) {
+    public TaskListAdapter (Context context, List<Task> taskList, int length) {
         mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mTaskList = taskList;

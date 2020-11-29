@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 public class TasksActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -51,11 +52,16 @@ public class TasksActivity extends AppCompatActivity
 
     // Firebase, declare instance
     private FirebaseAuth mAuth;
+
+    private ChecketDatabase mDB;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Firebase, initialize the instance
         mAuth = FirebaseAuth.getInstance();
+
+        mDB = ChecketDatabase.getDatabase(this);
 
         setContentView(R.layout.activity_tasks);
 
@@ -153,8 +159,6 @@ public class TasksActivity extends AppCompatActivity
 
         // Fill mTaskList
         fillTaskList();
-        // Call the method to initialize and inflate the recycler
-        recyclerView();
     }
 
     public void onStart() {
@@ -195,24 +199,22 @@ public class TasksActivity extends AppCompatActivity
         // RecyclerView
         // Populate list
         // TODO: Get list from DB
+
+
         // NB! The year, month, etc. constructor is deprecated
-        mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", 61565866200000L, "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", 61565866200000L, "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Sports", "Football in the park", 61565866200000L, "ic_sports"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. This is getting psychotic...", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Apartment's REAAALLY clean now.", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Here we go again.", 61565866200000L, "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Task> templist = mDB.checketDao().loadAllTasks();
+                for(Task temptask : templist) {
+                    mTaskList.add(temptask);
+                }
+
+                // Call the method to initialize and inflate the recycler
+                recyclerView();
+
+            }
+        });
 
     }
 
