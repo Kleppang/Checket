@@ -103,7 +103,7 @@ public class TasksActivity extends AppCompatActivity
                                     }).show();
                         } else {
                             // Starts the LoginRegisterActivity
-                            Intent intent = new Intent(TasksActivity.this, LoginRegisterActivity.class);
+                            Intent intent = new Intent(TasksActivity.this, LoginActivity.class);
                             startActivity(intent);
                         }
                         break;

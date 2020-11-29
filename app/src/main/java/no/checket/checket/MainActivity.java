@@ -39,7 +39,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity
                                     }).show();
                             } else {
                                 // Starts the LoginRegisterActivity
-                                Intent intent = new Intent(MainActivity.this, LoginRegisterActivity.class);
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             }
                             break;

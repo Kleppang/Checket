@@ -33,7 +33,7 @@
             android:theme="@style/SettingsTheme" />
         <activity android:name=".IntroSlideActivity" />
         <activity
-            android:name=".LoginRegisterActivity"
+            android:name=".LoginActivity"
             android:theme="@style/AppThemeTopBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
