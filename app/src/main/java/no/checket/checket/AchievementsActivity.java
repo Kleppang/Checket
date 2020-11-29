@@ -281,7 +281,7 @@ public class AchievementsActivity extends AppCompatActivity {
         boolean hasConnection = isConnected(getApplicationContext());
 
         if(mAuth.getCurrentUser() == null || !hasConnection) {
-            // User not logged in OR user is logged in but we don't have an Internet connection
+            // User not logged in OR we don't have an Internet connection
 
             // Fetch all tasks we'll test on
             /*
@@ -370,132 +370,129 @@ public class AchievementsActivity extends AppCompatActivity {
 
         } else {
             // User logged in
+            firestore = FirebaseFirestore.getInstance();
+            firestore.collection("tasks").addSnapshotListener(new EventListener<QuerySnapshot>() {
 
-            if (hasConnection) {
-                firestore = FirebaseFirestore.getInstance();
-                firestore.collection("tasks").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException err) {
+                    // Booleans used by the achievement "Germaphobe"
+                    boolean d1 = false;
+                    boolean d2 = false;
+                    boolean d3 = false;
+                    boolean d4 = false;
+                    boolean d5 = false;
+                    boolean d6 = false;
+                    boolean d7 = false;
 
+                    // Counter used by the achievement "Gotta go fast"
+                    int GGF_count = 0;
+
+                    if(err == null) {
+                        for(DocumentChange thisDoc:documents.getDocumentChanges()) {
+                            if(thisDoc.getType() == DocumentChange.Type.ADDED) {
+                                // Firstly, ensure user does not already have the achievement, then check if the UID matches logged in users' UID, check if the Category is Cleaning and only include results from the past 7 days
+                                if(!existsAchievement("Germaphobe") && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid()) && thisDoc.getDocument().getString("category").equals("Cleaning") && Long.parseLong(thisDoc.getDocument().getString("enddate")) >= (System.currentTimeMillis() - 604800000)) {
+
+                                    Calendar taskdate = Calendar.getInstance();
+                                    taskdate.setTimeInMillis(Long.parseLong(thisDoc.getDocument().getString("enddate")));
+
+                                    // Comparing todays date and the task's date, setting booleans to indicate whether all 7 days had a Cleaning task
+
+                                    long tasktime = taskdate.getTimeInMillis();
+                                    long now = System.currentTimeMillis();
+
+                                    if(tasktime <= (now - 518400000)) {
+                                        d7 = true;
+                                    } else if(tasktime <= (now - 432000000)) {
+                                        d6 = true;
+                                    } else if(tasktime <= (now - 345600000)) {
+                                        d5 = true;
+                                    } else if(tasktime <= (now - 259200000)) {
+                                        d4 = true;
+                                    } else if(tasktime <= (now - 172800000)) {
+                                        d3 = true;
+                                    } else if(tasktime <= (now - 86400000)) {
+                                        d2 = true;
+                                    } else if(tasktime <= now) {
+                                        d1 = true;
+                                    }
+
+                                    if(d7 && d6 && d5 && d4 && d3 && d2 && d1) {
+                                        // If all dates are a-okay
+                                        addAchievementFB("Germaphobe", "Cleaned 7 days in a row", "Cleaning");
+                                    }
+
+                                } else if(!existsAchievement("Gotta go fast") && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid())  && Long.parseLong(thisDoc.getDocument().getString("enddate")) >= (System.currentTimeMillis() - 86400000)) {
+                                    // Gets all of the tasks for a logged in user in the past 24 hours
+                                    GGF_count++;
+
+                                    if(GGF_count >= 10) {
+                                        addAchievementFB("Gotta go fast", "10 tasks in a single day", "Miscellaneous");
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        // If an error occurred
+                        Log.e(TAG, "Error occurred: " + err.getMessage());
+                    }
+                }
+
+            });
+
+            // Achievements related to the users collection
+            if(!existsAchievement("Customizer") || !existsAchievement("Klimate")) {
+                firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException err) {
-                        // Booleans used by the achievement "Germaphobe"
-                        boolean d1 = false;
-                        boolean d2 = false;
-                        boolean d3 = false;
-                        boolean d4 = false;
-                        boolean d5 = false;
-                        boolean d6 = false;
-                        boolean d7 = false;
-
-                        // Counter used by the achievement "Gotta go fast"
-                        int GGF_count = 0;
-
-                        if(err == null) {
-                            for(DocumentChange thisDoc:documents.getDocumentChanges()) {
-                                if(thisDoc.getType() == DocumentChange.Type.ADDED) {
-                                    // Firstly, ensure user does not already have the achievement, then check if the UID matches logged in users' UID, check if the Category is Cleaning and only include results from the past 7 days
-                                    if(!existsAchievement("Germaphobe") && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid()) && thisDoc.getDocument().getString("category").equals("Cleaning") && Long.parseLong(thisDoc.getDocument().getString("enddate")) >= (System.currentTimeMillis() - 604800000)) {
-
-                                        Calendar taskdate = Calendar.getInstance();
-                                        taskdate.setTimeInMillis(Long.parseLong(thisDoc.getDocument().getString("enddate")));
-
-                                        // Comparing todays date and the task's date, setting booleans to indicate whether all 7 days had a Cleaning task
-
-                                        long tasktime = taskdate.getTimeInMillis();
-                                        long now = System.currentTimeMillis();
-
-                                        if(tasktime <= (now - 518400000)) {
-                                            d7 = true;
-                                        } else if(tasktime <= (now - 432000000)) {
-                                            d6 = true;
-                                        } else if(tasktime <= (now - 345600000)) {
-                                            d5 = true;
-                                        } else if(tasktime <= (now - 259200000)) {
-                                            d4 = true;
-                                        } else if(tasktime <= (now - 172800000)) {
-                                            d3 = true;
-                                        } else if(tasktime <= (now - 86400000)) {
-                                            d2 = true;
-                                        } else if(tasktime <= now) {
-                                            d1 = true;
-                                        }
-
-                                        if(d7 && d6 && d5 && d4 && d3 && d2 && d1) {
-                                            // If all dates are a-okay
-                                            addAchievementFB("Germaphobe", "Cleaned 7 days in a row", "Cleaning");
-                                        }
-
-                                    } else if(!existsAchievement("Gotta go fast") && thisDoc.getDocument().getString("uid").equals(mAuth.getCurrentUser().getUid())  && Long.parseLong(thisDoc.getDocument().getString("enddate")) >= (System.currentTimeMillis() - 86400000)) {
-                                        // Gets all of the tasks for a logged in user in the past 24 hours
-                                        GGF_count++;
-
-                                        if(GGF_count >= 10) {
-                                            addAchievementFB("Gotta go fast", "10 tasks in a single day", "Miscellaneous");
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                                // Check if the UID matches logged in users' UID
+                                if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                    if(!existsAchievement("Customizer")) {
+                                        // User has set a custom name, award the achievement
+                                        addAchievementFB("Customizer", "Set a custom name", "User profile");
+                                    }
+                                    if(!existsAchievement("Klimate")) {
+                                        // Checking for the additional hidden achievement "Klimate"
+                                        if(thisDoc.getString("name").equals("Klimate")) {
+                                            addAchievementFB("Klimate", "A true environmentalist", "Hidden");
                                         }
                                     }
                                 }
                             }
-                        } else {
-                            // If an error occurred
-                            Log.e(TAG, "Error occurred: " + err.getMessage());
                         }
                     }
-
                 });
+            }
 
-                // Achievements related to the users collection
-                if(!existsAchievement("Customizer") || !existsAchievement("Klimate")) {
-                    firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()) {
-                                for (QueryDocumentSnapshot thisDoc : task.getResult()) {
-                                    // Check if the UID matches logged in users' UID
-                                    if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                        if(!existsAchievement("Customizer")) {
-                                            // User has set a custom name, award the achievement
-                                            addAchievementFB("Customizer", "Set a custom name", "User profile");
-                                        }
-                                        if(!existsAchievement("Klimate")) {
-                                            // Checking for the additional hidden achievement "Klimate"
-                                            if(thisDoc.getString("name").equals("Klimate")) {
-                                                addAchievementFB("Klimate", "A true environmentalist", "Hidden");
-                                            }
-                                        }
-                                    }
+            // If the user does not already have one of the Taskmaster achievements
+            if(!existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
+
+                firestore.collection("tasks").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int ant = 0;
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                                // Check if the UID matches logged in users' UID
+                                if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                    ant++;
                                 }
                             }
-                        }
-                    });
-                }
-
-                // If the user does not already have one of the Taskmaster achievements
-                if(!existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
-
-                    firestore.collection("tasks").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            int ant = 0;
-                            if(task.isSuccessful()) {
-                                for (QueryDocumentSnapshot thisDoc : task.getResult()) {
-                                    // Check if the UID matches logged in users' UID
-                                    if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                        ant++;
-                                    }
-                                }
-                                if(ant >= 10 && !existsAchievement("Taskmaster (10+)")) {
-                                    addAchievementFB("Taskmaster (10+)", "Finished 10 tasks", "Miscellaneous");
-                                } else if(ant >= 100 && !existsAchievement("Taskmaster (100+)")) {
-                                    addAchievementFB("Taskmaster (100+)", "Finished 100 tasks", "Miscellaneous");
-                                } else if(ant >= 1000 && !existsAchievement("Taskmaster (1000+)")) {
-                                    addAchievementFB("Taskmaster (1000+)", "Finished 1000 tasks", "Miscellaneous");
-                                } else if(ant >= 9001 && !existsAchievement("It's over 9000!")) {
-                                    // The hidden achievement "It's over 9000!"
-                                    addAchievementFB("It's over 9000!", "Finished 9001 tasks", "Hidden");
-                                }
+                            if(ant >= 10 && !existsAchievement("Taskmaster (10+)")) {
+                                addAchievementFB("Taskmaster (10+)", "Finished 10 tasks", "Miscellaneous");
+                            } else if(ant >= 100 && !existsAchievement("Taskmaster (100+)")) {
+                                addAchievementFB("Taskmaster (100+)", "Finished 100 tasks", "Miscellaneous");
+                            } else if(ant >= 1000 && !existsAchievement("Taskmaster (1000+)")) {
+                                addAchievementFB("Taskmaster (1000+)", "Finished 1000 tasks", "Miscellaneous");
+                            } else if(ant >= 9001 && !existsAchievement("It's over 9000!")) {
+                                // The hidden achievement "It's over 9000!"
+                                addAchievementFB("It's over 9000!", "Finished 9001 tasks", "Hidden");
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         }
     }
