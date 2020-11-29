@@ -201,7 +201,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditProfileActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, "Error occurred while uploading image", Toast.LENGTH_SHORT).show();
             }
         });
     }
