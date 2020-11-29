@@ -498,10 +498,10 @@ public class AchievementsActivity extends AppCompatActivity {
     public static boolean isConnected(Context context) {
         /* Some important notes regarding this function
 
-            NetworkInfo is now deprecated as of API 29
-            getActiveNetwork() requires API 23, this application aims for API 21
+            ConnectivityManager:getActiveNetworkInfo() is now deprecated as of API 29
+            ConnectivityManager:getActiveNetwork(), which is not deprecated, requires API 23, this application aims for API 21
 
-            Therefore, in order to support API 21 and 22 we need to also implement NetworkInfo when the user is on an older version of Android
+            Therefore, in order to support API 21 and 22 we need to also implement ConnectivityManager:getActiveNetworkInfo() when the user is on an older version of Android
 
         */
 
