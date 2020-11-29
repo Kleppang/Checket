@@ -316,12 +316,9 @@ public class AchievementsActivity extends AppCompatActivity {
                     // Germaphobe
 
                     if(!existsAchievement("Germaphobe") && thisTask.getHeader().equals("Cleaning") && thisTask.getDate() >= (System.currentTimeMillis() - 604800000)) {
-                        Calendar taskdate = Calendar.getInstance();
-                        taskdate.setTimeInMillis(thisTask.getDate());
-
                         // Comparing todays date and the task's date, setting booleans to indicate whether all 7 days had a Cleaning task
 
-                        long tasktime = taskdate.getTimeInMillis();
+                        long tasktime = thisTask.getDate();
                         long now = System.currentTimeMillis();
 
                         if(tasktime <= (now - 518400000)) {
