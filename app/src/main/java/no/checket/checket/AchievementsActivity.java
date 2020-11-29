@@ -55,13 +55,6 @@ public class AchievementsActivity extends AppCompatActivity {
 
     private ChecketDatabase mDB;
 
-    private static final String TAG = "AchievementsActivity";
-
-    /* TODO:
-    As a user may still get achievements while not being logged in, connect list of achievements with local database
-
-     */
-
     /*
 
     Hidden achievements:
@@ -261,19 +254,7 @@ public class AchievementsActivity extends AppCompatActivity {
         achAdapter.notifyDataSetChanged();
         achAdapterLocked.notifyDataSetChanged();
 
-        firestore.collection("achievements").add(achMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                // TODO
-                // Notification or similar to show the user that they have achieved something
-                Toast.makeText(AchievementsActivity.this, "An achievement was added " + achName, Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // Unable to add the achievement
-            }
-        });
+        firestore.collection("achievements").add(achMap);
     }
 
     private void checkAchievements() {
