@@ -293,6 +293,55 @@ public class AchievementsActivity extends AppCompatActivity {
 
         });
 
+        // User is logged in and has an active Internet connection
+        if(mAuth.getCurrentUser() != null && hasConnection) {
+            // Fetches all achievements stored on Firestore
+            firestore.collection("achievements").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()) {
+                        for(QueryDocumentSnapshot document : task.getResult()) {
+                            if(document.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                final Achievement tempach = new Achievement(document.getString("name"), document.getString("desc"), document.getString("category"));
+                                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mDB.checketDao().insertAchievement(tempach);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Achievements related to the users collection
+            if(!existsAchievement("Customizer") || !existsAchievement("Klimate")) {
+                firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot thisDoc : task.getResult()) {
+                                // Check if the UID matches logged in users' UID
+                                if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                    if(!existsAchievement("Customizer")) {
+                                        // User has set a custom name, award the achievement
+                                        addAchievementFB("Customizer", "Set a custom name", "User profile");
+                                    }
+                                    if(!existsAchievement("Klimate")) {
+                                        // Checking for the additional hidden achievement "Klimate"
+                                        if(thisDoc.getString("name").toLowerCase().equals("klimate")) {
+                                            addAchievementFB("Klimate", "A true environmentalist", "Hidden");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
         // Germaphobe & Gotta go fast
         if(!existsAchievement("Germaphobe") || !existsAchievement("Gotta go fast") || !existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
 
@@ -387,36 +436,11 @@ public class AchievementsActivity extends AppCompatActivity {
             }
         }
 
-        // Achievements specific to logged in users with an active Internet connection
+        Collections.sort(achList);
+        Collections.sort(achListLocked);
 
-        if(mAuth.getCurrentUser() != null && hasConnection) {
-            // Achievements related to the users collection
-            if(!existsAchievement("Customizer") || !existsAchievement("Klimate")) {
-                firestore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
-                            for (QueryDocumentSnapshot thisDoc : task.getResult()) {
-                                // Check if the UID matches logged in users' UID
-                                if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                    if(!existsAchievement("Customizer")) {
-                                        // User has set a custom name, award the achievement
-                                        addAchievementFB("Customizer", "Set a custom name", "User profile");
-                                    }
-                                    if(!existsAchievement("Klimate")) {
-                                        // Checking for the additional hidden achievement "Klimate"
-                                        if(thisDoc.getString("name").toLowerCase().equals("klimate")) {
-                                            addAchievementFB("Klimate", "A true environmentalist", "Hidden");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
+        achAdapter.notifyDataSetChanged();
+        achAdapterLocked.notifyDataSetChanged();
 
     }
 }
