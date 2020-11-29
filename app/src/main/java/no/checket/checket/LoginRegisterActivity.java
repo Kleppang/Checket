@@ -37,9 +37,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
     MaterialButton btn_login;
 
     //Transition animation
-    TextView tran_title, tran_text, CallSignUp;
-    TextInputLayout tran_email, tran_password;
-    Button tran_button;
+    TextView CallSignUp;
 
 
 
@@ -62,37 +60,12 @@ public class LoginRegisterActivity extends AppCompatActivity {
         }
 
         //Hooks
-        tran_title = findViewById(R.id.logoTitle);
-        tran_text = findViewById(R.id.logoText);
         CallSignUp = findViewById(R.id.link_signup);
-        tran_email = findViewById(R.id.lgn_email);
-        tran_password = findViewById(R.id.lgn_pw);
-        tran_button = findViewById(R.id.btn_login);
 
         CallSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginRegisterActivity.this, SignUpActivity.class);
-
-               /* Pair[] pairs = new Pair[7];
-
-                pairs[0] = new Pair<View,String>(tran_title,"logo_title");
-                pairs[1] = new Pair<View,String>(tran_text,"logo_text");
-                pairs[2] = new Pair<View,String>(tran_email,"input_email");
-                pairs[3] = new Pair<View,String>(tran_password,"input_pw");
-                pairs[4] = new Pair<View,String>(tran_button,"button_action");
-                pairs[5] = new Pair<View,String>(tran_Btntxt,"btn_text");
-
-                // Check if we're running on Android 5.0 or higher
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    // Apply activity transition
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(LoginRegisterActivity.this,pairs);
-                    startActivity(intent,options.toBundle());
-                } else {
-                    // Swap without transition
-                    startActivity(intent);
-                } */
-                startActivity(intent);
+                startActivity(new Intent(LoginRegisterActivity.this, SignUpActivity.class));
             }
         });
     }
@@ -129,7 +102,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail: failure", task.getException());
-                        Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Could not login, please try again.", Toast.LENGTH_SHORT).show();
 
                         // Clear password
                         eTxt_password.setText("");
@@ -138,6 +111,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                         btn_login.setText(R.string.action_sign_in);
                     }
                 }
+
             });
         } else {
             Toast.makeText(getApplicationContext(), "Please fill out both fields.", Toast.LENGTH_SHORT).show();
