@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -48,14 +49,14 @@ public class AchievementsActivity extends AppCompatActivity {
 
 
     Shown achievements:
-    Name                | Description               | Requirements
-    -----------------------------------------------------------
-    Customizer          | Set a custom name         | Custom name
-    Germaphobe          | Cleaned 7 days in a row   | At least 1 daily Cleaning task in the past 7 days
-    Gotta go fast       | 10 tasks in a single day  | At least 10 tasks in the past 24 hours
-    Taskmaster (10+)    | Finished 10 tasks         | At least 10 tasks with a end date in the
-    Taskmaster (100+)   | Finished 100 tasks        | At least 100 tasks with a end date in the past
-    Taskmaster (1000+)  | Finished 1000 tasks       | At least 1000 tasks with a end date in the past
+    Name                | Description                           | Requirements
+    ---------------------------------------------------------------------------------
+    Customizer          | Set a custom name                     | Custom name
+    Germaphobe          | Cleaned every day the past 7 days     | At least 1 daily Cleaning task in the past 7 days
+    Gotta go fast       | 10 tasks in a single day              | At least 10 tasks in the past 24 hours
+    Taskmaster (10+)    | Finished 10 tasks                     | At least 10 tasks with a end date in the
+    Taskmaster (100+)   | Finished 100 tasks                    | At least 100 tasks with a end date in the past
+    Taskmaster (1000+)  | Finished 1000 tasks                   | At least 1000 tasks with a end date in the past
 
 
      */
@@ -93,7 +94,7 @@ public class AchievementsActivity extends AppCompatActivity {
         recyclerViewLocked.setAdapter(achAdapterLocked);
 
         achListLocked.add(new Achievement("Customizer", "Set a custom name", "User profile"));
-        achListLocked.add(new Achievement("Germaphobe", "Cleaned 7 days in a row", "Cleaning"));
+        achListLocked.add(new Achievement("Germaphobe", "Cleaned every day the past 7 days", "Cleaning"));
         achListLocked.add(new Achievement("Gotta go fast", "10 tasks in a single day", "Miscellaneous"));
         achListLocked.add(new Achievement("Taskmaster (10+)", "Finished 10 tasks", "Miscellaneous"));
         achListLocked.add(new Achievement("Taskmaster (100+)", "Finished 100 tasks", "Miscellaneous"));
@@ -154,6 +155,7 @@ public class AchievementsActivity extends AppCompatActivity {
                             }
                         }
 
+                        achAdapter.notifyDataSetChanged();
                         achAdapterLocked.notifyDataSetChanged();
 
                         checkAchievements();
@@ -237,7 +239,9 @@ public class AchievementsActivity extends AppCompatActivity {
         achAdapter.notifyDataSetChanged();
         achAdapterLocked.notifyDataSetChanged();
 
-        firestore.collection("achievements").add(achMap);
+        DocumentReference documentReference = firestore.collection("achievements").document(mAuth.getUid()+achName);
+
+        documentReference.set(achMap);
     }
 
     private void checkAchievements() {
@@ -349,13 +353,14 @@ public class AchievementsActivity extends AppCompatActivity {
                     if(d7 && d6 && d5 && d4 && d3 && d2 && d1) {
                         // If all dates are a-okay
                         if(hasConnection) {
-                            addAchievementFB("Germaphobe", "Cleaned 7 days in a row", "Cleaning");
+                            addAchievementFB("Germaphobe", "Cleaned every day the past 7 days", "Cleaning");
                         } else {
-                            addAchievementLocal("Germaphobe", "Cleaned 7 days in a row", "Cleaning");
+                            addAchievementLocal("Germaphobe", "Cleaned every day the past 7 days", "Cleaning");
                         }
                     }
 
-                } else if(!existsAchievement("Gotta go fast") && thisTask.getDate() >= (System.currentTimeMillis() - 86400000)) {
+                }
+                if(!existsAchievement("Gotta go fast") && thisTask.getDate() >= (System.currentTimeMillis() - 86400000)) {
                     // Gets all of the tasks for a logged in user in the past 24 hours
                     GGF_count++;
 
@@ -366,7 +371,8 @@ public class AchievementsActivity extends AppCompatActivity {
                             addAchievementLocal("Gotta go fast", "10 tasks in a single day", "Miscellaneous");
                         }
                     }
-                } else if(!existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
+                }
+                if(!existsAchievement("Taskmaster (10+)") || !existsAchievement("Taskmaster (100+)") || !existsAchievement("Taskmaster (1000+)")) {
                     int taskAmount = taskList.size();
 
                     if(taskAmount >= 10 && !existsAchievement("Taskmaster (10+)")) {
