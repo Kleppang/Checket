@@ -1,19 +1,41 @@
 package no.checket.checket;
 
-import java.util.Date;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import java.util.Calendar;
+
+@Entity(tableName = "TasksTable")
 public class Task {
+    @ColumnInfo
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    private int id;
+    @ColumnInfo
     private String header;
+    @ColumnInfo
     private String details;
-    private Date date;
+    @ColumnInfo
+    private long date;
+    @ColumnInfo
     private String icon;
 
-    public Task(String header, String details, Date date, String icon) {
+    public Task(String header, String details, long date, String icon) {
         this.header = header;
         this.details = details;
         this.date = date;
         this.icon = icon;
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getHeader() {
@@ -32,11 +54,11 @@ public class Task {
         this.details = details;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

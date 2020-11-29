@@ -35,6 +35,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,8 @@ public class AchievementsActivity extends AppCompatActivity {
     // Firebase, declare instance of Firestore and Auth
     private FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
+
+    private List<no.checket.checket.Task> taskList;
 
     private List<Achievement> achList;
     private AchievementRecAdapter achAdapter;
@@ -283,15 +286,15 @@ public class AchievementsActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser() == null || !hasConnection) {
             // User not logged in OR we don't have an Internet connection
 
-            // Fetch all tasks we'll test on
-            /*
-            List<Task> taskList = new ArrayList<>();
+            taskList = new ArrayList<>();
 
+            // Fetch all tasks we'll test on
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     taskList = mDB.checketDao().loadAllTasks();
                 }
+
             });
 
             // Germaphobe & Gotta go fast
@@ -309,9 +312,10 @@ public class AchievementsActivity extends AppCompatActivity {
                 // Counter used by the achievement "Gotta go fast"
                 int GGF_count = 0;
 
-                for(Task thisTask : taskList) {
+                for(no.checket.checket.Task thisTask : taskList) {
                     // Germaphobe
-                    if(!existsAchievement("Germaphobe") && thisTask.getCategory().equals("Cleaning") && thisTask.getDate() >= (System.currentTimeMillis() - 604800000)) {
+
+                    if(!existsAchievement("Germaphobe") && thisTask.getHeader().equals("Cleaning") && thisTask.getDate() >= (System.currentTimeMillis() - 604800000)) {
                         Calendar taskdate = Calendar.getInstance();
                         taskdate.setTimeInMillis(thisTask.getDate());
 
@@ -364,9 +368,6 @@ public class AchievementsActivity extends AppCompatActivity {
                     }
                 }
             }
-
-
-            */
 
         } else {
             // User logged in

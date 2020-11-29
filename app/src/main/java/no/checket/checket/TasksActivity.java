@@ -26,9 +26,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedList;
 
 public class TasksActivity extends AppCompatActivity
@@ -196,23 +196,23 @@ public class TasksActivity extends AppCompatActivity
         // Populate list
         // TODO: Get list from DB
         // NB! The year, month, etc. constructor is deprecated
-        mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", new Date(61565866200000L), "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date(61565866200000L), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", new Date (2020, 11, 14, 21, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 19, 21, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", new Date (2020, 12, 21, 20, 30), "ic_misc"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 11, 5, 21, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Sports", "Football in the park", new Date (2020, 10, 22, 20, 0), "ic_sports"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 12, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 13, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 14, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. This is getting psychotic...", new Date (2020, 12, 28, 15, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 16, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 17, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 18, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Apartment's REAAALLY clean now.", new Date (2020, 12, 28, 19, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Here we go again.", new Date (2020, 12, 28, 21, 30), "ic_add"));
-        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", new Date (2020, 12, 28, 21, 30), "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Social", "Drinks with colleagues", 61565866200000L, "ic_misc"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Exercise", "30 minute cardio", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Miscellaneous", "Pick dad up at the airport", 61565866200000L, "ic_misc"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Sports", "Football in the park", 61565866200000L, "ic_sports"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. This is getting psychotic...", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Apartment's REAAALLY clean now.", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming. Here we go again.", 61565866200000L, "ic_add"));
+        mTaskList.add(new no.checket.checket.Task("Cleaning", "Vacuuming", 61565866200000L, "ic_add"));
 
     }
 
@@ -221,7 +221,13 @@ public class TasksActivity extends AppCompatActivity
         Collections.sort(mTaskList, new Comparator<no.checket.checket.Task>() {
             @Override
             public int compare(final no.checket.checket.Task object1, final no.checket.checket.Task object2) {
-                return object1.getDate().compareTo(object2.getDate());
+                Calendar o1 = Calendar.getInstance();
+                Calendar o2 = Calendar.getInstance();
+
+                o1.setTimeInMillis(object1.getDate());
+                o2.setTimeInMillis(object2.getDate());
+
+                return o1.compareTo(o2);
             }
         });
         // Get a handle to the RecyclerView.
@@ -241,7 +247,7 @@ public class TasksActivity extends AppCompatActivity
     // Had to create these from an error dialog when implementing the interface,
     // just to get the overrides right.
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, String header, String details, Date date, String icon) {
+    public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon) {
         Task task = new Task(header, details, date, icon);
         // Add the new task to the list
         int index = 0;

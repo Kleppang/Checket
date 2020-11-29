@@ -11,27 +11,24 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import java.text.BreakIterator;
-import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 
 public class NewTaskFragment extends DialogFragment {
 
     // Interface for fragment communication
     // Includes callbacks to MainActivity
     public interface NewTaskDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog, String header, String details, Date date, String icon);
+        void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon);
         void onDialogNegativeClick(DialogFragment dialog);
     }
     NewTaskDialogListener listener;
@@ -70,11 +67,15 @@ public class NewTaskFragment extends DialogFragment {
                     int year = mDate.getYear();
                     int hour = mTime.getCurrentHour()-1;
                     int minute = mTime.getCurrentMinute()-1;
-                    Date date = new Date(year, month, day, hour, minute);
+                    // TODO: Petter
+                    //Date date = new Date(year, month, day, hour, minute);
+
+                    Calendar newdate = Calendar.getInstance();
+                    Toast.makeText(getContext(), "No date saved, convert to Calendar", Toast.LENGTH_SHORT).show();
                     Log.i("Petter", day + ", " + month + ", " + year + hour + minute);
                     // The naming convention of the icons is ic_CATEGORY
                     String icon = "ic_" + header;
-                    listener.onDialogPositiveClick(NewTaskFragment.this, header, details, date, icon);
+                    listener.onDialogPositiveClick(NewTaskFragment.this, header, details, newdate.getTimeInMillis(), icon);
                 }
             })
             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
