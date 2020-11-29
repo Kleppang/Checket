@@ -16,11 +16,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class LoginActivity extends AppCompatActivity {
 
     // Firebase, declare instance
+    private FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
+
+    private ChecketDatabase mDB;
 
     private static final String TAG = "LoginRegisterActivity";
 
@@ -41,8 +47,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Firebase, initialize the instance
         mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
-
+        mDB = ChecketDatabase.getDatabase(this);
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -86,6 +93,27 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
+
+                        // Fetches all achievements stored on Firestore
+                        firestore.collection("achievements").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()) {
+                                    for(QueryDocumentSnapshot document : task.getResult()) {
+                                        if(document.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                            final Achievement tempach = new Achievement(document.getString("name"), document.getString("desc"), document.getString("category"));
+                                            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mDB.checketDao().insertAchievement(tempach);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail: success");
                         //FirebaseUser user = mAuth.getCurrentUser();
