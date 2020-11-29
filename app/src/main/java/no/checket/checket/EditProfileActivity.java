@@ -28,7 +28,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
@@ -53,7 +52,6 @@ public class EditProfileActivity extends AppCompatActivity {
     protected static final int CAMERA_PERMS = 20;
 
     private Uri imageUri;
-    private StorageTask uploadTask;
     private StorageReference storageReference;
 
     private static final String TAG = "EDIT_PROFILE";
