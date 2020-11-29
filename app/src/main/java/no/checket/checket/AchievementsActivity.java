@@ -453,7 +453,7 @@ public class AchievementsActivity extends AppCompatActivity {
                                     }
                                     if(!existsAchievement("Klimate")) {
                                         // Checking for the additional hidden achievement "Klimate"
-                                        if(thisDoc.getString("name").equals("Klimate")) {
+                                        if(thisDoc.getString("name").toLowerCase().equals("klimate")) {
                                             addAchievementFB("Klimate", "A true environmentalist", "Hidden");
                                         }
                                     }
