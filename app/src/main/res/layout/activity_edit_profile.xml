@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -7,89 +7,96 @@
     android:layout_height="match_parent"
     tools:context=".EditProfileActivity"
     >
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="56dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        >
-        <RelativeLayout
-            android:id="@+id/profile_userimage2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/circle_border"
-            android:layout_centerHorizontal="true"
-            >
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/editProfile_image"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_profile_black_24dp"
-                app:civ_border_color="@color/colorDarkGray"
-                app:civ_circle_background_color="@color/colorPrimary"
-                app:civ_border_width="2dp"
-                />
-        </RelativeLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnChangePic"
-            android:layout_below="@+id/profile_userimage2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="@string/change_profile_picture"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-
-            />
-
-        <!-- inputfield for custom name-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layout_customName"
-            android:layout_below="@id/btnChangePic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inp_customName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_userimage2"
-                android:hint="@string/custom_name_placeholder"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </RelativeLayout>
-
-
 
     <LinearLayout
-        android:layout_weight="1"
-        android:gravity="center|bottom"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
+        tools:context=".EditProfileActivity"
         >
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSave"
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save_information"
-            android:padding="12dp"
-            app:backgroundTint="@color/colorPrimaryDark"
+            android:paddingTop="56dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            >
+            <RelativeLayout
+                android:id="@+id/profile_userimage2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle_border"
+                android:layout_centerHorizontal="true"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/editProfile_image"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_profile_black_24dp"
+                    app:civ_border_color="@color/colorDarkGray"
+                    app:civ_circle_background_color="@color/colorPrimary"
+                    app:civ_border_width="2dp"
+                    />
+            </RelativeLayout>
 
-            />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnChangePic"
+                android:layout_below="@+id/profile_userimage2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/change_profile_picture"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+
+                />
+
+            <!-- inputfield for custom name-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_customName"
+                android:layout_below="@id/btnChangePic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inp_customName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_userimage2"
+                    android:hint="@string/custom_name_placeholder"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="56dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/save_information"
+                android:padding="12dp"
+                app:backgroundTint="@color/colorPrimaryDark"
+                />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
-
-
-</LinearLayout>
+</ScrollView>
