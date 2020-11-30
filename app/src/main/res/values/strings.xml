@@ -30,7 +30,7 @@
     <string name="label">HeiDetteErEtHint</string>
     <string name="txt_email_placeholder">Please login</string>
     <string name="txt_navname_placeholder">User not logged in</string>
-    <string name="placeholder_customName">Assign custom name</string>
+    <string name="placeholder_customName">No name set...</string>
 
 
 
