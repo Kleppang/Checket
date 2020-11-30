@@ -209,10 +209,11 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
                     if(task.isSuccessful()) {
+                        txtV_name = findViewById(R.id.nav_name);
+                        txtV_name.setText(R.string.placeholder_customName);
                         for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                             // Check if the UID matches logged in users' UID
                             if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                txtV_name = findViewById(R.id.nav_name);
                                 txtV_name.setText(thisDoc.getString("name"));
                             }
                         }

@@ -126,7 +126,6 @@ public class ProfileActivity extends AppCompatActivity {
                         if (thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                             txtV_name = findViewById(R.id.profile_name);
                             txtV_name.setText(thisDoc.getString("name"));
-
                         }
                     }
                 }
