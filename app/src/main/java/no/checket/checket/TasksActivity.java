@@ -15,6 +15,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
@@ -37,7 +38,7 @@ public class TasksActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         NewTaskFragment.NewTaskDialogListener {
 
-    private DrawerLayout drawerLayout;
+    private CoordinatorLayout coordinatorLayout;
 
     // Recycler view
     private LinkedList<Task> mTaskList = new LinkedList<Task>();
@@ -156,7 +157,7 @@ public class TasksActivity extends AppCompatActivity
         } else {
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
             // TODO: Unsure whether this is the right view to give
-            newTask(drawerLayout);
+            newTask(coordinatorLayout);
         }
 
     }

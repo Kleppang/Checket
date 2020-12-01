@@ -31,7 +31,10 @@
         <activity
             android:name=".EditProfileActivity"
             android:theme="@style/AppThemeTopBar" />
-        <activity android:name=".TasksActivity" />
+        <activity
+            android:name=".TasksActivity"
+            android:theme="@style/AppThemeTopBar"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".SignUpActivity"
             android:theme="@style/AppThemeTopBar" />
