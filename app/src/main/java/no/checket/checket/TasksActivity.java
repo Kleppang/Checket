@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,14 +37,7 @@ public class TasksActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         NewTaskFragment.NewTaskDialogListener {
 
-    BottomAppBar main_BottomAppBar;
-
     private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private Menu navigationMenu;
-
-    private TextView txtV_email;
-    private MenuItem MI_LoginReg;
 
     // Recycler view
     private LinkedList<Task> mTaskList = new LinkedList<Task>();
@@ -57,105 +51,19 @@ public class TasksActivity extends AppCompatActivity
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tasks);
+
+        // Top action bar with UP
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.settings);
+        }
 
         // Firebase, initialize the instance
         mAuth = FirebaseAuth.getInstance();
 
         mDB = ChecketDatabase.getDatabase(this);
-
-        setContentView(R.layout.activity_tasks);
-
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        navigationMenu = navigationView.getMenu();
-
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                main_BottomAppBar,
-                R.string.openNavDrawer,
-                R.string.closeNavDrawer
-        );
-
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId())
-                {
-                    case R.id.nav_LoginReg:
-                        // User has selected to login / logout
-                        if(mAuth.getCurrentUser() != null) {
-                            // User is currently logged in, show logout dialog
-                            new MaterialAlertDialogBuilder(TasksActivity.this).setTitle(R.string.dialog_logout_title).setMessage(R.string.dialog_logout_msg)
-                                    .setNegativeButton(R.string.dialog_logout_neg, null)
-                                    .setPositiveButton(R.string.dialog_logout_pos, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            // User has confirmed that they want to log out
-                                            mAuth.signOut();
-                                            // Reload the activity once we've signed out the user
-                                            finish();
-                                            startActivity(getIntent());
-                                        }
-                                    }).show();
-                        } else {
-                            // Starts the LoginRegisterActivity
-                            Intent intent = new Intent(TasksActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                        }
-                        break;
-                    case R.id.nav_settings:
-                        // Starts the SettingsActivity
-                        Intent intent = new Intent(TasksActivity.this, SettingsActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.nav_profile:
-                        //Starts the ProfileActivity
-                        Intent intentP = new Intent(TasksActivity.this, ProfileActivity.class);
-                        startActivity(intentP);
-                        break;
-
-                    case R.id.nav_achievements:
-                        // Starts the AchievementsActivity
-                        Intent intentAch = new Intent(TasksActivity.this, AchievementsActivity.class);
-                        startActivity(intentAch);
-                        break;
-                }
-                return false;
-            }
-        });
-
-        main_BottomAppBar = findViewById(R.id.main_BottomAppBar);
-
-        main_BottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
-        main_BottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch(menuItem.getItemId()) {
-                    case R.id.main_BottomAppBar_tasks:
-                        // Open Main
-                        Intent intentTasks = new Intent(TasksActivity.this, MainActivity.class);
-                        startActivity(intentTasks);
-                        break;
-                    case R.id.main_BottomAppBar_ach:
-                        // Open achievements
-                        Intent intentAch = new Intent(TasksActivity.this, AchievementsActivity.class);
-                        startActivity(intentAch);
-                        break;
-                }
-                return true;
-            }
-        });
 
         // Fill mTaskList
         fillTaskList();
@@ -163,20 +71,6 @@ public class TasksActivity extends AppCompatActivity
 
     public void onStart() {
         super.onStart();
-
-        // Check if a user is currently signed in, update UI
-        // A function to update the UI accordingly, (Logout / Sign in / Register)
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
-        MI_LoginReg = navigationMenu.findItem(R.id.nav_LoginReg);
-
-        if(currentUser != null) {
-            txtV_email.setText(currentUser.getEmail());
-            MI_LoginReg.setTitle("Logout");
-        } else {
-            MI_LoginReg.setTitle("Login / Register");
-        }
     }
 
     public void newTask(View view) {
