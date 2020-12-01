@@ -67,15 +67,13 @@ public class NewTaskFragment extends DialogFragment {
                     int year = mDate.getYear();
                     int hour = mTime.getCurrentHour()-1;
                     int minute = mTime.getCurrentMinute()-1;
-                    // TODO: Petter
-                    //Date date = new Date(year, month, day, hour, minute);
-
-                    Calendar newdate = Calendar.getInstance();
-                    Toast.makeText(getContext(), "No date saved, convert to Calendar", Toast.LENGTH_SHORT).show();
+                    Calendar date = Calendar.getInstance();
+                    date.set(year, month, day, hour, minute);
+                    //Toast.makeText(getContext(), "No date saved, convert to Calendar", Toast.LENGTH_SHORT).show();
                     Log.i("Petter", day + ", " + month + ", " + year + hour + minute);
                     // The naming convention of the icons is ic_CATEGORY
                     String icon = "ic_" + header;
-                    listener.onDialogPositiveClick(NewTaskFragment.this, header, details, newdate.getTimeInMillis(), icon);
+                    listener.onDialogPositiveClick(NewTaskFragment.this, header, details, date.getTimeInMillis(), icon);
                 }
             })
             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
