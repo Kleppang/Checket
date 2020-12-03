@@ -10,8 +10,6 @@ import java.util.Calendar;
 @Entity(tableName = "TasksTable")
 public class Task {
     @ColumnInfo
-    private int id;
-    @ColumnInfo
     private String header;
     @ColumnInfo
     private String details;
@@ -28,14 +26,6 @@ public class Task {
         this.date = date;
         this.icon = icon;
 
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getHeader() {
