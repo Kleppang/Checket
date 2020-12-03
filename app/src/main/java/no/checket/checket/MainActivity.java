@@ -88,12 +88,6 @@ public class MainActivity extends AppCompatActivity
 
         mDB = ChecketDatabase.getDatabase(this);
 
-        // Title bar
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setTitle(R.string.main_header);
-        }
-
         // Start by checking if this is the first launch, decides which view to show
         mIntroSlideManager = new IntroSlideManager(this);
         if(mIntroSlideManager.isFirstTime()) {
