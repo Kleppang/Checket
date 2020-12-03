@@ -28,7 +28,7 @@ public class NewTaskFragment extends DialogFragment {
     // Interface for fragment communication
     // Includes callbacks to MainActivity
     public interface NewTaskDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon);
+        void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon, Boolean completed);
         void onDialogNegativeClick(DialogFragment dialog);
     }
     NewTaskDialogListener listener;
@@ -73,7 +73,7 @@ public class NewTaskFragment extends DialogFragment {
                     Log.i("Petter", day + ", " + month + ", " + year + hour + minute);
                     // The naming convention of the icons is ic_CATEGORY
                     String icon = "ic_" + header;
-                    listener.onDialogPositiveClick(NewTaskFragment.this, header, details, date.getTimeInMillis(), icon);
+                    listener.onDialogPositiveClick(NewTaskFragment.this, header, details, date.getTimeInMillis(), icon, false);
                 }
             })
             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

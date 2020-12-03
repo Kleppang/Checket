@@ -28,7 +28,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.core.Tag;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity
                         for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                             // Check if the UID matches logged in users' UID
                             if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add");
+                                final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add", completed);
                                 mTaskList.add(newTask);
                                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                                     @Override
@@ -321,7 +320,7 @@ public class MainActivity extends AppCompatActivity
     // just to get the overrides right.
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon) {
-        Task task = new Task(header, details, date, icon);
+        Task task = new Task(header, details, date, icon, completed);
         // Add the new task to the list
         int index = 0;
         if (!header.equals("")) {

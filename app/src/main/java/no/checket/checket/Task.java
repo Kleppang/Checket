@@ -5,8 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Calendar;
-
 @Entity(tableName = "TasksTable")
 public class Task {
     @ColumnInfo
@@ -19,13 +17,15 @@ public class Task {
     private long date;
     @ColumnInfo
     private String icon;
+    @ColumnInfo
+    private boolean completed;
 
-    public Task(String header, String details, long date, String icon) {
+    public Task(String header, String details, long date, String icon, Boolean completed) {
         this.header = header;
         this.details = details;
         this.date = date;
         this.icon = icon;
-
+        this.completed = completed;
     }
 
     public String getHeader() {
@@ -60,4 +60,7 @@ public class Task {
         this.icon = icon;
     }
 
+    public Boolean getCompleted() { return completed; }
+
+    public void setCompleted(Boolean completed) { this.completed = completed; }
 }
