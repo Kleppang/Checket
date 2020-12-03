@@ -57,6 +57,7 @@
     <string name="txt_profileemail_placeholder">Email</string>
     <string name="task_count">Tasks</string>
     <string name="achievements_count">Achievements</string>
+    <string name="profile_email">Email</string>
 
     <!-- Edit Profile -->
     <string name="EditProfile">Edit Profile</string>
@@ -64,6 +65,7 @@
     <string name="custom_name_texthint">Enter to assign a custom name</string>
     <string name="custom_name_placeholder">Custom name</string>
     <string name="save_information">Save information</string>
+    <string name="fab_editprofile">FAB_editprofile</string>
 
 
     <!-- Intro Slider -->
