@@ -116,13 +116,12 @@ public class TasksActivity extends AppCompatActivity
             @Override
             public void run() {
                 List<Task> templist = mDB.checketDao().loadAllTasks();
-                int i = 1;
                 for(Task temptask : templist) {
-                    i++;
-                    Log.i("PETTER", temptask.getCompleted().toString() + ", " + i);
                     if (temptask.getCompleted()) {
+                        // Finished tasks
                         mTaskListFinished.add(temptask);
                     } else {
+                        // Ongoing tasks
                         mTaskList.add(temptask);
                     }
                 }
