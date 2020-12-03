@@ -333,7 +333,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
             // TODO: Reload dialog with any input
-            // TODO: Unsure whether this is the right view to give
             newTask(drawerLayout);
         }
 

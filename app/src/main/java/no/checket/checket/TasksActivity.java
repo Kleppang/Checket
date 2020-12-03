@@ -91,12 +91,6 @@ public class TasksActivity extends AppCompatActivity
     }
 
     public void fillTaskList () {
-        // RecyclerView
-        // Populate list
-        // TODO: Get list from DB
-
-
-        // NB! The year, month, etc. constructor is deprecated
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -156,7 +150,6 @@ public class TasksActivity extends AppCompatActivity
             recyclerView();
         } else {
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
-            // TODO: Unsure whether this is the right view to give
             newTask(coordinatorLayout);
         }
 
