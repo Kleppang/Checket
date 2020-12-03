@@ -44,7 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        // Interface for communication with NewTaskFragment...
+        // Interface for communication with NewTaskFragment
         NewTaskFragment.NewTaskDialogListener{
 
     private IntroSlideManager mIntroSlideManager;

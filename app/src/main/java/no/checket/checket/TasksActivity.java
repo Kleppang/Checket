@@ -52,6 +52,7 @@ public class TasksActivity extends AppCompatActivity
         if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.tasks_header);
+            actionBar.setElevation(0);
         }
 
         // Firebase, initialize the instance
@@ -62,7 +63,7 @@ public class TasksActivity extends AppCompatActivity
         // Fill mTaskList
         fillTaskList();
 
-        // Get a handle to the tablayout
+        // Get a handle to the tabLayout
         TabLayout tabLayout = findViewById(R.id.tasks_tabLayout);
 
         // Set listener for tabbing between them
@@ -85,12 +86,10 @@ public class TasksActivity extends AppCompatActivity
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
     }
@@ -99,7 +98,6 @@ public class TasksActivity extends AppCompatActivity
         // User has clicked the FAB
         DialogFragment dialog = new NewTaskFragment();
         dialog.show(getSupportFragmentManager(), "NewTaskFragment");
-
     }
 
     @Override
@@ -125,13 +123,10 @@ public class TasksActivity extends AppCompatActivity
                         mTaskList.add(temptask);
                     }
                 }
-
                 // Call the method to initialize and inflate the recycler
                 recyclerView();
-
             }
         });
-
     }
 
     public void recyclerView() {
@@ -195,24 +190,11 @@ public class TasksActivity extends AppCompatActivity
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
             newTask(coordinatorLayout);
         }
-
     }
 
     // ... or the cancel button
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         Log.i("Petter", "MainActivity.onNegativeDialogClick()");
-    }
-
-    // Used for accessing a time picker in the new task dialog
-    public void showTimePickerFragment(View view) {
-        DialogFragment time = new NewTaskFragment.TimePickerFragment();
-        time.show(getSupportFragmentManager(), "timePickerFragment");
-    }
-
-    // Same as above, for a date picker
-    public void showDatePickerFragment(View view) {
-        DialogFragment newFragment = new NewTaskFragment.DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }
