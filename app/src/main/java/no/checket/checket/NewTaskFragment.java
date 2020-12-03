@@ -32,11 +32,10 @@ public class NewTaskFragment extends DialogFragment {
         void onDialogNegativeClick(DialogFragment dialog);
     }
     NewTaskDialogListener listener;
-    
+
     @NonNull
     @Override
     public android.app.Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Log.i("Petter", "NewTaskFragment.onCreateDialog()");
         // Begin building a dialog, in the activity that called it.
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
@@ -47,7 +46,12 @@ public class NewTaskFragment extends DialogFragment {
         final EditText mDetails = (EditText) view.findViewById(R.id.details_text);
         final DatePicker mDate = (DatePicker) view.findViewById(R.id.date_input);
         final TimePicker mTime = (TimePicker) view.findViewById(R.id.time_input);
+        // TODO?
+        // Strangely, the spinner variant of the picker is off by 1 hour and 1 minute.
+        // Doing this to compensate for the discrepancy
         mTime.setIs24HourView(true);
+        mTime.setCurrentHour(mTime.getCurrentHour() + 1);
+        mTime.setCurrentMinute(mTime.getCurrentMinute() + 1);
 
         // Inflate and set buttons for dialog
         // Null represents the parent view, which is none for this dialog
@@ -57,12 +61,14 @@ public class NewTaskFragment extends DialogFragment {
             .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
-                    Log.i("Petter", "NewTaskFragment.onClick() positive button");
+                    // Make sure caategory is filled
                     String header = mHeader.getSelectedItem().toString();
                     String details = mDetails.getText().toString();
                     int month = mDate.getMonth();
                     int day = mDate.getDayOfMonth();
                     int year = mDate.getYear();
+                    // TODO?
+                    // Again, the TimePicker is not acting as expected
                     int hour = mTime.getCurrentHour()-1;
                     int minute = mTime.getCurrentMinute()-1;
                     Calendar date = Calendar.getInstance();
@@ -75,7 +81,6 @@ public class NewTaskFragment extends DialogFragment {
             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
-                    Log.i("Petter", "NewTaskFragment.onClick() negative button");
                     listener.onDialogNegativeClick(NewTaskFragment.this);
                     NewTaskFragment.this.getDialog().cancel();
                 }
@@ -85,7 +90,6 @@ public class NewTaskFragment extends DialogFragment {
 
     @Override
     public void onAttach(Context context) {
-        Log.i("Petter", "NewTaskFragment.onAttach()");
         super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {

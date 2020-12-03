@@ -1,6 +1,7 @@
 package no.checket.checket;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -28,6 +29,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,7 +40,9 @@ import com.squareup.picasso.Picasso;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -84,11 +88,16 @@ public class MainActivity extends AppCompatActivity
 
         mDB = ChecketDatabase.getDatabase(this);
 
+        // Title bar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle(R.string.main_header);
+        }
+
         // Start by checking if this is the first launch, decides which view to show
         mIntroSlideManager = new IntroSlideManager(this);
         if(mIntroSlideManager.isFirstTime()) {
             // If first time, launch the intro slider
-
             startActivity(new Intent(this, IntroSlideActivity.class));
             finish();
         } else {
@@ -154,14 +163,12 @@ public class MainActivity extends AppCompatActivity
                             Intent intentAch = new Intent(MainActivity.this, AchievementsActivity.class);
                             startActivity(intentAch);
                             break;
-
                     }
                     return false;
                 }
             });
 
             main_BottomAppBar = findViewById(R.id.main_BottomAppBar);
-
             main_BottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -255,21 +262,20 @@ public class MainActivity extends AppCompatActivity
                             // Check if the UID matches logged in users' UID
                             if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                                 final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add", thisDoc.getBoolean("completed"));
+                                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mDB.checketDao().insertTask(newTask);
+                                    }
+                                });
                                 // Testing that the task is not complete,
                                 // as well as weeding out unfinished past tasks
                                 Calendar cal = Calendar.getInstance();
                                 if (newTask.getCompleted() != true && newTask.getDate() > cal.getTimeInMillis()) {
                                     mTaskList.add(newTask);
-                                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mDB.checketDao().insertTask(newTask);
-                                        }
-                                    });
                                 }
                             }
                         }
-
                         // Call the method to initialize and inflate the recycler
                         recyclerView();
                     }
@@ -325,7 +331,7 @@ public class MainActivity extends AppCompatActivity
     // just to get the overrides right.
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon, Boolean completed) {
-        Task task = new Task(header, details, date, icon, completed);
+        final Task task = new Task(header, details, date, icon, completed);
         // Add the new task to the list
         int index = 0;
         if (header.equals("")) {
@@ -336,7 +342,6 @@ public class MainActivity extends AppCompatActivity
             // Make sure the date and time is not already used
             Boolean used = false;
             for (Task t : mTaskList) {
-                Log.i("PETTER", String.valueOf(t.getDate()) + ", " + String.valueOf(task.getDate()));
                 if (task.getDate() <= t.getDate() + 60000 && task.getDate() >= t.getDate() - 60000) {
                     used = true;
                 }
@@ -348,6 +353,24 @@ public class MainActivity extends AppCompatActivity
             } else {
                 mTaskList.add(index, task);
                 // TODO: Upload new Task to DB
+                Map<String, Object> taskMap = new HashMap<>();
+                taskMap.put("category", header);
+                taskMap.put("completed", completed);
+                taskMap.put("desc", details);
+                taskMap.put("enddate", String.valueOf(date));
+                taskMap.put("uid", mAuth.getUid());
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDB.checketDao().insertTask(task);
+                    }
+                });
+
+                DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+date);
+
+                documentReference.set(taskMap);
+
                 // Calling the function to refresh the RecyclerView
                 recyclerView();
             }
@@ -368,7 +391,4 @@ public class MainActivity extends AppCompatActivity
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-
-
-
 }

@@ -45,7 +45,8 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppThemeTopBar" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppThemeTopBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

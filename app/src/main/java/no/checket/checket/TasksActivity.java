@@ -195,6 +195,5 @@ public class TasksActivity extends AppCompatActivity
     // ... or the cancel button
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        Log.i("Petter", "MainActivity.onNegativeDialogClick()");
     }
 }
