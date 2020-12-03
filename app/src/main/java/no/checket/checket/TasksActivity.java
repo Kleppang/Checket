@@ -36,6 +36,7 @@ public class TasksActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private RecyclerView mRecyclerViewFinished;
     private TaskListAdapter mAdapter;
+    private TaskListAdapter mAdapterFinished;
 
     // Firebase, declare instance
     private FirebaseAuth mAuth;
@@ -115,8 +116,15 @@ public class TasksActivity extends AppCompatActivity
             @Override
             public void run() {
                 List<Task> templist = mDB.checketDao().loadAllTasks();
+                int i = 1;
                 for(Task temptask : templist) {
-                    mTaskList.add(temptask);
+                    i++;
+                    Log.i("PETTER", temptask.getCompleted().toString() + ", " + i);
+                    if (temptask.getCompleted()) {
+                        mTaskListFinished.add(temptask);
+                    } else {
+                        mTaskList.add(temptask);
+                    }
                 }
 
                 // Call the method to initialize and inflate the recycler
@@ -141,18 +149,36 @@ public class TasksActivity extends AppCompatActivity
                 return o1.compareTo(o2);
             }
         });
+
+        Collections.sort(mTaskListFinished, new Comparator<no.checket.checket.Task>() {
+            @Override
+            public int compare(final no.checket.checket.Task object1, final no.checket.checket.Task object2) {
+                Calendar o1 = Calendar.getInstance();
+                Calendar o2 = Calendar.getInstance();
+
+                o1.setTimeInMillis(object1.getDate());
+                o2.setTimeInMillis(object2.getDate());
+
+                return o1.compareTo(o2);
+            }
+        });
+
         // Get a handle to the RecyclerView.
         mRecyclerView = findViewById(R.id.tasks);
         mRecyclerViewFinished = findViewById(R.id.tasksFinished);
         // Specify the length of the list for this activity
         // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
         int length = mTaskList.size();
+        int lengthFinished = mTaskListFinished.size();
         // Create an adapter and supply the data to be displayed.
         mAdapter = new TaskListAdapter(this, mTaskList, length);
+        mAdapterFinished = new TaskListAdapter(this, mTaskListFinished, lengthFinished);
         // Connect the adapter with the RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerViewFinished.setAdapter(mAdapterFinished);
         // Give the RecyclerView a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerViewFinished.setLayoutManager(new LinearLayoutManager(this));
     }
 
     // Listener for clicking of the save button...
