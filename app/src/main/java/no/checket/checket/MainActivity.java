@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity
                         for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                             // Check if the UID matches logged in users' UID
                             if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add", completed);
+                                final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add", thisDoc.getBoolean("completed"));
                                 mTaskList.add(newTask);
                                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                                     @Override
@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity
     // Had to create these from an error dialog when implementing the interface,
     // just to get the overrides right.
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon) {
+    public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon, Boolean completed) {
         Task task = new Task(header, details, date, icon, completed);
         // Add the new task to the list
         int index = 0;
