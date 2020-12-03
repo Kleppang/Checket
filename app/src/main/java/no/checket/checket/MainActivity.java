@@ -255,13 +255,18 @@ public class MainActivity extends AppCompatActivity
                             // Check if the UID matches logged in users' UID
                             if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                                 final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add", thisDoc.getBoolean("completed"));
-                                mTaskList.add(newTask);
-                                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mDB.checketDao().insertTask(newTask);
-                                    }
-                                });
+                                // Testing that the task is not complete,
+                                // as well as weeding out unfinished past tasks
+                                Calendar cal = Calendar.getInstance();
+                                if (newTask.getCompleted() != true && newTask.getDate() > cal.getTimeInMillis()) {
+                                    mTaskList.add(newTask);
+                                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mDB.checketDao().insertTask(newTask);
+                                        }
+                                    });
+                                }
                             }
                         }
 
@@ -323,39 +328,35 @@ public class MainActivity extends AppCompatActivity
         Task task = new Task(header, details, date, icon, completed);
         // Add the new task to the list
         int index = 0;
-        if (!header.equals("")) {
-            mTaskList.add(index, task);
-            // TODO: Upload new Task to DB
-            Log.i("Petter", header + ", " + details + ", " + icon);
-            // Calling the function to refresh the RecyclerView
-            recyclerView();
-        } else {
+        if (header.equals("")) {
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
             // TODO: Reload dialog with any input
             newTask(drawerLayout);
+        } else {
+            // Make sure the date and time is not already used
+            Boolean used = false;
+            for (Task t : mTaskList) {
+                Log.i("PETTER", String.valueOf(t.getDate()) + ", " + String.valueOf(task.getDate()));
+                if (task.getDate() <= t.getDate() + 60000 && task.getDate() >= t.getDate() - 60000) {
+                    used = true;
+                }
+            }
+            if (used) {
+                Toast.makeText(this, "You already have something planned for that time slot", Toast.LENGTH_LONG).show();
+                // TODO: Reload dialog with any input
+                newTask(drawerLayout);
+            } else {
+                mTaskList.add(index, task);
+                // TODO: Upload new Task to DB
+                // Calling the function to refresh the RecyclerView
+                recyclerView();
+            }
         }
-
     }
 
     // ... or the cancel button
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        Log.i("Petter", "MainActivity.onNegativeDialogClick()");
-    }
-
-
-
-    // Used for accessing a time picker in the new task dialog
-    public void showTimePickerFragment(View view) {
-        DialogFragment time = new NewTaskFragment.TimePickerFragment();
-        time.show(getSupportFragmentManager(), "timePickerFragment");
-    }
-
-    // Same as above, for a date picker
-    public void showDatePickerFragment(View view) {
-        DialogFragment newFragment = new NewTaskFragment.DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-        Log.i("Petter", "TEST");
     }
 
     @Override
