@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,7 +49,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileActivity extends AppCompatActivity {
     private CircleImageView profileImage;
-    private MaterialButton saveButton, profileChangeBtn;
+    private MaterialButton saveButton;
+    private FloatingActionButton profileChangeBtn;
     private EditText inp_name;
 
     private FirebaseAuth mAuth;
@@ -78,7 +80,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         profileImage = findViewById(R.id.editProfile_image);
         saveButton = findViewById(R.id.btnSave);
-        profileChangeBtn = findViewById(R.id.btnChangePic);
+        profileChangeBtn = findViewById(R.id.fabEditProfil);
         inp_name = findViewById(R.id.inp_customName);
 
 

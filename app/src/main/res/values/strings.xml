@@ -137,6 +137,7 @@
     <string name="ach_unlockedAchievements_desc">A tab that will show all the unlocked achievements</string>
     <string name="ach_lockedAchievements_desc">A tab that will show all the locked achievements</string>
     <string name="category_icon_description">Image representing a category</string>
+    <string name="fab_editprofile">FAB_editprofile</string>
 
 
 </resources>
