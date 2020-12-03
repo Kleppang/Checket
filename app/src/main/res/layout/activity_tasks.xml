@@ -3,44 +3,64 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
+    android:id="@+id/coordinatorLayoutTasks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".TasksActivity">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tasks_tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="5dp"
+        app:tabIndicatorColor="@color/colorWhite"
+        app:tabSelectedTextColor="@color/colorWhite"
+        app:tabTextColor="@color/colorWhiteSecondary" >
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ongoing" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Finished" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tasks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="50dp"
+        android:paddingBottom="88dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tasksFinished"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="50dp"
+        android:paddingBottom="88dp"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_BottomAppBar_FAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:backgroundTint="@color/colorAccent"
+        android:baselineAlignBottom="true"
         android:clickable="true"
-        android:contentDescription="Icon representing a category"
         android:focusable="true"
         android:onClick="newTask"
-        app:borderWidth="0dp"
-        app:layout_anchor="@id/main_BottomAppBar"
-        app:layout_anchorGravity="top|center"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
+        android:src="@drawable/ic_add_black_24dp"
+        android:layout_margin="16dp"
+        app:borderWidth="0dp" />
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/main_BottomAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:contentDescription="@string/main_BottomAppBar_desc"
-        android:visibility="invisible"
-        app:hideOnScroll="true"
-        app:menu="@menu/main_bottomappbar_menu"
-        app:navigationIcon="@drawable/ic_menu_white_24dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tasks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="fill_vertical"
-        android:layout_marginTop="56dp"
-        android:clipChildren="false"
-        android:clipToPadding="false" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

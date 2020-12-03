@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -41,8 +43,10 @@ public class TasksActivity extends AppCompatActivity
     private CoordinatorLayout coordinatorLayout;
 
     // Recycler view
-    private LinkedList<Task> mTaskList = new LinkedList<Task>();
+    private LinkedList<Task> mTaskList = new LinkedList<>();
+    private LinkedList<Task> mTaskListFinished = new LinkedList<>();
     private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerViewFinished;
     private TaskListAdapter mAdapter;
 
     // Firebase, declare instance
@@ -58,7 +62,7 @@ public class TasksActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.settings);
+            actionBar.setTitle(R.string.tasks_header);
         }
 
         // Firebase, initialize the instance
@@ -68,10 +72,38 @@ public class TasksActivity extends AppCompatActivity
 
         // Fill mTaskList
         fillTaskList();
-    }
 
-    public void onStart() {
-        super.onStart();
+        // Get a handle to the tablayout
+        TabLayout tabLayout = findViewById(R.id.tasks_tabLayout);
+
+        // Set listener for tabbing between them
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch(tab.getPosition()) {
+                    case 0:
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        mRecyclerViewFinished.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        mRecyclerView.setVisibility(View.GONE);
+                        mRecyclerViewFinished.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     public void newTask(View view) {
@@ -123,6 +155,7 @@ public class TasksActivity extends AppCompatActivity
         });
         // Get a handle to the RecyclerView.
         mRecyclerView = findViewById(R.id.tasks);
+        mRecyclerViewFinished = findViewById(R.id.tasksFinished);
         // Specify the length of the list for this activity
         // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
         int length = mTaskList.size();
@@ -134,9 +167,7 @@ public class TasksActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    // Listener for clicking of the save button
-    // Had to create these from an error dialog when implementing the interface,
-    // just to get the overrides right.
+    // Listener for clicking of the save button...
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon) {
         Task task = new Task(header, details, date, icon);
@@ -145,7 +176,6 @@ public class TasksActivity extends AppCompatActivity
         if (!header.equals("")) {
             mTaskList.add(index, task);
             // TODO: Upload new Task to DB
-            Log.i("Petter", header + ", " + details + ", " + icon);
             // Calling the function to refresh the RecyclerView
             recyclerView();
         } else {
