@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Achievement.class, Task.class}, version = 3)
+@Database(entities = {Achievement.class, Task.class}, version = 4)
 public abstract class ChecketDatabase extends RoomDatabase {
 
     public static final String DB_NAME = "ChecketDB";
