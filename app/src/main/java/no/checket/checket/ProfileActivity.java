@@ -126,7 +126,6 @@ public class ProfileActivity extends AppCompatActivity {
                         if (thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
                             txtV_name = findViewById(R.id.profile_name);
                             txtV_name.setText(thisDoc.getString("name"));
-
                         }
                     }
                 }
@@ -134,14 +133,18 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-
-        StorageReference profileRef = storageReference.child("users/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(profileImageView);
-            }
-        });
+        try {
+            StorageReference profileRef = storageReference.child("users/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
+            profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(profileImageView);
+                }
+            });
+        } catch (Exception e) {
+            System.out.println(e);
+            System.out.println("User does not have a profile picture");
+        }
     }
 
     @Override
