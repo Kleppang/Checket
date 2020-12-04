@@ -157,6 +157,11 @@ public class MainActivity extends AppCompatActivity
                             Intent intentAch = new Intent(MainActivity.this, AchievementsActivity.class);
                             startActivity(intentAch);
                             break;
+                        case R.id.nav_tasks:
+                            // Starts the AchievementsActivity
+                            Intent intentTasks = new Intent(MainActivity.this, TasksActivity.class);
+                            startActivity(intentTasks);
+                            break;
                     }
                     return false;
                 }
