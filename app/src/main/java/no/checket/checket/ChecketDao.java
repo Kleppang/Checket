@@ -1,5 +1,6 @@
 package no.checket.checket;
 
+import java.sql.Blob;
 import java.util.List;
 
 import androidx.room.Dao;
@@ -25,4 +26,11 @@ public interface ChecketDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTask(Task task);
+
+    // User
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertUsername(String username);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertProfilepic(Blob profilepic);
 }
