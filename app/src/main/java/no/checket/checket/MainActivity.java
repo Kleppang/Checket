@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
+        txtV_name = navigationView.getHeaderView(0).findViewById(R.id.nav_name);
         MI_LoginReg = navigationMenu.findItem(R.id.nav_LoginReg);
         profileImage = navigationView.getHeaderView(0).findViewById(R.id.imageView);;
         MI_Profile = navigationMenu.findItem(R.id.nav_profile);
@@ -215,7 +216,6 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onComplete(@NonNull com.google.android.gms.tasks.Task<QuerySnapshot> task) {
                     if(task.isSuccessful()) {
-                        txtV_name = findViewById(R.id.nav_name);
                         txtV_name.setText(R.string.placeholder_customName);
                         for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                             // Check if the UID matches logged in users' UID
