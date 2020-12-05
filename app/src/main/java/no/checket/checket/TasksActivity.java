@@ -17,12 +17,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class TasksActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -38,8 +44,10 @@ public class TasksActivity extends AppCompatActivity
     private TaskListAdapter mAdapter;
     private TaskListAdapter mAdapterFinished;
 
-    // Firebase, declare instance
+    // Firebase & Auth, declare instance
+    private FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
+    private StorageReference storageReference;
 
     private ChecketDatabase mDB;
 
@@ -56,6 +64,7 @@ public class TasksActivity extends AppCompatActivity
         }
 
         // Firebase, initialize the instance
+        firestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         mDB = ChecketDatabase.getDatabase(this);
@@ -92,6 +101,13 @@ public class TasksActivity extends AppCompatActivity
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+    }
+
+    public void onStart() {
+        super.onStart();
+
+        //Declares storage reference
+        storageReference = FirebaseStorage.getInstance().getReference();
     }
 
     public void newTask(View view) {
@@ -178,17 +194,49 @@ public class TasksActivity extends AppCompatActivity
     // Listener for clicking of the save button...
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon, Boolean completed) {
-        Task task = new Task(header, details, date, icon, completed);
+        final Task task = new Task(header, details, date, icon, completed);
         // Add the new task to the list
         int index = 0;
-        if (!header.equals("")) {
-            mTaskList.add(index, task);
-            // TODO: Upload new Task to DB
-            // Calling the function to refresh the RecyclerView
-            recyclerView();
-        } else {
+        if (header.equals("")) {
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
+            // TODO: Reload dialog with any input
             newTask(coordinatorLayout);
+        } else {
+            // Make sure the date and time is not already used
+            Boolean used = false;
+            for (Task t : mTaskList) {
+                if (task.getDate() <= t.getDate() + 60000 && task.getDate() >= t.getDate() - 60000) {
+                    used = true;
+                }
+            }
+            if (used) {
+                Toast.makeText(this, "You already have something planned for that time slot", Toast.LENGTH_LONG).show();
+                // TODO: Reload dialog with any input
+                newTask(coordinatorLayout);
+            } else {
+                mTaskList.add(index, task);
+                // TODO: Upload new Task to DB
+                Map<String, Object> taskMap = new HashMap<>();
+                taskMap.put("category", header);
+                taskMap.put("completed", completed);
+                taskMap.put("desc", details);
+                taskMap.put("enddate", String.valueOf(date));
+                taskMap.put("uid", mAuth.getUid());
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDB.checketDao().insertTask(task);
+                    }
+                });
+
+                DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+date);
+
+                documentReference.set(taskMap);
+
+                // Calling the function to refresh the RecyclerView
+                recyclerView();
+            }
         }
     }
 
