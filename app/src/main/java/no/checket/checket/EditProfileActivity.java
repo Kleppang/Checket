@@ -100,52 +100,61 @@ public class EditProfileActivity extends AppCompatActivity {
         profileChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                
+                if(CommonFunctions.isConnected(getApplicationContext())) {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMS);
+                            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMS);
+                        }
                     }
+
+                    MaterialAlertDialogBuilder profilePicDialog = new MaterialAlertDialogBuilder(view.getContext());
+                    profilePicDialog.setTitle("Custom profile picture");
+                    profilePicDialog.setMessage("How do you want to select a picture?");
+                    profilePicDialog.setPositiveButton("Gallery",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    Intent pictureActionIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                    startActivityForResult(pictureActionIntent, GALLERY_PICTURE);
+                                }
+                            });
+                    profilePicDialog.setNegativeButton("Camera",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
+
+                                    Calendar time = Calendar.getInstance();
+                                    String filename = "profile_" + time.getTimeInMillis() + ".jpg";
+
+                                    File pic = new File(getBaseContext().getFilesDir(), filename);
+
+                                    Uri uri = FileProvider.getUriForFile(getBaseContext(), "no.checket.checket.provider", pic);
+
+                                    imageUri = uri;
+
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+                                    startActivityForResult(intent, CAMERA_PICTURE);
+
+                                }
+                            });
+                    profilePicDialog.show();
+                } else {
+                    Toast.makeText(EditProfileActivity.this, "You're not currently connected to the Internet, please try again later.", Toast.LENGTH_LONG).show();
                 }
-
-                MaterialAlertDialogBuilder profilePicDialog = new MaterialAlertDialogBuilder(view.getContext());
-                profilePicDialog.setTitle("Custom profile picture");
-                profilePicDialog.setMessage("How do you want to select a picture?");
-                profilePicDialog.setPositiveButton("Gallery",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                Intent pictureActionIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                startActivityForResult(pictureActionIntent, GALLERY_PICTURE);
-                            }
-                        });
-                profilePicDialog.setNegativeButton("Camera",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
-
-                                Calendar time = Calendar.getInstance();
-                                String filename = "profile_" + time.getTimeInMillis() + ".jpg";
-
-                                File pic = new File(getBaseContext().getFilesDir(), filename);
-
-                                Uri uri = FileProvider.getUriForFile(getBaseContext(), "no.checket.checket.provider", pic);
-
-                                imageUri = uri;
-
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-                                startActivityForResult(intent, CAMERA_PICTURE);
-
-                            }
-                        });
-                profilePicDialog.show();
             }
         });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addCustomName();
+                if(CommonFunctions.isConnected(getApplicationContext())) {
+                    addCustomName();
+                } else {
+                    Toast.makeText(EditProfileActivity.this, "You're not currently connected to the Internet, please try again later.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
