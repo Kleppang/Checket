@@ -37,11 +37,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -240,7 +242,6 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("User does not have a profile picture");
             }
 
-
             MI_LoginReg.setTitle("Logout");
             MI_Profile.setVisible(true);
 
@@ -277,8 +278,26 @@ public class MainActivity extends AppCompatActivity
             });
 
         } else {
+            // If the user is not logged in, fetch the tasks from the room DB
             MI_LoginReg.setTitle("Login / Register");
             MI_Profile.setVisible(false);
+
+            mTaskList.clear();
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    List<Task> templist = mDB.checketDao().loadAllTasks();
+                    Calendar c = Calendar.getInstance();
+                    for(Task temptask : templist) {
+                        if (!temptask.getCompleted() && temptask.getDate() > c.getTimeInMillis()) {
+                            // Eligible tasks
+                            mTaskList.add(temptask);
+                        }
+                    }
+                    // Call the method to initialize and inflate the recycler
+                    recyclerView();
+                }
+            });
         }
     }
 
@@ -325,10 +344,14 @@ public class MainActivity extends AppCompatActivity
     // just to get the overrides right.
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon, Boolean completed) {
+        // Test if the user is connected
+        boolean hasConnection = CommonFunctions.isConnected(getApplicationContext());
+
         final Task task = new Task(header, details, date, icon, completed);
         // Add the new task to the list
-        int index = 0;
+
         if (header.equals("")) {
+            // Inform user of mistake
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
             // TODO: Reload dialog with any input
             newTask(drawerLayout);
@@ -344,9 +367,9 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, "You already have something planned for that time slot", Toast.LENGTH_LONG).show();
                 // TODO: Reload dialog with any input
                 newTask(drawerLayout);
-            } else {
-                mTaskList.add(index, task);
-                // TODO: Upload new Task to DB
+            } else if (mAuth.getCurrentUser() != null && hasConnection) {
+                mTaskList.add(task);
+                // HashMap for firebase
                 Map<String, Object> taskMap = new HashMap<>();
                 taskMap.put("category", header);
                 taskMap.put("completed", completed);
@@ -354,18 +377,27 @@ public class MainActivity extends AppCompatActivity
                 taskMap.put("enddate", String.valueOf(date));
                 taskMap.put("uid", mAuth.getUid());
 
+                // Update firebase and locally
+                DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+date);
+                documentReference.set(taskMap);
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
                         mDB.checketDao().insertTask(task);
                     }
                 });
-
-                DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+date);
-
-                documentReference.set(taskMap);
-
                 // Calling the function to refresh the RecyclerView
+                recyclerView();
+            } else {
+                Log.i("Petter", "TEST");
+                // Upload only locally
+                mTaskList.add(task);
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDB.checketDao().insertTask(task);
+                    }
+                });
                 recyclerView();
             }
         }
