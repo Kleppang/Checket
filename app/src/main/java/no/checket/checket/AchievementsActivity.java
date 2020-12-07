@@ -141,6 +141,10 @@ public class AchievementsActivity extends AppCompatActivity {
             @Override
             public void run() {
                 achList = mDB.checketDao().loadAllAchievements();
+
+                taskList = new ArrayList<>();
+                taskList = mDB.checketDao().loadAllTasks();
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -249,17 +253,6 @@ public class AchievementsActivity extends AppCompatActivity {
 
         // First check if we have an Internet connection
         boolean hasConnection = CommonFunctions.isConnected(getApplicationContext());
-
-        taskList = new ArrayList<>();
-
-        // Fetch all tasks we'll test on
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                taskList = mDB.checketDao().loadAllTasks();
-            }
-
-        });
 
         // User is logged in and has an active Internet connection
         if(mAuth.getCurrentUser() != null && hasConnection) {

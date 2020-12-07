@@ -14,7 +14,9 @@
                 android:title="@string/achievements"
                 android:icon="@drawable/ic_achievements_black_24dp" />
 
-            <item android:title="@string/tasks"
+            <item
+                android:id="@+id/nav_tasks"
+                android:title="@string/tasks"
                 android:icon="@drawable/ic_tasks_black_24dp" />
         </menu>
     </item>

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -61,8 +62,12 @@ public class ProfileActivity extends AppCompatActivity {
         callEditprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-                startActivity(intent);
+                if(CommonFunctions.isConnected(getApplicationContext())) {
+                    Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(ProfileActivity.this, "You're not currently connected to the Internet, please try again later.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

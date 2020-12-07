@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.internal.service.Common;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.button.MaterialButton;
@@ -84,55 +86,58 @@ public class LoginActivity extends AppCompatActivity {
         String password = eTxt_password.getText().toString();
 
         if(!email.isEmpty() && !password.isEmpty()) {
-            btn_login = findViewById(R.id.btn_login);
+            if(CommonFunctions.isConnected(this)) {
+                btn_login = findViewById(R.id.btn_login);
 
-            btn_login.setEnabled(false);
-            btn_login.setText(R.string.Activity_wait);
+                btn_login.setEnabled(false);
+                btn_login.setText(R.string.Activity_wait);
 
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
 
-                        // Fetches all achievements stored on Firestore
-                        firestore.collection("achievements").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()) {
-                                    for(QueryDocumentSnapshot document : task.getResult()) {
-                                        if(document.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
-                                            final Achievement tempach = new Achievement(document.getString("name"), document.getString("desc"), document.getString("category"));
-                                            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    mDB.checketDao().insertAchievement(tempach);
-                                                }
-                                            });
+                            // Fetches all achievements stored on Firestore
+                            firestore.collection("achievements").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()) {
+                                        for(QueryDocumentSnapshot document : task.getResult()) {
+                                            if(document.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                                                final Achievement tempach = new Achievement(document.getString("name"), document.getString("desc"), document.getString("category"));
+                                                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        mDB.checketDao().insertAchievement(tempach);
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        });
+                            });
 
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail: success");
-                        //FirebaseUser user = mAuth.getCurrentUser();
-                        finish();
-                        // User authenticated, onStart's mAuth.getCurrentUser() will now return this user
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail: failure", task.getException());
-                        Toast.makeText(getApplicationContext(), "Could not login, please try again.", Toast.LENGTH_SHORT).show();
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail: success");
+                            //FirebaseUser user = mAuth.getCurrentUser();
+                            finish();
+                            // User authenticated, onStart's mAuth.getCurrentUser() will now return this user
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail: failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "Could not login, please try again.", Toast.LENGTH_SHORT).show();
 
-                        // Clear password
-                        eTxt_password.setText("");
+                            // Clear password
+                            eTxt_password.setText("");
 
-                        btn_login.setEnabled(true);
-                        btn_login.setText(R.string.action_sign_in);
+                            btn_login.setEnabled(true);
+                            btn_login.setText(R.string.action_sign_in);
+                        }
                     }
-                }
-
-            });
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "You're not currently connected to the Internet, please try again later.", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Please fill out both fields.", Toast.LENGTH_SHORT).show();
         }

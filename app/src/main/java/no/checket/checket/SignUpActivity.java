@@ -73,40 +73,42 @@ public class SignUpActivity extends AppCompatActivity {
 
         if(!email.isEmpty() && !password.isEmpty()) {
             if (password.equals(password2)) {
-                btn_SignUp = findViewById(R.id.btn_SignUp);
+                if(CommonFunctions.isConnected(this)) {
+                    btn_SignUp = findViewById(R.id.btn_SignUp);
 
-                btn_SignUp.setEnabled(false);
-                btn_SignUp.setText(R.string.Activity_wait);
+                    btn_SignUp.setEnabled(false);
+                    btn_SignUp.setText(R.string.Activity_wait);
 
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signUpWithEmail: success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                            finish();
-                            // User authenticated, onStart's mAuth.getCurrentUser() will now return this user
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signUpWithEmail: failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Sign up failed.", Toast.LENGTH_SHORT).show();
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signUpWithEmail: success");
+                                //FirebaseUser user = mAuth.getCurrentUser();
+                                finish();
+                                // User authenticated, onStart's mAuth.getCurrentUser() will now return this user
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signUpWithEmail: failure", task.getException());
+                                Toast.makeText(getApplicationContext(), "Sign up failed.", Toast.LENGTH_SHORT).show();
 
-                            // Clear password
-                            eTxt_pw.setText("");
-                            eTxt_pw2.setText("");
-
+                                // Clear password
+                                eTxt_pw.setText("");
+                                eTxt_pw2.setText("");
+                            }
                         }
-                    }
-                });
+                    });
                 } else {
-                Toast.makeText(getApplicationContext(), "Please makes sure out both password-fields match.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You're not currently connected to the Internet, please try again later.", Toast.LENGTH_SHORT).show();
                 }
-
             } else {
-                Toast.makeText(getApplicationContext(), "Please fill out all required fields.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Please makes sure out both password-fields match.", Toast.LENGTH_SHORT).show();
             }
-    }//method
+        } else {
+            Toast.makeText(getApplicationContext(), "Please fill out all required fields.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
