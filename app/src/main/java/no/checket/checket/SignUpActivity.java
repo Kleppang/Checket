@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
@@ -85,13 +86,22 @@ public class SignUpActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signUpWithEmail: success");
-                                //FirebaseUser user = mAuth.getCurrentUser();
+
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if(user != null) {
+                                    user.sendEmailVerification();
+                                }
+
+                                Toast.makeText(getApplicationContext(), "User created, please verify your email.", Toast.LENGTH_LONG).show();
+
                                 finish();
-                                // User authenticated, onStart's mAuth.getCurrentUser() will now return this user
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signUpWithEmail: failure", task.getException());
                                 Toast.makeText(getApplicationContext(), "Sign up failed.", Toast.LENGTH_SHORT).show();
+
+                                btn_SignUp.setEnabled(true);
+                                btn_SignUp.setText(R.string.SignUp);
 
                                 // Clear password
                                 eTxt_pw.setText("");
