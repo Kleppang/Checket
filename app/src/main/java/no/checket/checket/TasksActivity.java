@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -186,6 +187,9 @@ public class TasksActivity extends AppCompatActivity
         // Connect the adapter with the RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerViewFinished.setAdapter(mAdapterFinished);
+        // Add dividing lines to the recyclerView
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerViewFinished.addItemDecoration(new DividerItemDecoration(mRecyclerViewFinished.getContext(), DividerItemDecoration.VERTICAL));
         // Give the RecyclerView a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewFinished.setLayoutManager(new LinearLayoutManager(this));
