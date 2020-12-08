@@ -98,6 +98,11 @@
     <string name="dialog_intro_pos">Yes</string>
     <string name="dialog_intro_neg">No</string>
 
+    <string name="dialog_delete_title">Account deletion</string>
+    <string name="dialog_delete_msg">Are you sure you wish to delete your account? This will delete your login and all cloud saved data. You\'ll still keep your locally saved tasks and achievements on this device.</string>
+    <string name="dialog_delete_pos">Yes</string>
+    <string name="dialog_delete_neg">No</string>
+
     <!-- Settings -->
     <string name="settings_redo_title">Redo intro</string>
     <string name="settings_redo_desc">Click me to redo the introduction</string>
