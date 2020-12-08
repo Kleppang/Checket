@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity
 
     public void check(View view) {
         View root = view.getRootView();
-        TextView date = root.findViewById(R.id.date);
+        TextView date = root.findViewById(R.id.date);   // TODO: Regner med det er her det går galt
         CharSequence cs = date.getText();
         String s = cs.toString();
         Log.i("TestDate", s);
