@@ -121,7 +121,7 @@
     <string name="logo">Checket</string>
 
     <!-- Tasks -->
-    <string name="main_header">Upcoming tasks</string>
+    <string name="main_header">Current tasks</string>
     <string name="new_task">New task</string>
     <string name="category">Category</string>
     <string name="details">Details</string>

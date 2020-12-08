@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity
                     List<Task> templist = mDB.checketDao().loadAllTasks();
                     Calendar c = Calendar.getInstance();
                     for(Task temptask : templist) {
-                        if (!temptask.getCompleted() && temptask.getDate() > c.getTimeInMillis()) {
+                        if (!temptask.getCompleted() && temptask.getDate() > c.getTimeInMillis() - 172800000) {
                             // Eligible tasks
                             mTaskList.add(temptask);
                         }
