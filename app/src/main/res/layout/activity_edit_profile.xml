@@ -86,6 +86,17 @@
                 android:padding="12dp"
                 app:backgroundTint="@color/colorPrimaryDark"
                 />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPassword"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_below="@id/btnSave"
+                android:layout_height="wrap_content"
+                android:text="@string/update_password"
+                android:padding="12dp"
+                app:backgroundTint="@color/colorPrimaryDark"
+                />
         </RelativeLayout>
 
     </LinearLayout>
