@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -270,7 +271,7 @@ public class MainActivity extends AppCompatActivity
                                     }
                                 });
                                 // Testing that the task is not complete,
-                                // as well as weeding out unfinished past tasks
+                                // as well as weeding out unfinished tasks in the past
                                 Calendar cal = Calendar.getInstance();
                                 if (newTask.getCompleted() != true && newTask.getDate() > cal.getTimeInMillis()) {
                                     mTaskList.add(newTask);
@@ -346,11 +347,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void check(View view) {
-        View root = view.getRootView();
-        TextView date = root.findViewById(R.id.date);   // TODO: Regner med det er her det går galt
-        CharSequence cs = date.getText();
+        // The String date is stored as the checkbox's content description.
+        // Admittedly not ideal, and merely a workaround.
+        CharSequence cs = view.getContentDescription();
         String s = cs.toString();
-        Log.i("TestDate", s);
+        Log.i("Test", s);
         // Extract substrings from TextView to represent a date
         String sDay = s.substring(0,2);
         String sMonth = s.substring(3,5);
@@ -359,7 +360,7 @@ public class MainActivity extends AppCompatActivity
         String sMinute = s.substring(12);
         // Parse to integers
         int day = Integer.parseInt(sDay);
-        // NB! Strange thing where this int is an index, not the actual month, so deduct 1
+        // NB! Strange thing where this int is an index (range 0-11), not the actual month, so deduct 1
         int month = Integer.parseInt(sMonth) - 1;
         // NB! the year fetched from the string is only 2 digits
         int year = Integer.parseInt(sYear) + 2000;
@@ -371,14 +372,12 @@ public class MainActivity extends AppCompatActivity
         long date1 = c.getTimeInMillis();
         // Unreachable index
         int index = -1;
+        // Counter to mark corresponding task when comparing
         int i = 0;
         // Compare
-        Log.i("Test", String.valueOf(date1));
         for (final Task t : mTaskList) {
             long date2 = t.getDate();
-            Log.i("Test", String.valueOf(date2));
             if (date1 <= date2 + 60000 && date1 >= date2 - 60000) {
-                Log.i("Test", "IF success");
                 // Mark for deletion, as items cannot be removed while looping through
                 index = i;
                 // Update object
@@ -390,12 +389,31 @@ public class MainActivity extends AppCompatActivity
                         mDB.checketDao().insertTask(t);
                     }
                 });
+                // Test if the user is connected
+                boolean hasConnection = CommonFunctions.isConnected(getApplicationContext());
+                // Upload to firebase if the user is logged in
+                if (mAuth.getCurrentUser() != null && hasConnection && index > -1) {
+                    String header = t.getHeader();
+                    boolean completed = t.getCompleted();
+                    String details = t.getDetails();
+                    Long date = t.getDate();
+                    // HashMap for firebase
+                    Map<String, Object> taskMap = new HashMap<>();
+                    taskMap.put("category", header);
+                    taskMap.put("completed", completed);
+                    taskMap.put("desc", details);
+                    taskMap.put("enddate", String.valueOf(date));
+                    taskMap.put("uid", mAuth.getUid());
+
+                    // Update firebase
+                    DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+date);
+                    documentReference.set(taskMap);
+                }
             }
             i++;
         }
         if (index != -1) {
             mTaskList.remove(index);
-            Log.i("Test", String.valueOf(index));
             recyclerView();
         }
     }
@@ -450,8 +468,7 @@ public class MainActivity extends AppCompatActivity
                 // Calling the function to refresh the RecyclerView
                 recyclerView();
             } else {
-                Log.i("Petter", "TEST");
-                // Upload only locally
+                // Upload locally
                 mTaskList.add(task);
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override

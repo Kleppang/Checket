@@ -244,4 +244,76 @@ public class TasksActivity extends AppCompatActivity
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
     }
+
+    public void check(View view) {
+        // The String date is stored as the checkbox's content description.
+        // Admittedly not ideal, and merely a workaround.
+        CharSequence cs = view.getContentDescription();
+        String s = cs.toString();
+        Log.i("Test", s);
+        // Extract substrings from TextView to represent a date
+        String sDay = s.substring(0,2);
+        String sMonth = s.substring(3,5);
+        String sYear = s.substring(6,8);
+        String sHour = s.substring(9,11);
+        String sMinute = s.substring(12);
+        // Parse to integers
+        int day = Integer.parseInt(sDay);
+        // NB! Strange thing where this int is an index (range 0-11), not the actual month, so deduct 1
+        int month = Integer.parseInt(sMonth) - 1;
+        // NB! the year fetched from the string is only 2 digits
+        int year = Integer.parseInt(sYear) + 2000;
+        int hour = Integer.parseInt(sHour);
+        int minute = Integer.parseInt(sMinute);
+        // Build calendar
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, day, hour, minute);
+        long date1 = c.getTimeInMillis();
+        // Unreachable index
+        int index = -1;
+        // Counter to mark corresponding task when comparing
+        int i = 0;
+        // Compare
+        for (final Task t : mTaskList) {
+            long date2 = t.getDate();
+            if (date1 <= date2 + 60000 && date1 >= date2 - 60000) {
+                // Mark for deletion, as items cannot be removed while looping through
+                index = i;
+                // Update object
+                t.setCompleted(true);
+                // Update locally
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDB.checketDao().insertTask(t);
+                    }
+                });
+                // Test if the user is connected
+                boolean hasConnection = CommonFunctions.isConnected(getApplicationContext());
+                // Upload to firebase if the user is logged in
+                if (mAuth.getCurrentUser() != null && hasConnection && index > -1) {
+                    String header = t.getHeader();
+                    boolean completed = t.getCompleted();
+                    String details = t.getDetails();
+                    Long date = t.getDate();
+                    // HashMap for firebase
+                    Map<String, Object> taskMap = new HashMap<>();
+                    taskMap.put("category", header);
+                    taskMap.put("completed", completed);
+                    taskMap.put("desc", details);
+                    taskMap.put("enddate", String.valueOf(date));
+                    taskMap.put("uid", mAuth.getUid());
+
+                    // Update firebase
+                    DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+date);
+                    documentReference.set(taskMap);
+                }
+            }
+            i++;
+        }
+        if (index != -1) {
+            mTaskList.remove(index);
+            recyclerView();
+        }
+    }
 }
