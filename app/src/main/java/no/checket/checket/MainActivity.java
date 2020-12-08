@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     private LinkedList<no.checket.checket.Task> mTaskList = new LinkedList<>();
     private RecyclerView mRecyclerView;
     private TaskListAdapter mAdapter;
+    private TextView mEmptyListText;
 
     // Firebase & Auth, declare instance
     private FirebaseFirestore firestore;
@@ -323,8 +324,10 @@ public class MainActivity extends AppCompatActivity
                 return o1.compareTo(o2);
             }
         });
-        // Get a handle to the RecyclerView.
+        // Get a handle to the RecyclerView...
         mRecyclerView = findViewById(R.id.coming_tasks);
+        // ... As well as the potential message
+        mEmptyListText = findViewById(R.id.emptyMainText);
         // Specify the length of the list for this activity
         // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
         int length;
@@ -341,6 +344,14 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
         // Give the RecyclerView a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // If mTaskList is empty, display a helpful message
+        if (mTaskList.size() <= 0) {
+            mRecyclerView.setVisibility(View.GONE);
+            mEmptyListText.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mEmptyListText.setVisibility(View.GONE);
+        }
     }
     
     public void newTask(View view) {
