@@ -101,9 +101,13 @@
     <!-- Settings -->
     <string name="settings_redo_title">Redo intro</string>
     <string name="settings_redo_desc">Click me to redo the introduction</string>
+    <string name="settings_delete_title">Delete data</string>
+    <string name="settings_delete_desc">Click me to delete all of your user data with us</string>
 
     <!-- Preference keys -->
     <string name="key_IsFirstTime">IsFirstTime</string>
+    <string name="key_DeleteAccount">DeleteAccount</string>
+    <string name="key_DeleteAccount_cat">DeleteAccountCat</string>
 
     <string name="logo">Checket</string>
 

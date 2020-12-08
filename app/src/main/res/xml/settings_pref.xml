@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory 
         android:title="GENERAL">
         <Preference
             android:key="@string/key_IsFirstTime"
             android:title="@string/settings_redo_title"
             android:summary="@string/settings_redo_desc"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="@string/key_DeleteAccount_cat"
+        android:title="USER PROFILE"
+        app:isPreferenceVisible="false">
+        <Preference
+            android:key="@string/key_DeleteAccount"
+            android:title="@string/settings_delete_title"
+            android:summary="@string/settings_delete_desc"/>
 
     </PreferenceCategory>
 </PreferenceScreen>

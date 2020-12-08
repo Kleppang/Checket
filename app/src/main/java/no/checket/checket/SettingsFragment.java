@@ -5,23 +5,32 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private IntroSlideManager mIntroSlideManager;
 
+    private FirebaseAuth mAuth;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings_pref);
+
+        mAuth = FirebaseAuth.getInstance();
 
         if(getContext() != null) {
             mIntroSlideManager = new IntroSlideManager(getContext());
         }
 
         Preference redoPref = findPreference(getString(R.string.key_IsFirstTime));
+
+        PreferenceCategory deleteCat = findPreference(getString(R.string.key_DeleteAccount_cat));
+        Preference deletePref = findPreference(getString(R.string.key_DeleteAccount));
 
         if(redoPref != null) {
             redoPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -43,6 +52,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     return true;
                 }
             });
+        }
+        if(deletePref != null && deleteCat != null) {
+            if(mAuth.getCurrentUser() != null) {
+                deleteCat.setVisible(true);
+            }
         }
     }
 }
