@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
+import androidx.room.Update;
 
 import android.Manifest;
 import android.app.Activity;
@@ -52,6 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private MaterialButton saveButton;
     private FloatingActionButton profileChangeBtn;
     private EditText inp_name;
+    private MaterialButton btn_updatePassword;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
@@ -82,7 +84,7 @@ public class EditProfileActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.btnSave);
         profileChangeBtn = findViewById(R.id.fabEditProfil);
         inp_name = findViewById(R.id.inp_customName);
-
+        btn_updatePassword = findViewById(R.id.btnPassword);
 
         //Init
         mAuth = FirebaseAuth.getInstance();
@@ -152,6 +154,18 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(CommonFunctions.isConnected(getApplicationContext())) {
                     addCustomName();
+                } else {
+                    Toast.makeText(EditProfileActivity.this, "You're not currently connected to the Internet, please try again later.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        btn_updatePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(CommonFunctions.isConnected(getApplicationContext())) {
+                    Intent updateIntent = new Intent(getApplicationContext(), UpdatePasswordActivity.class);
+                    startActivity(updateIntent);
                 } else {
                     Toast.makeText(EditProfileActivity.this, "You're not currently connected to the Internet, please try again later.", Toast.LENGTH_LONG).show();
                 }

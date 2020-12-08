@@ -33,7 +33,6 @@
     <string name="placeholder_customName">No name set…</string>
 
 
-
     <!-- Login/Register -->
     <string name="loginRegister_username">Username Icon</string>
     <string name="login">Login</string>
@@ -64,9 +63,14 @@
     <string name="change_profile_picture">Change profile picture</string>
     <string name="custom_name_texthint">Enter to assign a custom name</string>
     <string name="custom_name_placeholder">Custom name</string>
-    <string name="save_information">Save information</string>
+    <string name="save_information">Save username</string>
+    <string name="update_password">Update password</string>
     <string name="fab_editprofile">FAB_editprofile</string>
 
+    <!-- Update password -->
+    <string name="UpdatePassword">Update password</string>
+    <string name="password_placeholder">Password</string>
+    <string name="v_password_placeholder">Verify Password</string>
 
     <!-- Intro Slider -->
     <string name="intro_slider_next">NEXT</string>
