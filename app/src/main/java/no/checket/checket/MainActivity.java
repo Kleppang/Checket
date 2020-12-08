@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
@@ -342,6 +343,61 @@ public class MainActivity extends AppCompatActivity
         // User has clicked the FAB
         DialogFragment dialog = new NewTaskFragment();
         dialog.show(getSupportFragmentManager(), "newTaskFragment");
+    }
+
+    public void check(View view) {
+        View root = view.getRootView();
+        TextView date = root.findViewById(R.id.date);
+        CharSequence cs = date.getText();
+        String s = cs.toString();
+        Log.i("TestDate", s);
+        // Extract substrings from TextView to represent a date
+        String sDay = s.substring(0,2);
+        String sMonth = s.substring(3,5);
+        String sYear = s.substring(6,8);
+        String sHour = s.substring(9,11);
+        String sMinute = s.substring(12);
+        // Parse to integers
+        int day = Integer.parseInt(sDay);
+        // NB! Strange thing where this int is an index, not the actual month, so deduct 1
+        int month = Integer.parseInt(sMonth) - 1;
+        // NB! the year fetched from the string is only 2 digits
+        int year = Integer.parseInt(sYear) + 2000;
+        int hour = Integer.parseInt(sHour);
+        int minute = Integer.parseInt(sMinute);
+        // Build calendar
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, day, hour, minute);
+        long date1 = c.getTimeInMillis();
+        // Unreachable index
+        int index = -1;
+        int i = 0;
+        // Compare
+        Log.i("Test", String.valueOf(date1));
+        for (final Task t : mTaskList) {
+            long date2 = t.getDate();
+            Log.i("Test", String.valueOf(date2));
+            if (date1 <= date2 + 60000 && date1 >= date2 - 60000) {
+                Log.i("Test", "IF success");
+                // Mark for deletion, as items cannot be removed while looping through
+                index = i;
+                // Update object
+                t.setCompleted(true);
+                // Update locally
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDB.checketDao().insertTask(t);
+                    }
+                });
+            }
+            i++;
+        }
+        if (index != -1) {
+            mTaskList.remove(index);
+            Log.i("Test", String.valueOf(index));
+            recyclerView();
+        }
     }
 
     // Listener for clicking of the save button
