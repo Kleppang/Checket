@@ -129,7 +129,9 @@ public class LoginActivity extends AppCompatActivity {
                                     finish();
                                     // User authenticated, onStart's mAuth.getCurrentUser() will now return this user
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Please verify your email before logging in.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Your email is not verified, another email has been dispatched. Please verify before logging in.", Toast.LENGTH_LONG).show();
+
+                                    user.sendEmailVerification();
 
                                     mAuth.signOut();
 
