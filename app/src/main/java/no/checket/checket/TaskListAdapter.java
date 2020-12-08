@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +48,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         String mDrawable = mCurrent.getIcon();
         int resID = res.getIdentifier(mDrawable , "drawable", context.getPackageName());
         holder.imageItemView.setImageResource(resID);
+        holder.checkBox.setContentDescription(strDate);
     }
 
     public int getItemCount() {
@@ -59,6 +61,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         public final TextView detailItemView;
         public final TextView dateItemView;
         public final ImageView imageItemView;
+        public final CheckBox checkBox;
         final TaskListAdapter mAdapter;
 
         public TaskViewHolder(View itemView, TaskListAdapter adapter) {
@@ -67,6 +70,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             detailItemView = itemView.findViewById(R.id.details);
             dateItemView = itemView.findViewById(R.id.date);
             imageItemView = itemView.findViewById(R.id.icon);
+            checkBox = itemView.findViewById(R.id.checkBox);
             this.mAdapter = adapter;
         }
     }
