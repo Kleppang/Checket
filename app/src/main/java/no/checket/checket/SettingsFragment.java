@@ -12,6 +12,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -26,6 +29,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
+    private StorageReference storageReference;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -90,8 +94,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void deleteAccount() {
         // A function that will delete all saved data from a user on Google Firebase
-        // This includes any task in the future, present or past, any achievements, any custom name and authentication
+        // This includes any task in the future, present or past, profilepicture, any achievements, any custom name and authentication
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference fileRef = storageReference.child("users/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
+
+        fileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //An error occured
+
+            }
+        });
 
         if(currentUser != null) {
             firestore.collection("achievements").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
