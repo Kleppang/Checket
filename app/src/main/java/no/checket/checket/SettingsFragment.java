@@ -94,7 +94,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void deleteAccount() {
         // A function that will delete all saved data from a user on Google Firebase
-        // This includes any task in the future, present or past, profile any achievements, any custom name and authentication
+        // This includes any task in the future, present or past, profilepicture, any achievements, any custom name and authentication
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         storageReference = FirebaseStorage.getInstance().getReference();
