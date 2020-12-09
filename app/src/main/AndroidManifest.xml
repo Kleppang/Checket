@@ -36,7 +36,6 @@
             android:theme="@style/AppThemeTopBar" />
         <activity
             android:name=".TasksActivity"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeTopBar" />
         <activity
             android:name=".SignUpActivity"

@@ -38,12 +38,12 @@ public class TasksActivity extends AppCompatActivity
     private CoordinatorLayout coordinatorLayout;
 
     // Recycler view
-    private LinkedList<Task> mTaskList = new LinkedList<>();
-    private LinkedList<Task> mTaskListFinished = new LinkedList<>();
-    private RecyclerView mRecyclerView;
-    private RecyclerView mRecyclerViewFinished;
-    private TaskListAdapter mAdapter;
-    private TaskListAdapter mAdapterFinished;
+    private LinkedList<Task> mTasksList = new LinkedList<>();
+    private LinkedList<Task> mTasksListFinished = new LinkedList<>();
+    private RecyclerView mRecyclerViewTasks;
+    private RecyclerView mRecyclerViewTasksFinished;
+    private TaskListAdapter mAdapterTasks;
+    private TaskListAdapter mAdapterTasksFinished;
 
     // Firebase & Auth, declare instance
     private FirebaseFirestore firestore;
@@ -70,7 +70,7 @@ public class TasksActivity extends AppCompatActivity
 
         mDB = ChecketDatabase.getDatabase(this);
 
-        // Fill mTaskList
+        // Fill mTasksList
         fillTaskList();
 
         // Get a handle to the tabLayout
@@ -82,12 +82,12 @@ public class TasksActivity extends AppCompatActivity
             public void onTabSelected(TabLayout.Tab tab) {
                 switch(tab.getPosition()) {
                     case 0:
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        mRecyclerViewFinished.setVisibility(View.GONE);
+                        mRecyclerViewTasks.setVisibility(View.VISIBLE);
+                        mRecyclerViewTasksFinished.setVisibility(View.GONE);
                         break;
                     case 1:
-                        mRecyclerView.setVisibility(View.GONE);
-                        mRecyclerViewFinished.setVisibility(View.VISIBLE);
+                        mRecyclerViewTasks.setVisibility(View.GONE);
+                        mRecyclerViewTasksFinished.setVisibility(View.VISIBLE);
                         break;
                     default:
                         break;
@@ -133,10 +133,10 @@ public class TasksActivity extends AppCompatActivity
                 for(Task temptask : templist) {
                     if (temptask.getCompleted()) {
                         // Finished tasks
-                        mTaskListFinished.add(temptask);
+                        mTasksListFinished.add(temptask);
                     } else {
                         // Ongoing tasks
-                        mTaskList.add(temptask);
+                        mTasksList.add(temptask);
                     }
                 }
                 // Call the method to initialize and inflate the recycler
@@ -147,7 +147,7 @@ public class TasksActivity extends AppCompatActivity
 
     public void recyclerView() {
         // Sort list
-        Collections.sort(mTaskList, new Comparator<no.checket.checket.Task>() {
+        Collections.sort(mTasksList, new Comparator<no.checket.checket.Task>() {
             @Override
             public int compare(final no.checket.checket.Task object1, final no.checket.checket.Task object2) {
                 Calendar o1 = Calendar.getInstance();
@@ -160,7 +160,7 @@ public class TasksActivity extends AppCompatActivity
             }
         });
 
-        Collections.sort(mTaskListFinished, new Comparator<no.checket.checket.Task>() {
+        Collections.sort(mTasksListFinished, new Comparator<no.checket.checket.Task>() {
             @Override
             public int compare(final no.checket.checket.Task object1, final no.checket.checket.Task object2) {
                 Calendar o1 = Calendar.getInstance();
@@ -174,24 +174,24 @@ public class TasksActivity extends AppCompatActivity
         });
 
         // Get a handle to the RecyclerView.
-        mRecyclerView = findViewById(R.id.tasks);
-        mRecyclerViewFinished = findViewById(R.id.tasksFinished);
+        mRecyclerViewTasks = findViewById(R.id.tasks);
+        mRecyclerViewTasksFinished = findViewById(R.id.tasksFinished);
         // Specify the length of the list for this activity
         // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
-        int length = mTaskList.size();
-        int lengthFinished = mTaskListFinished.size();
+        int length = mTasksList.size();
+        int lengthFinished = mTasksListFinished.size();
         // Create an adapter and supply the data to be displayed.
-        mAdapter = new TaskListAdapter(this, mTaskList, length);
-        mAdapterFinished = new TaskListAdapter(this, mTaskListFinished, lengthFinished);
+        mAdapterTasks = new TaskListAdapter(this, mTasksList, length);
+        mAdapterTasksFinished = new TaskListAdapter(this, mTasksListFinished, lengthFinished);
         // Connect the adapter with the RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerViewFinished.setAdapter(mAdapterFinished);
+        mRecyclerViewTasks.setAdapter(mAdapterTasks);
+        mRecyclerViewTasksFinished.setAdapter(mAdapterTasksFinished);
         // Add dividing lines to the recyclerView
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
-        mRecyclerViewFinished.addItemDecoration(new DividerItemDecoration(mRecyclerViewFinished.getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerViewTasks.addItemDecoration(new DividerItemDecoration(mRecyclerViewTasks.getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerViewTasksFinished.addItemDecoration(new DividerItemDecoration(mRecyclerViewTasksFinished.getContext(), DividerItemDecoration.VERTICAL));
         // Give the RecyclerView a default layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerViewFinished.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerViewTasks.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerViewTasksFinished.setLayoutManager(new LinearLayoutManager(this));
     }
 
     // Listener for clicking of the save button...
@@ -212,7 +212,7 @@ public class TasksActivity extends AppCompatActivity
         } else {
             // Make sure the date and time is not already used
             Boolean used = false;
-            for (Task t : mTaskList) {
+            for (Task t : mTasksList) {
                 if (task.getDate() <= t.getDate() + 60000 && task.getDate() >= t.getDate() - 60000) {
                     used = true;
                 }
@@ -222,7 +222,7 @@ public class TasksActivity extends AppCompatActivity
                 // TODO: Reload dialog with any input
                 newTask(coordinatorLayout);
             } else if (mAuth.getCurrentUser() != null && hasConnection) {
-                mTaskList.add(task);
+                mTasksList.add(task);
                 // HashMap for firebase
                 Map<String, Object> taskMap = new HashMap<>();
                 taskMap.put("category", header);
@@ -244,7 +244,7 @@ public class TasksActivity extends AppCompatActivity
                 recyclerView();
             } else {
                 // Upload locally
-                mTaskList.add(task);
+                mTasksList.add(task);
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -289,7 +289,7 @@ public class TasksActivity extends AppCompatActivity
         // Counter to mark corresponding task when comparing
         int i = 0;
         // Compare
-        for (final Task t : mTaskList) {
+        for (final Task t : mTasksList) {
             long date2 = t.getDate();
             if (date1 <= date2 + 60000 && date1 >= date2 - 60000) {
                 // Mark for deletion, as items cannot be removed while looping through
@@ -327,8 +327,14 @@ public class TasksActivity extends AppCompatActivity
             i++;
         }
         if (index != -1) {
-            mTaskList.remove(index);
+            mTasksList.remove(index);
             recyclerView();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }
