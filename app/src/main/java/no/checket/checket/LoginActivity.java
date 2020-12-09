@@ -19,9 +19,15 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -122,6 +128,21 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
+                                    // Upload all local tasks to firestore
+                                    List<no.checket.checket.Task> taskList = mDB.checketDao().loadAllTasks();
+                                    for (no.checket.checket.Task t : taskList) {
+                                        // HashMap for firebase
+                                        Map<String, Object> taskMap = new HashMap<>();
+                                        taskMap.put("category", t.getHeader());
+                                        taskMap.put("completed", t.getCompleted());
+                                        taskMap.put("desc", t.getDetails());
+                                        taskMap.put("enddate", String.valueOf(t.getDate()));
+                                        taskMap.put("uid", mAuth.getUid());
+
+                                        // Update firebase
+                                        DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+ t.getDate());
+                                        documentReference.set(taskMap);
+                                    }
 
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithEmail: success");
