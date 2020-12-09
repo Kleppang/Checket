@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
 
         // Check if a user is currently signed in, update UI
         // A function to update the UI accordingly, (Logout / Sign in / Register)
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
 
         txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
         txtV_name = navigationView.getHeaderView(0).findViewById(R.id.nav_name);
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity
                     if(task.isSuccessful()) {
                         for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                             // Check if the UID matches logged in users' UID
-                            if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                            if(thisDoc.getString("uid").equals(currentUser.getUid())) {
                                 final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add", thisDoc.getBoolean("completed"));
                                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                                     @Override
