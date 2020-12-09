@@ -49,6 +49,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         int resID = res.getIdentifier(mDrawable , "drawable", context.getPackageName());
         holder.imageItemView.setImageResource(resID);
         holder.checkBox.setContentDescription(strDate);
+        if (mCurrent.getCompleted()) {
+            holder.checkBox.setVisibility(View.GONE);
+        }
     }
 
     public int getItemCount() {

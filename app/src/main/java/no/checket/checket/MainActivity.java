@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     private LinkedList<no.checket.checket.Task> mTaskList = new LinkedList<>();
     private RecyclerView mRecyclerView;
     private TaskListAdapter mAdapter;
+    private TextView mEmptyListText;
 
     // Firebase & Auth, declare instance
     private FirebaseFirestore firestore;
@@ -296,7 +298,7 @@ public class MainActivity extends AppCompatActivity
                     List<Task> templist = mDB.checketDao().loadAllTasks();
                     Calendar c = Calendar.getInstance();
                     for(Task temptask : templist) {
-                        if (!temptask.getCompleted() && temptask.getDate() > c.getTimeInMillis()) {
+                        if (!temptask.getCompleted() && temptask.getDate() > c.getTimeInMillis() - 172800000) {
                             // Eligible tasks
                             mTaskList.add(temptask);
                         }
@@ -322,8 +324,10 @@ public class MainActivity extends AppCompatActivity
                 return o1.compareTo(o2);
             }
         });
-        // Get a handle to the RecyclerView.
+        // Get a handle to the RecyclerView...
         mRecyclerView = findViewById(R.id.coming_tasks);
+        // ... As well as the potential message
+        mEmptyListText = findViewById(R.id.emptyMainText);
         // Specify the length of the list for this activity
         // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
         int length;
@@ -336,8 +340,18 @@ public class MainActivity extends AppCompatActivity
         mAdapter = new TaskListAdapter(this, mTaskList, length);
         // Connect the adapter with the RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
+        // Add dividing lines to the recyclerView
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
         // Give the RecyclerView a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // If mTaskList is empty, display a helpful message
+        if (mTaskList.size() <= 0) {
+            mRecyclerView.setVisibility(View.GONE);
+            mEmptyListText.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mEmptyListText.setVisibility(View.GONE);
+        }
     }
     
     public void newTask(View view) {
@@ -419,8 +433,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     // Listener for clicking of the save button
-    // Had to create these from an error dialog when implementing the interface,
-    // just to get the overrides right.
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon, Boolean completed) {
         // Test if the user is connected

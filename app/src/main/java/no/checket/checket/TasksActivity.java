@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -186,18 +187,26 @@ public class TasksActivity extends AppCompatActivity
         // Connect the adapter with the RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerViewFinished.setAdapter(mAdapterFinished);
+        // Add dividing lines to the recyclerView
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerViewFinished.addItemDecoration(new DividerItemDecoration(mRecyclerViewFinished.getContext(), DividerItemDecoration.VERTICAL));
         // Give the RecyclerView a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewFinished.setLayoutManager(new LinearLayoutManager(this));
     }
 
     // Listener for clicking of the save button...
+    // Listener for clicking of the save button
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon, Boolean completed) {
+        // Test if the user is connected
+        boolean hasConnection = CommonFunctions.isConnected(getApplicationContext());
+
         final Task task = new Task(header, details, date, icon, completed);
         // Add the new task to the list
-        int index = 0;
+
         if (header.equals("")) {
+            // Inform user of mistake
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
             // TODO: Reload dialog with any input
             newTask(coordinatorLayout);
@@ -213,9 +222,9 @@ public class TasksActivity extends AppCompatActivity
                 Toast.makeText(this, "You already have something planned for that time slot", Toast.LENGTH_LONG).show();
                 // TODO: Reload dialog with any input
                 newTask(coordinatorLayout);
-            } else {
-                mTaskList.add(index, task);
-                // TODO: Upload new Task to DB
+            } else if (mAuth.getCurrentUser() != null && hasConnection) {
+                mTaskList.add(task);
+                // HashMap for firebase
                 Map<String, Object> taskMap = new HashMap<>();
                 taskMap.put("category", header);
                 taskMap.put("completed", completed);
@@ -223,18 +232,26 @@ public class TasksActivity extends AppCompatActivity
                 taskMap.put("enddate", String.valueOf(date));
                 taskMap.put("uid", mAuth.getUid());
 
+                // Update firebase and locally
+                DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+date);
+                documentReference.set(taskMap);
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
                         mDB.checketDao().insertTask(task);
                     }
                 });
-
-                DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+date);
-
-                documentReference.set(taskMap);
-
                 // Calling the function to refresh the RecyclerView
+                recyclerView();
+            } else {
+                // Upload locally
+                mTaskList.add(task);
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDB.checketDao().insertTask(task);
+                    }
+                });
                 recyclerView();
             }
         }
