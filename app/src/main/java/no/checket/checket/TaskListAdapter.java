@@ -36,7 +36,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         Task mCurrent = mTaskList.get(position);
         holder.wordItemView.setText(mCurrent.getHeader());
-        holder.detailItemView.setText(mCurrent.getDetails());
+        if (!mCurrent.getDetails().isEmpty()) {
+            holder.detailItemView.setText(mCurrent.getDetails());
+        } else {
+            holder.detailItemView.setText(R.string.noDetailsText);
+        }
         // The holder will not accept a Date object for its setText() method
         // Parse to String
         // Starting by specifying a date format
