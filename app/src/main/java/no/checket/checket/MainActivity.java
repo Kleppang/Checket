@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity
                                 // Testing that the task is not complete,
                                 // as well as weeding out unfinished tasks in the past
                                 Calendar cal = Calendar.getInstance();
-                                if (newTask.getCompleted() != true && newTask.getDate() > cal.getTimeInMillis()) {
+                                if (newTask.getCompleted() != true && newTask.getDate() > cal.getTimeInMillis() - 172800000) {
                                     mTaskList.add(newTask);
                                 }
                             }
@@ -365,7 +365,6 @@ public class MainActivity extends AppCompatActivity
         // Admittedly not ideal, and merely a workaround.
         CharSequence cs = view.getContentDescription();
         String s = cs.toString();
-        Log.i("Test", s);
         // Extract substrings from TextView to represent a date
         String sDay = s.substring(0,2);
         String sMonth = s.substring(3,5);

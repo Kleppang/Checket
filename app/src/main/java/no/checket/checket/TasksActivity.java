@@ -114,7 +114,6 @@ public class TasksActivity extends AppCompatActivity
     public void newTask(View view) {
         // User has clicked the FAB
         DialogFragment dialog = new NewTaskFragment();
-        dialog.show(getSupportFragmentManager(), "NewTaskFragment");
     }
 
     @Override
@@ -267,7 +266,6 @@ public class TasksActivity extends AppCompatActivity
         // Admittedly not ideal, and merely a workaround.
         CharSequence cs = view.getContentDescription();
         String s = cs.toString();
-        Log.i("Test", s);
         // Extract substrings from TextView to represent a date
         String sDay = s.substring(0,2);
         String sMonth = s.substring(3,5);
