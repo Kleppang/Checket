@@ -129,20 +129,25 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     });
                                     // Upload all local tasks to firestore
-                                    List<no.checket.checket.Task> taskList = mDB.checketDao().loadAllTasks();
-                                    for (no.checket.checket.Task t : taskList) {
-                                        // HashMap for firebase
-                                        Map<String, Object> taskMap = new HashMap<>();
-                                        taskMap.put("category", t.getHeader());
-                                        taskMap.put("completed", t.getCompleted());
-                                        taskMap.put("desc", t.getDetails());
-                                        taskMap.put("enddate", String.valueOf(t.getDate()));
-                                        taskMap.put("uid", mAuth.getUid());
+                                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            List<no.checket.checket.Task> taskList = mDB.checketDao().loadAllTasks();
+                                            for (no.checket.checket.Task t : taskList) {
+                                                // HashMap for firebase
+                                                Map<String, Object> taskMap = new HashMap<>();
+                                                taskMap.put("category", t.getHeader());
+                                                taskMap.put("completed", t.getCompleted());
+                                                taskMap.put("desc", t.getDetails());
+                                                taskMap.put("enddate", String.valueOf(t.getDate()));
+                                                taskMap.put("uid", mAuth.getUid());
 
-                                        // Update firebase
-                                        DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+ t.getDate());
-                                        documentReference.set(taskMap);
-                                    }
+                                                // Update firebase
+                                                DocumentReference documentReference = firestore.collection("tasks").document(mAuth.getUid()+ t.getDate());
+                                                documentReference.set(taskMap);
+                                            }
+                                        }
+                                    });
 
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithEmail: success");
