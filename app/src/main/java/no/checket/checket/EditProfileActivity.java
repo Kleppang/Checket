@@ -138,7 +138,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                     intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
-                                    startActivityForResult(intent, CAMERA_PICTURE);
+                                    try {
+                                        startActivityForResult(intent, CAMERA_PICTURE);
+                                    } catch (SecurityException e) {
+                                        Toast.makeText(EditProfileActivity.this, "No permission, please allow the application access to the Camera to continue.", Toast.LENGTH_SHORT).show();
+                                    }
 
                                 }
                             });
