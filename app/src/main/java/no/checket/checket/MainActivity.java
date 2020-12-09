@@ -303,8 +303,13 @@ public class MainActivity extends AppCompatActivity
                             mTaskList.add(temptask);
                         }
                     }
-                    // Call the method to initialize and inflate the recycler
-                    recyclerView();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Call the method to initialize and inflate the recycler
+                            recyclerView();
+                        }
+                    });
                 }
             });
         }
@@ -339,26 +344,10 @@ public class MainActivity extends AppCompatActivity
         // Create an adapter and supply the data to be displayed.
         mAdapter = new TaskListAdapter(this, mTaskList, length);
         // Connect the adapter with the RecyclerView.
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                mRecyclerView.setAdapter(mAdapter);
-
-            }
-        });
-
+        mRecyclerView.setAdapter(mAdapter);
         // Add dividing lines to the recyclerView
-        runOnUiThread(new Runnable() {
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-            @Override
-            public void run() {
-
-                mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
-            }
-        });
         // Give the RecyclerView a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // If mTaskList is empty, display a helpful message
