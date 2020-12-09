@@ -433,8 +433,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     // Listener for clicking of the save button
-    // Had to create these from an error dialog when implementing the interface,
-    // just to get the overrides right.
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String header, String details, long date, String icon, Boolean completed) {
         // Test if the user is connected
