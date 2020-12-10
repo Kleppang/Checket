@@ -46,12 +46,9 @@ public class NewTaskFragment extends DialogFragment {
         final EditText mDetails = (EditText) view.findViewById(R.id.details_text);
         final DatePicker mDate = (DatePicker) view.findViewById(R.id.date_input);
         final TimePicker mTime = (TimePicker) view.findViewById(R.id.time_input);
-        // TODO?
-        // Strangely, the spinner variant of the picker is off by 1 hour and 1 minute.
-        // Doing this to compensate for the discrepancy
         mTime.setIs24HourView(true);
-        mTime.setCurrentHour(mTime.getCurrentHour() + 1);
-        mTime.setCurrentMinute(mTime.getCurrentMinute() + 1);
+        mTime.setCurrentHour(mTime.getCurrentHour());
+        mTime.setCurrentMinute(mTime.getCurrentMinute());
 
         // Inflate and set buttons for dialog
         // Null represents the parent view, which is none for this dialog
@@ -67,10 +64,8 @@ public class NewTaskFragment extends DialogFragment {
                     int month = mDate.getMonth();
                     int day = mDate.getDayOfMonth();
                     int year = mDate.getYear();
-                    // TODO?
-                    // Again, the TimePicker is not acting as expected
-                    int hour = mTime.getCurrentHour()-1;
-                    int minute = mTime.getCurrentMinute()-1;
+                    int hour = mTime.getCurrentHour();
+                    int minute = mTime.getCurrentMinute();
                     Calendar date = Calendar.getInstance();
                     date.set(year, month, day, hour, minute);
                     // The naming convention of the icons is ic_CATEGORY
