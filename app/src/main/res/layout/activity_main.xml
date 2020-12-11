@@ -69,7 +69,8 @@
             app:layout_anchorGravity="top|center"
             app:srcCompat="@drawable/ic_add_black_24dp"
             app:borderWidth="0dp"
-            android:backgroundTint="@color/colorAccent"/>
+            android:backgroundTint="@color/colorAccent"
+            android:contentDescription="@string/fabDesc" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
