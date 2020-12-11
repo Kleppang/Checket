@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,7 @@ public class TasksActivity extends AppCompatActivity
     private RecyclerView mRecyclerViewTasksFinished;
     private TaskListAdapter mAdapterTasks;
     private TaskListAdapter mAdapterTasksFinished;
+    private TextView mEmptyListText;
 
     // Firebase & Auth, declare instance
     private FirebaseFirestore firestore;
@@ -174,9 +176,11 @@ public class TasksActivity extends AppCompatActivity
             }
         });
 
-        // Get a handle to the RecyclerView.
+        // Get a handle to the RecyclerViews...
         mRecyclerViewTasks = findViewById(R.id.tasks);
         mRecyclerViewTasksFinished = findViewById(R.id.tasksFinished);
+        // ... As well as the potential message
+        mEmptyListText = findViewById(R.id.emptyMainText);
         // Specify the length of the list for this activity
         // This lets us use the same TaskListAdapter class for multiple activities showing different lengths.
         int length = mTasksList.size();
@@ -193,6 +197,14 @@ public class TasksActivity extends AppCompatActivity
         // Give the RecyclerView a default layout manager.
         mRecyclerViewTasks.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewTasksFinished.setLayoutManager(new LinearLayoutManager(this));
+        // If mTaskList is empty, display a helpful message
+        if (mTasksList.size() <= 0) {
+            mRecyclerViewTasks.setVisibility(View.GONE);
+            mEmptyListText.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerViewTasks.setVisibility(View.VISIBLE);
+            mEmptyListText.setVisibility(View.GONE);
+        }
     }
 
     // Listener for clicking of the save button...
