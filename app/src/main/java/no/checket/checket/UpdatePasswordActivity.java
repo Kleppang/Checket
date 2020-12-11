@@ -47,17 +47,21 @@ public class UpdatePasswordActivity extends AppCompatActivity {
                     if(txt_password.getText().toString().equals(txt_password2.getText().toString())) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if(user != null) {
-                            user.updatePassword(txt_password.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(UpdatePasswordActivity.this, "Successfully updated your password.", Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(UpdatePasswordActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            try {
+                                user.updatePassword(txt_password.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(UpdatePasswordActivity.this, "Successfully updated your password.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(UpdatePasswordActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            } catch(Exception e) {
+                                Toast.makeText(UpdatePasswordActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
                     } else {
                         Toast.makeText(UpdatePasswordActivity.this, "Passwords do not match.", Toast.LENGTH_SHORT).show();

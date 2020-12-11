@@ -114,6 +114,7 @@ public class TasksActivity extends AppCompatActivity
     public void newTask(View view) {
         // User has clicked the FAB
         DialogFragment dialog = new NewTaskFragment();
+        dialog.show(getSupportFragmentManager(), "newTaskFragment");
     }
 
     @Override

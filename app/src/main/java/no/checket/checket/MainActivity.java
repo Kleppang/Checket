@@ -1,11 +1,9 @@
 package no.checket.checket;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
@@ -21,11 +19,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -37,10 +35,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -82,6 +80,8 @@ public class MainActivity extends AppCompatActivity
     private StorageReference storageReference;
 
     private ChecketDatabase mDB;
+
+    private static final String TAG = "MainActivity";
 
 
     @Override
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
 
         // Check if a user is currently signed in, update UI
         // A function to update the UI accordingly, (Logout / Sign in / Register)
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
 
         txtV_email = navigationView.getHeaderView(0).findViewById(R.id.nav_email);
         txtV_name = navigationView.getHeaderView(0).findViewById(R.id.nav_name);
@@ -237,19 +237,21 @@ public class MainActivity extends AppCompatActivity
             storageReference = FirebaseStorage.getInstance().getReference();
 
             //Finds Uri and loads profile picture to nav_header
-            try {
-                StorageReference profileRef = storageReference.child("users/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
-                profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.get().load(uri).into(profileImage);
+            String reference = "users/" + currentUser.getUid() + "/profile.jpg";
+            StorageReference profileRef = storageReference.child(reference);
+            profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()  {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(profileImage);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    if (exception instanceof StorageException && ((StorageException) exception).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                        Log.e(TAG, "File does not exist");
                     }
-                });
-
-            } catch (Exception e) {
-                System.out.println(e);
-                System.out.println("User does not have a profile picture");
-            }
+                }
+            });;
 
             MI_LoginReg.setTitle("Logout");
             MI_Profile.setVisible(true);
@@ -264,7 +266,7 @@ public class MainActivity extends AppCompatActivity
                     if(task.isSuccessful()) {
                         for (QueryDocumentSnapshot thisDoc : task.getResult()) {
                             // Check if the UID matches logged in users' UID
-                            if(thisDoc.getString("uid").equals(mAuth.getCurrentUser().getUid())) {
+                            if(thisDoc.getString("uid").equals(currentUser.getUid())) {
                                 final Task newTask = new Task(thisDoc.getString("category"), thisDoc.getString("desc"), Long.parseLong(thisDoc.getString("enddate")), "ic_add", thisDoc.getBoolean("completed"));
                                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                                     @Override
