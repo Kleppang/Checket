@@ -166,7 +166,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), "An error occurred while deleting data, please try again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }
