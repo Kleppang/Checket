@@ -2,21 +2,16 @@ package no.checket.checket;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -24,8 +19,11 @@ import androidx.viewpager.widget.ViewPager;
 public class IntroSlideActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
+
     private LinearLayout dotsLayout;
+    private LinearLayout windowLayout;
     private TextView[] dots;
+
     private int[] layouts;
     private Button btn_skip, btn_next;
     private IntroSlideManager introSlideManager;
@@ -55,7 +53,6 @@ public class IntroSlideActivity extends AppCompatActivity {
         viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
-
     }
 
     private void addBottomDots(int currentPage) {
