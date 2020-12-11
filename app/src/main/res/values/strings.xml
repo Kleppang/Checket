@@ -149,6 +149,10 @@
         <item>Sports</item>
     </string-array>
 
+    <string name="fabDesc">Floating action button</string>
+    <string name="tasktabFinished">Finished</string>
+    <string name="taskTabOngoing">Ongoing</string>
+
     <!-- Achievements -->
     <string name="ach_unlockedAchievements">Unlocked achievements</string>
     <string name="ach_lockedAchievements">Locked achievements</string>
