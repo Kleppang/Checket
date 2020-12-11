@@ -13,7 +13,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -155,6 +154,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 }
             });
+
+
+            StorageReference pictureRef = storageReference.child("users/"+mAuth.getCurrentUser().getUid()+"/profile.jpg");
+            pictureRef.delete();
 
             currentUser.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
