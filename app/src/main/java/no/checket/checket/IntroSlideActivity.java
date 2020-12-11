@@ -18,11 +18,8 @@ import androidx.viewpager.widget.ViewPager;
 
 public class IntroSlideActivity extends AppCompatActivity {
     private ViewPager viewPager;
-    private ViewPagerAdapter viewPagerAdapter;
 
     private LinearLayout dotsLayout;
-    private LinearLayout windowLayout;
-    private TextView[] dots;
 
     private int[] layouts;
     private Button btn_skip, btn_next;
@@ -35,6 +32,7 @@ public class IntroSlideActivity extends AppCompatActivity {
 
         setContentView(R.layout.intro_slider_layout);
 
+        // Set the color of the window to match the background of the intro slide
         window = getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.intro_slider_bg1));
 
@@ -50,13 +48,13 @@ public class IntroSlideActivity extends AppCompatActivity {
         // Adds the bottom dots, start with first page
         addBottomDots(0);
 
-        viewPagerAdapter = new ViewPagerAdapter();
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
+        viewPager.addOnPageChangeListener(onPageChangeListener);
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length];
+        TextView[] dots = new TextView[layouts.length];
 
         int active = R.color.intro_slider_dot;
         int inactive = R.color.intro_slider_dot_dark;
@@ -74,13 +72,14 @@ public class IntroSlideActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(getResources().getColor(active));
     }
 
-    //  viewpager change listener
-    ViewPager.OnPageChangeListener viewPagerOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+    // An OnPageChange listener we use to determine which page we're on
+    ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {
             addBottomDots(position);
 
+            // Set the color of the window to match the background of the intro slide
             switch (position) {
                 case 0:
                     window.setStatusBarColor(getResources().getColor(R.color.intro_slider_bg1));
@@ -98,11 +97,11 @@ public class IntroSlideActivity extends AppCompatActivity {
 
             // Checks current page, changes text accordingly
             if (position == layouts.length - 1) {
-                // last page. make button text to GOT IT
+                // We're on the last page and set the text to Finish and hide the skip button
                 btn_next.setText(getString(R.string.intro_slider_finish));
                 btn_skip.setVisibility(View.GONE);
             } else {
-                // still pages are left
+                // We're not on the last page, show Next
                 btn_next.setText(getString(R.string.intro_slider_next));
                 btn_skip.setVisibility(View.VISIBLE);
             }
@@ -120,7 +119,7 @@ public class IntroSlideActivity extends AppCompatActivity {
     };
 
 
-    // onClick for the next button
+    // Called by a onClick
     public void onNext(View view) {
         int currentPage = viewPager.getCurrentItem() + 1;
 
@@ -132,7 +131,7 @@ public class IntroSlideActivity extends AppCompatActivity {
         }
     }
 
-    // onClick for the skip button
+    // Called by a onClick
     public void onSkip(View view) {
         finishIntro();
     }
@@ -145,13 +144,12 @@ public class IntroSlideActivity extends AppCompatActivity {
 
     // View pager adapter
     public class ViewPagerAdapter extends PagerAdapter {
-        private LayoutInflater layoutInflater;
 
         public ViewPagerAdapter() {
         }
 
         public Object instantiateItem(ViewGroup container, int position) {
-            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = layoutInflater.inflate(layouts[position], container, false);
             container.addView(view);
