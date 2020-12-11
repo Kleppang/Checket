@@ -134,7 +134,7 @@
     <string name="cancel">Cancel</string>
     <string name="input">Input</string>
     <string name="category_icon_description">Image representing a category</string>
-    <string name="emptyMainText">You have no current tasks. Why don\'t you hit that button to get started?</string>
+    <string name="emptyMainText">You have no tasks. Why don\'t you hit that button to get started?</string>
     <string name="noDetailsText">No details were added for this task.</string>
 
     <string-array name="categories">
