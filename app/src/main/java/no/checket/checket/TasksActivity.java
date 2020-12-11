@@ -220,7 +220,6 @@ public class TasksActivity extends AppCompatActivity
         if (header.equals("")) {
             // Inform user of mistake
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
-            // TODO: Reload dialog with any input
             newTask(coordinatorLayout);
         } else {
             // Make sure the date and time is not already used
@@ -232,7 +231,6 @@ public class TasksActivity extends AppCompatActivity
             }
             if (used) {
                 Toast.makeText(this, "You already have something planned for that time slot", Toast.LENGTH_LONG).show();
-                // TODO: Reload dialog with any input
                 newTask(coordinatorLayout);
             } else if (mAuth.getCurrentUser() != null && hasConnection) {
                 mTasksList.add(task);

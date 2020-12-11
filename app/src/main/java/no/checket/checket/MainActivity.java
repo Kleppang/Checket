@@ -256,7 +256,6 @@ public class MainActivity extends AppCompatActivity
             MI_LoginReg.setTitle("Logout");
             MI_Profile.setVisible(true);
 
-            // TODO: Bare legg til nye tasks, bruker Clear() for å unnvike dobbel tasks
             mTaskList.clear();
 
             // Fetch a users tasks, then add them to the local database
@@ -451,7 +450,6 @@ public class MainActivity extends AppCompatActivity
         if (header.equals("")) {
             // Inform user of mistake
             Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show();
-            // TODO: Reload dialog with any input
             newTask(drawerLayout);
         } else {
             // Make sure the date and time is not already used
@@ -463,7 +461,6 @@ public class MainActivity extends AppCompatActivity
             }
             if (used) {
                 Toast.makeText(this, "You already have something planned for that time slot", Toast.LENGTH_LONG).show();
-                // TODO: Reload dialog with any input
                 newTask(drawerLayout);
             } else if (mAuth.getCurrentUser() != null && hasConnection) {
                 mTaskList.add(task);
