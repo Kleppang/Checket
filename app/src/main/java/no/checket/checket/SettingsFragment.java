@@ -156,12 +156,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }
             });
 
-            currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            currentUser.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
-                public void onComplete(@NonNull Task<Void> task) {
+                public void onSuccess(Void aVoid) {
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    Toast.makeText(getContext(), "Your account has been deleted.", Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
