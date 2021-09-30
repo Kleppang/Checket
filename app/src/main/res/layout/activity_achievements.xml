@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AchievementsActivity">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/ach_tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:tabIndicatorColor="@color/colorWhite"
+        app:tabSelectedTextColor="@color/colorWhite"
+        app:tabTextColor="@color/colorWhiteSecondary"
+        android:elevation="5dp">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ach_tabLayoutUnlocked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ach_unlockedAchievements"
+            android:contentDescription="@string/ach_unlockedAchievements_desc"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/ach_tabLayoutLocked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ach_lockedAchievements"
+            android:contentDescription="@string/ach_lockedAchievements_desc"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ach_recView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ach_recViewLocked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+</LinearLayout>

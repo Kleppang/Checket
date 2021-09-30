@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/main_BottomAppBar_tasks"
+        android:icon="@drawable/ic_tasks_white_24dp"
+        android:title="@string/main_BottomAppBar_tasks_title"
+        android:contentDescription="@string/main_BottomAppBar_tasks_desc"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/main_BottomAppBar_ach"
+        android:icon="@drawable/ic_achievements_white_24dp"
+        android:title="@string/main_BottomAppBar_ach_title"
+        android:contentDescription="@string/main_BottomAppBar_ach_desc"
+        app:showAsAction="ifRoom"/>
+
+</menu>

@@ -1,0 +1,162 @@
+<resources>
+    <string name="app_name">Checket</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <!-- Bottom app bar & Navigation Drawer -->
+    <string name="main_BottomAppBar_desc">Bottom app bar</string>
+    <string name="main_BottomAppBar_tasks_title">Tasks</string>
+    <string name="main_BottomAppBar_ach_title">Achievements</string>
+    <string name="main_BottomAppBar_tasks_desc">A button to open a users tasks</string>
+    <string name="main_BottomAppBar_ach_desc">A button to open a users achievements</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="my_files">My Files</string>
+    <string name="shared">Shared</string>
+    <string name="openNavDrawer">Navigation Drawer Open</string>
+    <string name="closeNavDrawer">Navigation Drawer Close</string>
+    <string name="login_logout">Login/logout</string>
+    <string name="achievements">Achievements</string>
+    <string name="tasks">Tasks</string>
+    <string name="general">GENERAL</string>
+    <string name="system">SYSTEM</string>
+    <string name="label">HeiDetteErEtHint</string>
+    <string name="txt_email_placeholder">Please login</string>
+    <string name="txt_navname_placeholder">User not logged in</string>
+    <string name="placeholder_customName">No name set…</string>
+
+
+    <!-- Login/Register -->
+    <string name="loginRegister_username">Username Icon</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="ForgotPassword">Forgot Password?</string>
+    <string name="rememberMe">Remember me</string>
+    <string name="NoAccount">No account yet? Create one</string>
+
+    <!-- SignUp -->
+    <string name="signInText">Sign in to continue</string>
+    <string name="SignUpText">Sign up to begin your tasks</string>
+    <string name="SignUp">Sign up</string>
+    <string name="GotAccount">Already have an account? Login</string>
+    <string name="prompt_reenter_pw">Re-Enter Password</string>
+    <string name="helperTextInp">Required*</string>
+
+    <!-- Profile -->
+    <string name="Profile">Profile</string>
+    <string name="txt_name_placeholder">No name set</string>
+    <string name="txt_profileemail_placeholder">Email</string>
+    <string name="task_count">Tasks</string>
+    <string name="achievements_count">Achievements</string>
+    <string name="profile_email">Email</string>
+
+    <!-- Edit Profile -->
+    <string name="EditProfile">Edit Profile</string>
+    <string name="change_profile_picture">Change profile picture</string>
+    <string name="custom_name_texthint">Enter to assign a custom name</string>
+    <string name="custom_name_placeholder">Custom name</string>
+    <string name="save_information">Save username</string>
+    <string name="update_password">Update password</string>
+    <string name="fab_editprofile">FAB_editprofile</string>
+
+    <!-- Update password -->
+    <string name="UpdatePassword">Update password</string>
+    <string name="password_placeholder">Password</string>
+    <string name="v_password_placeholder">Verify Password</string>
+
+    <!-- Intro Slider -->
+    <string name="intro_slider_next">NEXT</string>
+    <string name="intro_slider_skip">SKIP</string>
+    <string name="intro_slider_finish">FINISH</string>
+
+    <string name="intro_slider_slide1_title">New task</string>
+    <string name="intro_slider_slide1_desc">You can create a new task by hitting the small round plus button on the bottom of your screen!</string>
+
+    <string name="intro_slider_slide2_title">New task</string>
+    <string name="intro_slider_slide2_desc">After you\'ve filled out all the small neat details about your new task, submit it!</string>
+
+    <string name="intro_slider_slide3_title">Achievements</string>
+    <string name="intro_slider_slide3_desc">By completing certain chores you can earn achievements, some are hidden!</string>
+
+    <string name="intro_slider_slide4_title">Creating a new user</string>
+    <string name="intro_slider_slide4_desc">By creating a new user you can sync your tasks and progress across multiple devices!</string>
+
+    <!-- Info and placeholders used specifically in Java programming -->
+    <string name="Activity_wait">Please wait</string>
+
+    <string name="dialog_logout_title">Logout</string>
+    <string name="dialog_logout_msg">Are you sure you want to logout? Tasks and achievements will no longer be synced across your devices</string>
+    <string name="dialog_logout_pos">Yes</string>
+    <string name="dialog_logout_neg">No</string>
+
+    <string name="dialog_intro_title">Introduction</string>
+    <string name="dialog_intro_msg">Are you sure you want to redo the introduction?</string>
+    <string name="dialog_intro_pos">Yes</string>
+    <string name="dialog_intro_neg">No</string>
+
+    <string name="dialog_delete_title">Account deletion</string>
+    <string name="dialog_delete_msg">Are you sure you wish to delete your account? This will delete your login and all cloud saved data. You\'ll still keep your locally saved tasks and achievements on this device.</string>
+    <string name="dialog_delete_pos">Yes</string>
+    <string name="dialog_delete_neg">No</string>
+
+    <!-- Settings -->
+    <string name="settings_redo_title">Redo intro</string>
+    <string name="settings_redo_desc">Click me to redo the introduction</string>
+    <string name="settings_delete_title">Delete data</string>
+    <string name="settings_delete_desc">Click me to delete all of your user data with us</string>
+
+    <!-- Preference keys -->
+    <string name="key_IsFirstTime">IsFirstTime</string>
+    <string name="key_DeleteAccount">DeleteAccount</string>
+    <string name="key_DeleteAccount_cat">DeleteAccountCat</string>
+
+    <string name="logo">Checket</string>
+
+    <!-- Tasks -->
+    <string name="main_header">Current tasks</string>
+    <string name="new_task">New task</string>
+    <string name="category">Category</string>
+    <string name="details">Details</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="add">ADD</string>
+    <string name="discard">Discard</string>
+    <string name="tasks_header">Tasks</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="input">Input</string>
+    <string name="category_icon_description">Image representing a category</string>
+    <string name="emptyMainText">You have no tasks. Why don\'t you hit that button to get started?</string>
+    <string name="noDetailsText">No details were added for this task.</string>
+
+    <string-array name="categories">
+        <item></item>
+        <item>Cleaning</item>
+        <item>Exercise</item>
+        <item>Gardening</item>
+        <item>Housekeeping</item>
+        <item>Miscellaneous</item>
+        <item>Shopping</item>
+        <item>Social</item>
+        <item>Sports</item>
+    </string-array>
+
+    <string name="fabDesc">Floating action button</string>
+    <string name="tasktabFinished">Finished</string>
+    <string name="taskTabOngoing">Ongoing</string>
+
+    <!-- Achievements -->
+    <string name="ach_unlockedAchievements">Unlocked achievements</string>
+    <string name="ach_lockedAchievements">Locked achievements</string>
+    <string name="ach_unlockedAchievements_desc">A tab that will show all the unlocked achievements</string>
+    <string name="ach_lockedAchievements_desc">A tab that will show all the locked achievements</string>
+
+</resources>

@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Intro slider -->
+    <dimen name="intro_slider_dots_height">30dp</dimen>
+    <dimen name="intro_slider_dots_margin_bottom">20dp</dimen>
+    <dimen name="intro_slider_img_height">150dp</dimen>
+    <dimen name="intro_slider_desc_padding">40dp</dimen>
+    <!-- SP is recommended per the Android Documentation for font sizes as it scales the font with a users font size preference -->
+    <dimen name="intro_slider_title">30sp</dimen>
+    <dimen name="intro_slider_desc">16sp</dimen>
+</resources>
